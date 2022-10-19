@@ -1,0 +1,148 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <section class="section-content padding-y bg" xmlns="http://www.w3.org/1999/html">
+        <div class="container">
+            <form action="{% url 'submit_order' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <aside class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body text-right">
+                                <h4 class="card-title text-center mb-4">مشخصات گیرنده ی سفارش</h4>
+                                <hr />
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="fname">اسم</label>
+                                            <input id="fname" class="form-control" placeholder="نام" name="fname" value="{{ user.fname }}" />
+                                        </div>
+                                        <div class="col form-group">
+                                            <label for="lname">فامیل</label>
+                                            <input id="lname" class="form-control" placeholder="نام خانوادگی" name="lname" value="{{ user.lname }}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="province">استان</label>
+                                            <input id="province" class="form-control" placeholder="استان" name="province" required />
+                                        </div>
+                                        <div class="col form-group">
+                                            <label for="city">شهر</label>
+                                            <input id="city" class="form-control" placeholder="شهر" name="city" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="phone">شماره تماس فعلی</label>
+                                            <input id="phone" class="form-control" placeholder="شماره تماس (در دسترس)" name="phone" value="{{ user.phone }}" />
+                                        </div>
+                                        <div class="col form-group">
+                                            <label for="postal_code">کد پستی</label>
+                                            <input id="postal_code" class="form-control" placeholder="کد پستی" name="postal_code" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="address">آدرس کامل</label>
+                                            <textarea id="address" rows="3"  maxlength="256" class="form-control" placeholder="آدرس" name="address" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col form-group">
+                                            <label for="notes">توضیحات سفارش (اختیاری)</label>
+                                            <textarea id="notes" rows="5" maxlength="512" class="form-control" placeholder="توضیحات سفارش" name="notes">-</textarea>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div> <!-- card.// -->
+                    </aside> <!-- col.// -->
+
+                    <aside class="col-lg-6">
+                        <table class="table table-shopping-cart">
+                                 <thead class="text-muted bg-light">
+                                    <tr class="small text-center text-uppercase">
+                                      <th scope="col">کالا</th>
+                                      <th scope="col">تعداد</th>
+                                      <th scope="col">قیمت</th>
+                                      <th scope="col">تخفیف</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-light">
+                                    {% for taken in taken_products %}
+                                        <tr>
+                                            <td>
+                                                <figure class="itemside align-items-center">
+
+                                                    <figcaption class="info">
+                                                        <a href="{{taken.product.url}}">
+                                                            {{ taken.product }}
+                                                        </a>
+
+                                                        <p class="text-muted small text-center">
+                                                            {{ taken.product.category }}
+                                                            <br />
+                                                            {% if taken.preferred_variations.all %}
+                                                                {% for variation in taken.preferred_variations.all %}
+                                                                   {{variation.value}}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            {% if taken.exact_stock > 3 %}
+                                                                <span class="badge pill badge-success"> {{ taken.exact_stock }} </span>
+                                                            {% elif taken.exact_stock > 1 %}
+                                                                <span class="badge pill badge-warning"> {{ taken.exact_stock }} </span>
+                                                            {% else %}
+                                                                <span class="badge pill badge-danger"> {{ taken.exact_stock }} </span>
+                                                            {% endif %}
+                                                    </figcaption>
+                                                </figure>
+                                            </td>
+                                            <td>
+                                                <div class="col">
+                                                    <div class="input-group input-spinner justify-content-center">
+                                                        <input type="text" class="form-control" disabled  value="{{taken.quantity}}" />
+                                                    </div> <!-- input-group.// -->
+                                                </div> <!-- col.// -->
+                                            </td>
+                                            <td>
+                                                <div class="price-wrap text-center">
+                                                    <h4>
+                                                        <span class="mx-1 my-1 badge badge-pill badge-primary">{{ taken.total_price }}$</span>
+                                                    </h4>
+                                                    <small class="text-muted"> {{ taken.product.price }}$ each </small>
+                                                </div> <!-- price-wrap .// -->
+                                            </td>
+                                            <td>
+                                                <h5 class="text-center">
+                                                    <span class="mx-1 my-1 badge badge-pill badge-danger">{{ taken.product.discount }}%</span>
+                                                </h5>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        <div class="card">
+                            <div class="card-body text-right">
+                                <dl class="dlist-align">
+                                  <dt>قیمت اصلی:</dt>
+                                  <dd dir="ltr" class="text-left text-primary">{{ stack.cost }} $</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                  <dt>تخفیف:</dt>
+                                  <dd dir="ltr" class="text-left text-danger"> -{{ stack.discounts }} $</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                  <dt>هزینه نهایی:</dt>
+                                  <dd dir="ltr" class="text-left text-success b"><strong>{{ stack.final_cost }} $</strong></dd>
+                                </dl>
+                                <hr>
+                                <button type="submit" class="btn btn-success btn-block expandable-button"> ثبت سفارش </button>
+                                <a href="{% url 'store' %}" class="btn btn-secondary btn-block expandable-button"> ادامه خرید </a>
+                            </div> <!-- card-body.// -->
+                        </div> <!-- card.// -->
+                    </aside> <!-- col.// -->
+
+                </div> <!-- row.// -->
+            </form>
+        </div> <!-- container .//  -->
+    </section>
+{% endblock %}

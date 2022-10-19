@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% block content %}
+<section class="section-content text-right  padding-y" style="direction:rtl;min-height:84vh">
+{% if request.GET.command == 'verification' %}
+	<div class="container mx-auto text-center alert alert-info" role="alert" style="max-width: 380px; margin-top:100px;">
+        یک ایمیل حاوی لینک فعال سازی به {{request.GET.email}} ارسال شد. برای تکمیل فرایند ثبت نام به ایمیل خود رجوع کنید...
+        <br /><hr />
+        اگر اکانتت رو فعال کردی از <a href="{% url 'login' %}">اینجا وارد شو...</a>
+    </div>
+{% else %}
+<!-- ============================ COMPONENT LOGIN   ================================= -->
+	<div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+      <div class="card-body">
+      <h4 class="card-title mb-4">دخول</h4>
+      <hr />
+      {% include 'includes/toast.html' %}
+      <form action="{% url 'login' %}" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+			 <input type="text" class="form-control" name="contact" placeholder="شماره تلفن یا ایمیل" >
+          </div> <!-- form-group// -->
+          <div class="form-group">
+			<input type="password" class="form-control" name="password" placeholder="رمزشب" >
+          </div> <!-- form-group// -->
+
+          <div class="form-group">
+          	<a href="{% url 'forgot_password' %}" class="mx-auto px-3">یادت نمیاد؟</a>
+
+          </div> <!-- form-group form-check .// -->
+          <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-block expandable-button">برو!</button>
+          </div> <!-- form-group// -->
+      </form>
+      </div> <!-- card-body.// -->
+    </div> <!-- card .// -->
+
+     <p class="text-center mt-4">هنوز نوم نویسی نکردی؟ <a href="{% url 'register' %}">نوم نویسی کن خب!</a></p>
+     <br><br>
+{% endif %}
+<!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+{% endblock %}

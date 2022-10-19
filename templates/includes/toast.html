@@ -1,0 +1,17 @@
+{% if messages %}
+    {% for msg in messages %}
+        <div id="message" class="container mx-auto text-center">
+            <div style="min-height:60px; max-height:80px"
+                {% if msg.tags %}
+                    class=" mx-auto text-center alert alert-{{msg.tags}}"
+                {% endif %}
+                role="alert">
+                    <button class="close text-center mx-auto p-1" style="font-size:15px;" data-dismiss="alert">
+                        <span aria-hidden="true">&times;
+                            {{ msg }}
+                        </span>
+                    </button>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

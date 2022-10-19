@@ -1,0 +1,132 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="section-content padding-y bg">
+        {% if taken_products %}
+            <div class="row m-5">
+                <aside class="col-lg-9">
+                    <div class="card">
+                        <table class="table table-shopping-cart">
+                            <thead class="text-muted bg-light">
+                                <tr class="small text-center text-uppercase">
+                                  <th scope="col">کالا</th>
+                                  <th scope="col">تعداد</th>
+                                  <th scope="col">قیمت</th>
+                                  <th scope="col">تخفیف</th>
+                                  <th scope="col" class="text-right"> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for taken in taken_products %}
+                                    <tr>
+                                        <td>
+                                            <figure class="itemside align-items-center">
+                                                <div class="aside">
+                                                    <a href="{{taken.product.url}}">
+                                                        <img href="{{taken.product.url}}" src="{{ taken.product.image.url }}" class="img-sm">
+                                                    </a>
+                                                </div>
+                                                <figcaption class="info">
+                                                    <a href="{{taken.product.url}}">
+                                                        {{ taken.product }}
+                                                    </a>
+
+                                                    <p class="text-muted small text-center">
+                                                        دسته بندی: {{ taken.product.category }}
+                                                        <br />
+                                                        {% if taken.preferred_variations.all %}
+                                                            {% for variation in taken.preferred_variations.all %}
+                                                               {{ variation.parameter_fa }} : {{variation.value}}
+                                                                <br />
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        موجودی:
+                                                        {% if taken.exact_stock > 3 %}
+                                                            <span class="badge pill badge-success"> {{ taken.exact_stock }} </span>
+                                                        {% elif taken.exact_stock > 1 %}
+                                                            <span class="badge pill badge-warning"> {{ taken.exact_stock }} </span>
+                                                        {% else %}
+                                                            <span class="badge pill badge-danger"> {{ taken.exact_stock }} </span>
+                                                        {% endif %}
+                                                </figcaption>
+                                            </figure>
+                                        </td>
+                                        <td>
+                                            <div class="col">
+                                                <div class="input-group input-spinner">
+                                                    <div class="input-group-append">
+                                                        <a class="btn btn-light" href="{% url 'take_another' taken.product.ID taken.ID %}"> <i class="fa fa-plus"></i> </a>
+                                                    </div>
+                                                    <input type="text" class="form-control"  value="{{taken.quantity}}" />
+                                                    <div class="input-group-prepend">
+                                                        <a class="btn btn-light" type="button" href="{% url 'put_back' taken.product.ID taken.ID %}"> <i class="fa fa-minus"></i> </a>
+                                                    </div>
+                                                </div> <!-- input-group.// -->
+                                            </div> <!-- col.// -->
+                                        </td>
+                                        <td>
+                                            <div class="price-wrap text-center">
+                                                <h4>
+                                                    <span class="mx-1 my-1 badge badge-pill badge-primary">{{ taken.total_price }} تومن</span>
+                                                </h4>
+                                                <small class="text-muted">هرکدوم {{ taken.product.price }} تومن </small>
+                                            </div> <!-- price-wrap .// -->
+                                        </td>
+                                        <td>
+                                            <h5 class="text-center">
+                                                <span class="mx-1 my-1 badge badge-pill badge-danger">{{ taken.product.discount }}%</span>
+                                            </h5>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="{% url 'put_all' taken.product.ID taken.ID %}" style="border-radius: 25%"
+                                               onclick="return deletionConfirmation();" class="btn btn-outline-danger px-2 py-1 text-danger">
+                                                <i class="fa fa-times p-1" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- card.// -->
+
+                </aside> <!-- col.// -->
+                <aside class="col-lg-3">
+
+                    <div class="card">
+                        <div class="card-body text-right">
+                            <dl class="dlist-align">
+                              <dt >قیمت اصلی:</dt>
+                              <dd dir="ltr" class="text-left text-primary">{{ stack.cost }} تومن</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>تخفیف:</dt>
+                              <dd dir="ltr" class="text-left text-danger"> -{{ stack.discounts }} تومن</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>هزینه نهایی:</dt>
+                              <dd dir="ltr" class="text-left text-success b"><strong>{{ stack.final_cost }} تومن</strong></dd>
+                            </dl>
+                            <hr>
+                            <a href="{% url 'checkout' %}" class="btn btn-warning btn-block expandable-button"> پرداخت </a>
+                            <a href="{% url 'store' %}" class="btn btn-secondary btn-block expandable-button"> ادامه خرید </a>
+
+                        </div> <!-- card-body.// -->
+                    </div> <!-- card.// -->
+
+                </aside> <!-- col.// -->
+
+
+            </div> <!-- row.// -->
+        {% else %}
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3>خرمنت خالیه. یکم شل کن ...</h3>
+                    <br />
+                    <h3>سر کیسه رو</h3>
+                    <a href="{% url 'store' %}" class="btn btn-secondary">بریم خرید</a>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% load static %}
+<style>
+    .search-textbox {
+        border: 1px dashed coral;
+        width:60%;
+        font-weight: bold;
+        font-size: 20px;
+        opacity: 0.3;
+        transition: opacity 1.5s ease-in-out;
+        -webkit-transition: opacity 1.5s ease-in-out;
+    }
+
+    .search-textbox:focus {
+        opacity: 0.9;
+    }
+    .search-textbox:hover {
+        opacity: 0.9;
+    }
+
+    .search-button {
+        border: 1px dashed coral;
+
+    }
+
+    .search-button:hover{
+        background: coral;
+    }
+</style>
+<header class="section-header">
+    <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarTop4">
+            <ul class="navbar-nav">
+                <li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> نومه </a></li>
+                <li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> تیلیف </a></li>
+            </ul> <!-- list-inline //  -->
+          </div> <!-- navbar-collapse .// -->
+        </div> <!-- container //  -->
+    </nav>
+
+    <section class="header-main border-bottom">
+        <div class="container" >
+            <div class="row align-items-center " style="height:25rem; background: url({% static 'images/logo.png' %}) no-repeat center center ;">
+                <a href="/" class="btn btn-primary-light">خونه</a>
+                <div class="col-lg col-sm col-md  col-4 mx-lg-1 flex-grow-0">
+                    <div  dir="ltr" class="category-wrap dropdown d-inline-block float-right">
+                        <button type="button" style="font-weight: bold" class="btn btn-outline-danger dropdown-toggle px-3" data-toggle="dropdown">
+                            <i class="fa fa-bars"></i> همه دسته ها
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item text-right" href="{% url 'store' %}">همه</a>
+                            {% if categories %}
+                                {% for category in categories %}
+                                    <a class="dropdown-item text-right" href="{{category.url}}">{{ category }}</a>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>  <!-- category-wrap.// -->
+                </div> <!-- col.// -->
+                <a href="{% url 'store' %}" class="btn btn-primary" >فروشگاه</a>
+                <div class="mt-3 col-lg col-md-6 col-sm-6 col-6 col">
+                    <form action="#" class="search">
+                        <div class="input-group w-100">
+                            <div class="input-group-append">
+                              <button class="btn search-button" style="border-radius: 0 1rem 1rem 0;" type="submit">
+                                <i class="fa fa-search"></i>
+                              </button>
+                            </div>
+                            <input type="text" class="form-control text-center text-dark search-textbox" style="border-radius: 1rem 0 0 1rem;" placeholder="بگرد...">
+                        </div>
+                    </form> <!-- search-wrap .end// -->
+                </div> <!-- col.// -->
+                <div style="background: white; border-radius: 1rem" class="col-lg-3 col-sm-6 col-6 order-2 order-lg-3 p-1">
+                    <div class="d-flex justify-content-end mb-3 mb-lg-0">
+                        <div class="text-right widget-header">
+                            {% if user.ID is None %}
+                                <small class="title text-muted">سلام فیلی</small>
+                                <div>
+                                    <a href="{% url 'login' %}">ورود</a> <span class="dark-transp"> | </span>
+                                    <a href="{% url 'register' %}">نوم نویسی</a>
+                                </div>
+                            {% else %}
+                                <small class="title text-muted">سلام {{user.fname}} {{user.lname}}</small>
+                                <div>
+                                    <a href="{% url 'profile'%}" >پروفایل</a> <span class="dark-transp"> | </span>
+                                    <a href="{% url 'logout' %}">خروج</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'stack' %}" class="widget-header mx-4">
+                            <div class="icon icon-md rounded-circle border"><i class="fa fa-shopping-bag"></i></div>
+                            <span class="badge badge-pill badge-danger notify">{{stack_counter}}</span>
+                        </a>
+                    </div> <!-- widgets-wrap.// -->
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- container.// -->
+    </section> <!-- header-main .// -->
+</header> <!-- section-header.// -->

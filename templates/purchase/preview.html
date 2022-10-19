@@ -1,0 +1,152 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="section-content padding-y bg">
+        <div class="container">
+            <div class="row">
+                <aside class="col-lg-7">
+                    <div class="card text-center my-1">
+                      <div class="card-header">
+                        مشخصات گیرنده سفارش
+                      </div>
+                      <div class="card-body">
+                        <p>این سفارش برای
+                         <mark>{{ order.receiver.fullname }}</mark>
+                          ساکن در
+                        <mark>{{ order.receiver.full_address }}</mark>
+                        و شماره تماس
+                         <mark class="p-2">{{ order.receiver.phone }}</mark>
+                          ارسال میشه.
+                        </p>
+                      {% if order.notes %}
+                            <p>
+                            <mark>توجه:</mark>
+                            {{ order.notes }}
+                            </p>
+                      {% endif %}
+                      </div>
+                    </div>
+                     <div class="card text-center my-1">
+                      <div class="card-header">
+                        روش پرداخت
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                      </div>
+
+                    </div>
+                     <div class="card text-center my-1">
+                      <div class="card-header">
+                        پیش نمایش کالاها
+                      </div>
+                      <div class="card-body">
+                        <p class="card-title">اگر چه لیست کالا ها را تو مرحله ی قبل مرور کردی؛ اما بد نیست برای بار آخر یه نگاهی بهش بندازی و بعد خریدتو نهایی کنی.</p>
+                      </div>
+                      <div class="card-footer text-muted">
+                        <!-- Large modal -->
+                        <button type="button" class="btn btn-outline-info expandable-button" data-toggle="modal" data-target=".bd-example-modal-lg">نمایش لیست</button>
+
+                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="orderedItems" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                              <div class="modal-body">
+                                <table class="table table-shopping-cart">
+                                    <thead class="text-muted bg-light">
+                                        <tr class="small text-center text-uppercase">
+                                          <th scope="col">کالا</th>
+                                          <th scope="col">قیمت نهایی</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in goods %}
+                                            <tr>
+                                                <td>
+                                                    <figure class="itemside align-items-center">
+                                                        <div class="aside">
+                                                            <a href="{{item.product.url}}">
+                                                                <img href="{{item.product.url}}" src="{{ item.product.image.url }}" class="img-sm">
+                                                            </a>
+                                                        </div>
+                                                        <figcaption class="info">
+                                                            <a href="{{item.product.url}}">
+                                                                {{ item.product }}
+                                                            </a>
+
+                                                            <p class="text-muted small text-center">
+                                                                دسته بندی: {{ item.product.category }}
+                                                                <br />
+                                                                {% if item.preferred_variations.all %}
+                                                                    {% for variation in item.preferred_variations.all %}
+                                                                       {{ variation.parameter_fa }} : {{variation.value}}
+                                                                        <br />
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                                موجودی:
+                                                                {% if item.exact_stock > 3 %}
+                                                                    <span class="badge pill badge-success"> {{ item.exact_stock }} </span>
+                                                                {% elif item.exact_stock > 1 %}
+                                                                    <span class="badge pill badge-warning"> {{ item.exact_stock }} </span>
+                                                                {% else %}
+                                                                    <span class="badge pill badge-danger"> {{ item.exact_stock }} </span>
+                                                                {% endif %}
+                                                        </figcaption>
+                                                    </figure>
+                                                </td>
+                                                <td>
+                                                    <div class="price-wrap text-center">
+                                                        <h4>
+                                                            <span dir="ltr" class="mx-1 my-1 badge badge-pill badge-success text-white">
+                                                                <del>{{item.product.price}}$</del>
+                                                                <sub>{{ item.absolute_price }}</sub>
+                                                                x {{ item.quantity }}
+                                                                = {{ item.final_price }}$
+                                                            </span>
+                                                        </h4>
+                                                    </div> <!-- price-wrap .// -->
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </aside> <!-- col.// -->
+
+                <aside class="col-lg-5">
+                    <div class="card">
+                        <div class="card-body text-right">
+                            <dl class="dlist-align">
+                              <dt>قیمت اصلی:</dt>
+                              <dd dir="ltr" class="text-left text-primary">{{ order.cost }} $</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>تخفیف:</dt>
+                              <dd dir="ltr" class="text-left text-danger"> -{{ order.discounts }} $</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>هزینه ارسال:</dt>
+                              <dd dir="ltr" class="text-left text-primary">{{ order.shipping_cost }} $</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                              <dt>هزینه پرداختی:</dt>
+                              <dd dir="ltr" class="text-left text-success b"><strong>{{ order.must_be_paid }} $</strong></dd>
+                            </dl>
+                            <hr>
+                            <a href="{{ order.check_url }}" class="btn btn-success btn-block expandable-button">تایید نهایی</a>
+                        </div> <!-- card-body.// -->
+                    </div> <!-- card.// -->
+
+                </aside> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- container .//  -->
+    </section>
+{% endblock %}

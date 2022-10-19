@@ -1,0 +1,7 @@
+{% autoescape off %}
+سلام  {{user.lname}} {{user.fname}}!
+طی درخواستی که داشتی لینک بازیابی رمزشب رو برات فرستادیم.
+http://{{domain}}{% url 'reset_password_permission' uidb64=uid token=token %}
+
+اگر این درخواست از طرف تو نیست و یا اصلا خبر نداری چرا با این ایمیل مواجه شدی؛ صرفا این ایمیل رو نادیده بگیر...
+{% endautoescape %}

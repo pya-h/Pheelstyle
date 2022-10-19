@@ -1,0 +1,99 @@
+
+body {
+    /*direction: rtl;*/
+    font-family: "BYekan", serif !important;
+    font-size: 18px !important;
+}
+* {
+    transition: all 1s;
+    -webkit-transition: all 1s;
+}
+.expand-opacity-animation {
+    opacity: 1;
+    -webkit-transition: opacity 0.25s ease-in-out;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.expand-opacity-animation:hover {
+    opacity: 0.5;
+    color: darkgreen;
+}
+
+.btn-animation{
+    width: 70%;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+.btn-animation:hover{
+    width: 100%;
+}
+
+.expandable-textbox{
+    margin-left:auto;
+    margin-right: auto;
+    width: 60%;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+.expandable-textbox:focus{
+    width: 100%;
+}
+
+.expandable-button{
+    margin-left:auto;
+    margin-right: auto;
+    width: 80%;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+.expandable-button:hover{
+    width: 100%;
+}
+
+.variation {
+    float: left;
+}
+.variation-select {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.rating > input {
+    display: none;
+}
+
+.rating {
+    display: inline-block;
+    border: 0;
+}
+
+.rating > label {
+    float: right;
+}
+
+.rating > label:before {
+    display: inline-block;
+    font-family: FontAwesome, serif;
+    content: "\f005";
+    margin: 0;
+    padding: 0.3rem 0.2rem;
+    cursor: pointer;
+}
+
+.rating > .half:before{
+    content: "\f089";
+    position: absolute;
+    padding-right: 0;
+}
+
+input:checked ~ label, label:hover ~ label {
+    color: #ffb503;
+}
+
+/* highlight hover for previous rate */
+input:checked + label:hover, input:checked ~ label:hover, input:checked ~ label:hover ~ label,
+    label:hover ~ input:checked ~ label
+{
+    color: #cc9000;
+
+}

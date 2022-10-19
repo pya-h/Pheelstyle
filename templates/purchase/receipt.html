@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+    <section class="section-content padding-y bg" xmlns="http://www.w3.org/1999/html">
+            <div class="container">
+
+            <form action="{% url 'reserve_order' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <aside class="col-lg-6 mx-auto">
+                        <div class="card">
+                            <div class="card-body text-right">
+
+                                <h4 class="card-title text-center mb-4">اطلاعات تراکنش</h4>
+                                <hr />
+                                <b>مرحمت می کنی اینجا عکس رسید و شماره پیگیری تراکنش رو وارد می کنی و پس از اعمال بررسی، سفارشت تایید و ارسال میشه.</b>
+                                <br /> <br />
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <input hidden id="order_key" class="form-control" placeholder="کد سفارش" name="order_key"  value="{{ order.key }}" />
+                                  <!--      {{ form.reference_id }} -->
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="amount">مبلغ پرداختی (﷼)</label>
+                                        <input id="amount" class="form-control" placeholder="مبلغ پرداختی" name="amount"  value="{{ order.cost }}" />
+                                        <!--{{ form.amount }}-->
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="reference_id">کد پیگیری (رهگیری)</label>
+                                       <input id="reference_id" class="form-control" placeholder="کد پیگیری" name="reference_id"  />
+                                  <!--      {{ form.reference_id }} -->
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col form-group">
+                                        <label for="image" class="form-label">تصویر رسید پرداختی</label>
+                                        <input class="form-control form-control-lg" id="image" type="file" name="image" />
+                                        <!--{{ form.image }} -->
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <button class="btn btn-outline-info btn-block btn-large" type="submit">ثبت تراکنش</button>
+                                </div>
+                            </div>
+                        </div> <!-- card.// -->
+                    </aside> <!-- col.// -->
+                </div> <!-- row.// -->
+            </form>
+        </div> <!-- container .//  -->
+    </section>
+{% endblock %}

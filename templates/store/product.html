@@ -1,0 +1,135 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="section-content padding-y bg">
+        <div class="container">
+
+        <!-- ============================ COMPONENT 1 ================================= -->
+            <div style="border-radius: 5px" class="card">
+                <div class="row no-gutters">
+                    <aside class="col-md-6">
+                        <article class="gallery-wrap">
+                            <div class="img-big-wrap">
+                               <a href="#"><img src="{{ this_product.image.url }}"></a>
+                            </div> <!-- img-big-wrap.// -->
+
+                        </article> <!-- gallery-wrap .end// -->
+                    </aside>
+                    <main class="col-md-6 border-left text-right">
+                        <form method="POST" action="{% url 'take_product' this_product.ID %}" >
+                            {% csrf_token %}
+                            <article class="content-body">
+
+                                <h2 class="title">{{ this_product }}</h2>
+                                <hr />
+
+                                <div class="mb-3">
+                                    <var class="price h4">${{ this_product.price }}</var>
+                                </div>
+                                <p>{{ this_product.description }}</p>
+                                <hr>
+                                <div dir="ltr" class="row justify-content-center text-center">
+                                    <div>
+                                        <h6>انتخاب رنگ</h6>
+                                        <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                                         {% for v_color in this_product.variation_set.by_color %}
+                                            {% if v_color.stock > 0 %}
+                                                <label style="font-size: 16px;" class="btn btn-light variation-select">
+                                                        <input type="radio" name="color" value="{{v_color.value.lower}}">
+                                                        {{ v_color.value }}
+                                                        {% if v_color.stock > 3 %}
+                                                            <span class="badge pill badge-success mx-1 variation"> {{ v_color.stock }} </span>
+                                                        {% elif v_color.stock > 1 %}
+                                                            <span class="badge pill badge-warning mx-1 variation"> {{ v_color.stock }} </span>
+                                                        {% else %}
+                                                            <span class="badge pill badge-danger mx-1 variation"> {{ v_color.stock }} </span>
+                                                        {% endif %}
+                                                </label>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                </div> <!-- row.// -->
+                                <div class="mx-5 px-5"> <hr /> </div>
+                                <div dir="ltr" class="row justify-content-center text-center">
+                                    <div class="item-option-select">
+                                        <h6>انتخاب سایز</h6>
+                                        <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+                                         {% for v_size in this_product.variation_set.by_size %}
+                                             {% if v_size.stock > 0 %}
+                                                 <label style="font-size: 16px;" class="btn btn-light variation-select">
+                                                        <input type="radio" name="size" value="{{v_size.value.lower}}">
+                                                        {{ v_size.value }}
+                                                        {% if v_size.stock > 3 %}
+                                                            <span class="badge pill badge-success mx-1 variation"> {{ v_size.stock }} </span>
+                                                        {% elif v_size.stock > 1 %}
+                                                            <span class="badge pill badge-warning mx-1 variation"> {{ v_size.stock }} </span>
+                                                        {% else %}
+                                                            <span class="badge pill badge-danger mx-1 variation"> {{ v_size.stock }} </span>
+                                                        {% endif %}
+                                                  </label>
+                                             {% endif %}
+                                          {% endfor %}
+                                        </div>
+                                    </div>
+                                </div> <!-- row.// -->
+                                <hr>
+                                {% comment %} {% if this_product.stock <= 0  %}
+                                    <button disabled class="btn btn-block btn-dark expandable-button">تا دسته فروش رفت</button> {% endcomment %}
+                                {% if not this_product.available %}
+                                    <button disabled class="btn btn-block btn-danger expandable-button">موجود نیست هنوز</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-block btn-primary expandable-button">بزن به خرمن</button>
+                                {% endif %}
+                                <!--<a href="./product-detail.html" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a> -->
+                             </article> <!-- product-info-aside .// -->
+                        </form>
+                    </main> <!-- col.// -->
+                </div> <!-- row.// -->
+            </div> <!-- card.// -->
+            <br>
+            <div class="row">
+                <div class="col-12 text-right">
+
+
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <article dir="rtl" class="box mb-3">
+
+                            <header class="section-heading">
+                                <h3>نظرات شما</h3>
+                            </header>
+                            <div>
+                                <label for="comment">نظرت؟</label>
+                                <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
+                                <br />
+                                <div class="row">
+
+                                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
+                                        از 5 چند میدی؟
+                                    </div>
+                                    <div id="rate-stars" dir="ltr" class="col rating mt-3">
+                                        <input  type="radio" name="rating" id="rate5_0" required /> <label  style="font-size: 20px"  for="rate5_0" title="5.0"></label>
+                                        <input type="radio" name="rating" id="rate4_5" required /> <label for="rate4_5" title="4.5" class="half"></label>
+                                        <input type="radio" name="rating" id="rate4_0" required /> <label for="rate4_0" title="4.0"></label>
+                                        <input type="radio" name="rating" id="rate3_5" required /> <label for="rate3_5" title="3.5" class="half"></label>
+                                        <input type="radio" name="rating" id="rate3_0" required /> <label for="rate3_0" title="3.0"></label>
+                                        <input type="radio" name="rating" id="rate2_5" required /> <label for="rate2_5" title="2.5" class="half"></label>
+                                        <input type="radio" name="rating" id="rate2_0" required /> <label for="rate2_0" title="2.0"></label>
+                                        <input type="radio" name="rating" id="rate1_5" required /> <label for="rate1_5" title="1.5" class="half"></label>
+                                        <input type="radio" name="rating" id="rate1_0" required /> <label for="rate1_0" title="1.0"></label>
+                                        <input type="radio" name="rating" id="rate0_5" required /> <label for="rate0_5" title="0.5" class="half"></label>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary mx-2">ثبت نظر</button>
+                                </div>
+                            </div>
+                            <hr />
+                        </article>
+                    </form>
+                </div> <!-- col.// -->
+            </div> <!-- row.// -->
+
+        </div> <!-- container .//  -->
+    </section>
+{% endblock %}

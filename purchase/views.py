@@ -5,7 +5,6 @@ from stack.utlities import open_stack
 from .models import Order, OrderReceiver, Transaction, OrderedProduct, Receipt
 import datetime
 from django.contrib.auth.decorators import login_required
-from store.models import Variation
 
 
 def finalize_order(request, order_key, method, status, reference_id=None, amount=None):
@@ -21,7 +20,8 @@ def finalize_order(request, order_key, method, status, reference_id=None, amount
             stack_items = TakenProduct.objects.filter(stack=user_stack)
             for item in stack_items:
                 ordered_product = OrderedProduct()
-                ordered_product.order_id = order.id  # another way of setting an ForeignKey object's value inside a model
+                ordered_product.order_id = order.id  # another way of setting an ForeignKey object's value inside a
+                # model
                 ordered_product.buyer_id = request.user.id
                 ordered_product.product_id = item.product_id
                 # variations cannot be set like this, it must be set after .save() call
@@ -46,10 +46,10 @@ def finalize_order(request, order_key, method, status, reference_id=None, amount
                     # because there is no association that which size.stock associates with which color.stock
 
                     # MOVE THIS PIECE OF CODE TO ADMIN VERIFICATION SECTION FOR INCOMING ORDERS
-                    #for preferred_variation in preferred_variations:
-                        #variation = Variation.objects.get(id=preferred_variation.id)
-                        #variation.stock -= ordered_product.quantity
-                        #variation.save()
+                    # for preferred_variation in preferred_variations:
+                    # variation = Variation.objects.get(id=preferred_variation.id)
+                    # variation.stock -= ordered_product.quantity
+                    # variation.save()
                     # MOVE CODE ABOVE TO ADMIN VERIFICATION SECTION
                     ordered_product.save()
                     item.delete()  # *** CORRECT ???? ***
@@ -97,7 +97,7 @@ def submit_order(request):
                 order.receiver.save()
 
                 order.notes = form.cleaned_data['notes']
-                order.cost = user_stack.cost * 10000
+                order.cost = user_stack.cost * 10
                 order.discounts = user_stack.discounts
                 order.shipping_cost = 50000  # this is for test; ask pouya about this
                 order.how_much_to_pay()  # calculate the cose and update the order.must_be_paid
@@ -112,7 +112,8 @@ def submit_order(request):
                 month = int(datetime.date.today().strftime('%m'))
                 day = int(datetime.date.today().strftime('%d'))
                 today = datetime.date(year, month, day)  # construct today's date in proper format and object
-                order_key = today.strftime('%Y%m%d') + str(order.id)  # django default primary key: id starts from 1 increasing by one
+                order_key = today.strftime('%Y%m%d') + str(
+                    order.id)  # django default primary key: id starts from 1 increasing by one
                 order.key = order_key
                 order.save()
 

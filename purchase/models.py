@@ -112,7 +112,7 @@ class Order(models.Model):
 
     def sell_products(self):
         # apply order and update the product stocks and statistics in the inventory
-        ordered_products = OrderedProduct.objects.filter(order=self, buyer=self.buyer,) # transaction=self.transaction
+        ordered_products = OrderedProduct.objects.filter(order=self, buyer=self.buyer,)  # transaction=self.transaction
         for item in ordered_products:
             preferred_variations = item.variations.all()
             for preferred_variation in preferred_variations:
@@ -133,7 +133,8 @@ class OrderedProduct(models.Model):
     quantity = models.IntegerField(default=0)
     color = models.CharField(max_length=20)  # these two variation are defined separately are for direct access
     size = models.CharField(max_length=20)
-    cost = models.IntegerField()  # final price for each product that is ordered ( considering the quantity and discount)
+    cost = models.IntegerField()  # final price for each product that is ordered ( considering the quantity and
+    # discount)
 
     delivered = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -143,7 +144,8 @@ class OrderedProduct(models.Model):
     def __str__(self):
         return f'{self.product.__str__()} {self.color} {self.size} [{self.quantity}]'
 
-    def exact_stock(self):  # even after saving the order etc. => ordered product can get the exact stock value updated by today
+    def exact_stock(self):  # even after saving the order etc. => ordered product can get the exact stock value
+        # updated by today
         variations = list(self.variations.all())
         es = variations[0].stock
         for variation in variations:

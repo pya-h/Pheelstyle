@@ -8,6 +8,7 @@ body {
     transition: all 1s;
     -webkit-transition: all 1s;
 }
+
 .expand-opacity-animation {
     opacity: 1;
     -webkit-transition: opacity 0.25s ease-in-out;
@@ -67,12 +68,13 @@ body {
     border: 0;
 }
 
-.rating > label {
+.rating > .star {
     float: right;
 }
 
-.rating > label:before {
+.rating > .star:before {
     display: inline-block;
+    font-size: 1.1rem;
     font-family: FontAwesome, serif;
     content: "\f005";
     margin: 0;
@@ -86,14 +88,13 @@ body {
     padding-right: 0;
 }
 
-input:checked ~ label, label:hover ~ label {
+input:checked ~ .star, .star:hover ~ .star {
     color: #ffb503;
 }
 
 /* highlight hover for previous rate */
-input:checked + label:hover, input:checked ~ label:hover, input:checked ~ label:hover ~ label,
-    label:hover ~ input:checked ~ label
+input:checked + .star:hover, input:checked ~ .star:hover, input:checked ~ .star:hover ~ .star,
+    .star:hover ~ input:checked ~ .star
 {
     color: #cc9000;
-
 }

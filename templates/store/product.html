@@ -8,7 +8,7 @@
         <!-- ============================ COMPONENT 1 ================================= -->
             <div style="border-radius: 5px" class="card">
                 <div class="row no-gutters">
-                    <aside class="col-md-6">
+                    <aside class="col-lg-6">
                         <article class="gallery-wrap">
                             <div class="img-big-wrap">
                                <a href="#"><img src="{{ this_product.image.url }}"></a>
@@ -16,16 +16,16 @@
 
                         </article> <!-- gallery-wrap .end// -->
                     </aside>
-                    <main class="col-md-6 border-left text-right">
+                    <main class="col-lg-6 border-left text-right">
                         <form method="POST" action="{% url 'take_product' this_product.ID %}" >
                             {% csrf_token %}
                             <article class="content-body">
 
                                 <h2 class="title">{{ this_product }}</h2>
                                 <hr />
-
                                 <div class="mb-3">
-                                    <var class="price h4">${{ this_product.price }}</var>
+                                    قیمت:
+                                    <var class="price h4">{{ this_product.price }} تومن</var>
                                 </div>
                                 <p>{{ this_product.description }}</p>
                                 <hr>
@@ -80,7 +80,7 @@
                                 {% if not this_product.available %}
                                     <button disabled class="btn btn-block btn-danger expandable-button">موجود نیست هنوز</button>
                                 {% else %}
-                                    <button type="submit" class="btn btn-block btn-primary expandable-button">بزن به خرمن</button>
+                                    <button type="submit" class="btn btn-lg btn-block btn-primary expandable-button">بزن به خرمن</button>
                                 {% endif %}
                                 <!--<a href="./product-detail.html" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a> -->
                              </article> <!-- product-info-aside .// -->
@@ -89,44 +89,51 @@
                 </div> <!-- row.// -->
             </div> <!-- card.// -->
             <br>
+            <div class="row text-center mt-5">
+                <h1 class="col">
+                     Philan Bisar Section
+                </h1>
+            </div>
             <div class="row">
                 <div class="col-12 text-right">
-
-
-                    <form action="" method="POST">
+                    <form action="{% url 'post_review' this_product.id %}" method="POST">
                         {% csrf_token %}
-                        <article dir="rtl" class="box mb-3">
-
-                            <header class="section-heading">
-                                <h3>نظرات شما</h3>
-                            </header>
-                            <div>
-                                <label for="comment">نظرت؟</label>
-                                <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
+                        {% include 'includes/toast.html' %}
+                        <div dir="rtl" class="box mb-3 bg-transparent">
+                            {% if user.is_authenticated %}
+                                <textarea id="comment" name="comment" rows="4" class="form-control" placeholder="نظرت؟"></textarea>
                                 <br />
-                                <div class="row">
-
-                                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
+                                <div class="row mt-2">
+                                    <div class="col-lg-8 col-md-7 col-4 text-left mt-1">
                                         از 5 چند میدی؟
                                     </div>
-                                    <div id="rate-stars" dir="ltr" class="col rating mt-3">
-                                        <input  type="radio" name="rating" id="rate5_0" required /> <label  style="font-size: 20px"  for="rate5_0" title="5.0"></label>
-                                        <input type="radio" name="rating" id="rate4_5" required /> <label for="rate4_5" title="4.5" class="half"></label>
-                                        <input type="radio" name="rating" id="rate4_0" required /> <label for="rate4_0" title="4.0"></label>
-                                        <input type="radio" name="rating" id="rate3_5" required /> <label for="rate3_5" title="3.5" class="half"></label>
-                                        <input type="radio" name="rating" id="rate3_0" required /> <label for="rate3_0" title="3.0"></label>
-                                        <input type="radio" name="rating" id="rate2_5" required /> <label for="rate2_5" title="2.5" class="half"></label>
-                                        <input type="radio" name="rating" id="rate2_0" required /> <label for="rate2_0" title="2.0"></label>
-                                        <input type="radio" name="rating" id="rate1_5" required /> <label for="rate1_5" title="1.5" class="half"></label>
-                                        <input type="radio" name="rating" id="rate1_0" required /> <label for="rate1_0" title="1.0"></label>
-                                        <input type="radio" name="rating" id="rate0_5" required /> <label for="rate0_5" title="0.5" class="half"></label>
+                                    <div id="rate-stars" dir="ltr" class="col col-lg-2 col-md-3 col-4 rating text-right">
+                                        <input type="radio" name="rating" id="rate5_0" value="5.0" required /> <label for="rate5_0" title="5.0"  class="star" ></label>
+                                        <input type="radio" name="rating" id="rate4_5" value="4.5" required /> <label for="rate4_5" title="4.5" class="star half"></label>
+                                        <input type="radio" name="rating" id="rate4_0" value="4.0" required /> <label for="rate4_0" title="4.0" class="star" ></label>
+                                        <input type="radio" name="rating" id="rate3_5" value="3.5" required /> <label for="rate3_5" title="3.5" class="star half"></label>
+                                        <input type="radio" name="rating" id="rate3_0" value="3.0" required /> <label for="rate3_0" title="3.0" class="star" ></label>
+                                        <input type="radio" name="rating" id="rate2_5" value="2.5" required /> <label for="rate2_5" title="2.5" class="star half"></label>
+                                        <input type="radio" name="rating" id="rate2_0" value="2.0" required /> <label for="rate2_0" title="2.0" class="star" ></label>
+                                        <input type="radio" name="rating" id="rate1_5" value="1.5" required /> <label for="rate1_5" title="1.5" class="star half"></label>
+                                        <input type="radio" name="rating" id="rate1_0" value="1.0" required /> <label for="rate1_0" title="1.0" class="star" ></label>
+                                        <input type="radio" name="rating" id="rate0_5" value="0.5" required /> <label for="rate0_5" title="0.5" class="star half"></label>
                                     </div>
-                                    <button type="submit" class="btn btn-outline-primary mx-2">ثبت نظر</button>
-                                </div>
+                                    <div class="col-lg-2 col-md-2 col-4 text-left">
+                                        <button type="submit" class="btn btn-success btn-block text-center"><b>پست</b></button>
+                                    </div>
+                                {% else %}
+                                    <p>برای ادای فیلان بیسار باید ابتدا وارد اکانت خود شوید</p>
+                                {% endif %}
                             </div>
-                            <hr />
-                        </article>
+                        </div>
                     </form>
+
+                    <article dir="rtl" class="box mb-3">
+                        <header class="section-heading">
+                            <h3>فیلان بیسار</h3>
+                        </header>
+                    </article>
                 </div> <!-- col.// -->
             </div> <!-- row.// -->
 

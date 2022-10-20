@@ -100,7 +100,8 @@ def take_product(request, product_id):
             for similar_taken in similar_takens:
                 items_variations = similar_taken.preferred_variations.all()
 
-                if have_same_variations(first=list(items_variations), second=preferred_variations):  # the exact item with exact variations exists in previous stack products
+                if have_same_variations(first=list(items_variations), second=preferred_variations):  # the exact item
+                    # with exact variations exists in previous stack products
                     # so no need to add new product variations
                     taken = similar_taken
                     break

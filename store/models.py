@@ -27,7 +27,7 @@ class Product(models.Model):
         # or update dates?
         return self.available  # temp
 
-    # this is IMPORTANTE -> remove image from here and add use default variation image
+    # this is IMPORTANT -> remove image from here and add use default variation image
 
     def url(self):
         return reverse('single_product', args=[self.category.slug, self.slug])
@@ -92,7 +92,8 @@ class Variation(models.Model):
     stock = models.IntegerField(default=1)  # number of remaining
     # use default value for variation image or not?
     # if variation has no image use the product.image
-    image = models.ImageField(upload_to=join('photos/products', parameter.__str__()), blank=True)  # parameter + '_' + value), blank=True)
+    image = models.ImageField(upload_to=join('photos/products', parameter.__str__()), blank=True)  # parameter + '_'
+    # + value), blank=True)
     # default image in photos/product root folder and variations in /product_name ? huh!
     objects = VariationManager()
 
@@ -117,7 +118,6 @@ class Review(models.Model):
     comment = models.TextField(max_length=500, blank=True)
     rating = models.FloatField()
     ip = models.CharField(max_length=20, blank=True)
-    bought = models.BooleanField(default=False)
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

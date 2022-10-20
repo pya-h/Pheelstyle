@@ -26,7 +26,8 @@ def register(request):
             # send user verification email
             Mailer(user, email, request, 'user_verification').send('فعال سازی حساب کاربری')
 
-            # messages.info(request, 'حسابت ساخته شد...حالا از طریقی ایمیلی که برات فرستادیم باید اکانتت رو فعال کنی...')
+            # messages.info(request, 'حسابت ساخته شد...حالا از طریقی ایمیلی که برات فرستادیم باید اکانتت رو فعال
+            # کنی...')
             return redirect('/user/login/?command=verification&email=' + email)
     else:
         form = RegisterForm()

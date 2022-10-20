@@ -1,3 +1,9 @@
+<style>
+    #message {
+        transition: visibility 1s;
+        -webkit-transition: visibility 1s;
+    }
+</style>
 {% if messages %}
     {% for msg in messages %}
         <div id="message" class="container mx-auto text-center">

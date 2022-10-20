@@ -37,15 +37,23 @@
                     </div>
                      <div class="card text-center my-1">
                       <div class="card-header">
-                        پیش نمایش کالاها
+                          <div class="row">
+                              <div class="col-lg-11 col-10 text-center">
+                                پیش نمایش کالاها
+                              </div>
+                              <div class="col-lg-1 col-2 text-left">
+                                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-list" aria-hidden="true"></i></button>
+                              </div>
+                        </div>
+
                       </div>
                       <div class="card-body">
-                        <p class="card-title">اگر چه لیست کالا ها را تو مرحله ی قبل مرور کردی؛ اما بد نیست برای بار آخر یه نگاهی بهش بندازی و بعد خریدتو نهایی کنی.</p>
-                      </div>
-                      <div class="card-footer text-muted">
-                        <!-- Large modal -->
-                        <button type="button" class="btn btn-outline-info expandable-button" data-toggle="modal" data-target=".bd-example-modal-lg">نمایش لیست</button>
+                        <div class="card-title">
+                            اگر چه لیست کالا ها را تو مرحله ی قبل مرور کردی؛ اما بد نیست برای بار آخر یه نگاهی بهش بندازی و بعد خریدتو نهایی کنی.
 
+                        </div>
+
+                        <!-- Large modal -->
                         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="orderedItems" aria-hidden="true">
                           <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -126,19 +134,19 @@
                         <div class="card-body text-right">
                             <dl class="dlist-align">
                               <dt>قیمت اصلی:</dt>
-                              <dd dir="ltr" class="text-left text-primary">{{ order.cost }} $</dd>
+                              <dd dir="rtl" class="text-left text-primary">{{ order.cost }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>تخفیف:</dt>
-                              <dd dir="ltr" class="text-left text-danger"> -{{ order.discounts }} $</dd>
+                              <dd dir="rtl" class="text-left text-danger">{{ order.discounts }}-  &nbsp;تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه ارسال:</dt>
-                              <dd dir="ltr" class="text-left text-primary">{{ order.shipping_cost }} $</dd>
+                              <dd dir="rtl" class="text-left text-primary">{{ order.shipping_cost }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه پرداختی:</dt>
-                              <dd dir="ltr" class="text-left text-success b"><strong>{{ order.must_be_paid }} $</strong></dd>
+                              <dd dir="rtl" class="text-left text-success b"><strong>{{ order.must_be_paid }}</strong>&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <hr>
                             <a href="{{ order.check_url }}" class="btn btn-success btn-block expandable-button">تایید نهایی</a>

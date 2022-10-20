@@ -1,5 +1,10 @@
 {% load static %}
 <style>
+
+    #navigation-box {
+        transition: height 1.75s;
+        -webkit-transition: height 1.75s;
+    }
     .search-textbox {
         border: 1px dashed coral;
         width:60%;
@@ -43,7 +48,7 @@
 
     <section class="header-main border-bottom">
         <div class="container" >
-            <div class="row align-items-center " style="height:25rem; background: url({% static 'images/logo.png' %}) no-repeat center center ;">
+            <div id="navigation-box" class="row align-items-center " style="height:150vh; background: url({% static 'images/logo.png' %}) no-repeat center center ;">
                 <a href="/" class="btn btn-primary-light">خونه</a>
                 <div class="col-lg col-sm col-md  col-4 mx-lg-1 flex-grow-0">
                     <div  dir="ltr" class="category-wrap dropdown d-inline-block float-right">
@@ -100,3 +105,8 @@
         </div> <!-- container.// -->
     </section> <!-- header-main .// -->
 </header> <!-- section-header.// -->
+<script>
+    window.onload = event => {
+        document.getElementById('navigation-box').style.height = "25rem";
+    }
+</script>

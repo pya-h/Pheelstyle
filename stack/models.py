@@ -12,7 +12,9 @@ class Stack(models.Model):
     discounts = models.IntegerField(default=0)
 
     def final_cost(self):
-        return self.cost - self.discounts
+        result = self.cost - self.discounts
+        int_result = int(result)
+        return int_result if result == int_result else  self.cost - self.discounts
 
     def __str__(self):
         return self.sid
@@ -85,7 +87,9 @@ class TakenProduct(models.Model):
         return self.absolute_price() * self.quantity
 
     def total_discount(self):
-        return self.total_price() * self.product.discount / 100
+        result = self.total_price() * self.product.discount / 100
+        int_result = int(result)
+        return int_result if int_result == result else result
 
     def __str__(self):
         return '%s [%d]' % (self.product.__str__(), self.quantity)

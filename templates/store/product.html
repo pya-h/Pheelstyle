@@ -123,18 +123,22 @@
                                         <button type="submit" class="btn btn-success btn-block text-center"><b>پست</b></button>
                                     </div>
                                 {% else %}
-                                    <p>برای ادای فیلان بیسار باید ابتدا وارد اکانت خود شوید</p>
+                                    <div>برای ادای فیلان بیسار باید ابتدا
+                                        <a href="{% url 'login' %}">وارد اکانت</a>
+                                        خود شوید</div>
                                 {% endif %}
                             </div>
                         </div>
                     </form>
+                </div> <!-- col.// -->
+                <div class="col-12 text-right">
 
                     <article dir="rtl" class="box mb-3">
                         <header class="section-heading">
                             <h3>فیلان بیسار</h3>
                         </header>
                     </article>
-                </div> <!-- col.// -->
+                </div>
             </div> <!-- row.// -->
 
         </div> <!-- container .//  -->

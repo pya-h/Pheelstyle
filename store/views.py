@@ -27,8 +27,13 @@ def product(request, category_filter, product_slug=None):
     context = dict()
     try:
         this_product = Product.objects.get(slug=product_slug, category__slug=category_filter)
+        reviews = Review.objects.filter(product=this_product, status=True)
+        #for review in reviews:
+            #review.comment = review.comment.replace('\n', ' <br> ')
+
         context = {
             'this_product': this_product,
+            'reviews': reviews
         }
     except Exception as ex:
         # handle this seriously
@@ -49,10 +54,7 @@ def post_review(request, product_id):
                 messages.info(request, "نظر قبلی شما به روز رسانی شد.")
             except Review.DoesNotExist:
                 form = ReviewForm(request.POST)
-                print(form)
                 if form.is_valid():
-                    print(form.cleaned_data)
-
                     try:
                         product_to_be_reviewed = Product.objects.get(id=product_id)
                         new_review = Review(product=product_to_be_reviewed, user=request.user,

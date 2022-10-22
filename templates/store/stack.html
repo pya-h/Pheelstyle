@@ -94,18 +94,18 @@
                 <aside class="col-lg-3">
 
                     <div class="card">
-                        <div class="card-body text-right">
+                        <div dir="rtl"  class="card-body text-right">
                             <dl class="dlist-align">
-                              <dt >قیمت اصلی:</dt>
-                              <dd dir="ltr" class="text-left text-primary">{{ stack.cost }} تومن</dd>
+                              <dt>قیمت اصلی:</dt>
+                              <dd class="text-left text-primary">{{ stack.cost }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>تخفیف:</dt>
-                              <dd dir="ltr" class="text-left text-danger"> -{{ stack.discounts }} تومن</dd>
+                              <dd class="text-left text-danger">{{ stack.discounts }}-  &nbsp;تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه نهایی:</dt>
-                              <dd dir="ltr" class="text-left text-success b"><strong>{{ stack.final_cost }} تومن</strong></dd>
+                              <dd class="text-left text-success b"><strong>{{ stack.final_cost }}</strong>&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <hr>
                             <a href="{% url 'checkout' %}" class="btn btn-warning btn-block expandable-button"> پرداخت </a>

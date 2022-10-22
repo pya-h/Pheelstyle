@@ -131,22 +131,22 @@
 
                 <aside class="col-lg-5">
                     <div class="card">
-                        <div class="card-body text-right">
+                        <div dir="rtl"  class="card-body text-right">
                             <dl class="dlist-align">
                               <dt>قیمت اصلی:</dt>
-                              <dd dir="rtl" class="text-left text-primary">{{ order.cost }}&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-left text-primary">{{ order.cost }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>تخفیف:</dt>
-                              <dd dir="rtl" class="text-left text-danger">{{ order.discounts }}-  &nbsp;تومن</dd>
+                              <dd class="text-left text-danger">{{ order.discounts }}-  &nbsp;تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه ارسال:</dt>
-                              <dd dir="rtl" class="text-left text-primary">{{ order.shipping_cost }}&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-left text-primary">{{ order.shipping_cost }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه پرداختی:</dt>
-                              <dd dir="rtl" class="text-left text-success b"><strong>{{ order.must_be_paid }}</strong>&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-left text-success b"><strong>{{ order.must_be_paid }}</strong>&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <hr>
                             <a href="{{ order.check_url }}" class="btn btn-success btn-block expandable-button">تایید نهایی</a>

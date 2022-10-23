@@ -23,9 +23,15 @@
 
                                 <h2 class="title">{{ this_product }}</h2>
                                 <hr />
-                                <div class="mb-3">
-                                    قیمت:
-                                    <var class="price h4">{{ this_product.price }} تومن</var>
+                                <div class="row mb-3">
+                                    <div class="col-lg-6 col-md-6 col-12 text-right">
+                                        قیمت:
+                                        <var class="price h4">{{ this_product.price }} تومن</var>
+                                    </div>
+                                    <div dir="rtl" class="col-lg-6 col-md-6 col-12 text-left">
+                                        امتیاز:
+                                        <b style="color:coral">{{ this_product.rating }}</b>
+                                    </div>
                                 </div>
                                 <p>{{ this_product.description }}</p>
                                 <hr>

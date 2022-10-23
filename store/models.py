@@ -4,6 +4,7 @@ from category.models import Category
 from django.urls import reverse
 import uuid
 from user.models import User
+from django.db.models import Avg, Count
 
 
 class Product(models.Model):
@@ -38,6 +39,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name_fa
         # return self.name_fa
+
+    def rating(self):
+        reviews = Review.objects.filter(product=self, status=True).aggregate(average_rating=Avg('rating'), count=Count('id'))
+        if reviews['count']:
+            return f'{float(reviews["average_rating"])}/5.0 [{int(reviews["count"])}]'
+        return "-"
 
 
 class VariationManager(models.Manager):

@@ -90,7 +90,7 @@
                             {% else %}
                                 <small class="title text-muted">سلام {{user.fname}} {{user.lname}}</small>
                                 <div>
-                                    <a href="{% url 'profile'%}" >پروفایل</a> <span class="dark-transp"> | </span>
+                                    <a href="{% url 'user-dashboard' %}" >پروفایل</a> <span class="dark-transp"> | </span>
                                     <a href="{% url 'logout' %}">خروج</a>
                                 </div>
                             {% endif %}

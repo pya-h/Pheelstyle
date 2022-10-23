@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y bg text-center">
+        {% include 'includes/toast.html' %}
+        <div class="container">
+            <div class="row">
+                {% include 'user/dashboard/sidebar.html' %}
+                <main class="col-lg-9 text-right mt-4">
+                    <article class="card bg-transparent" style="border: none">
+                        <header class="bg-transparent" style="z-index: 1">
+                            <strong class="d-inline-block mr-3">
+                                <img src="{% static 'images/noavatar.jpeg' %}" alt="آواتارت" width="96" height="96" style="border-radius: 50%">
+                                {{ user }}
+                            </strong>
+                        </header>
+                        <div class="card-body" style="border-radius: 15px; border: 1px solid lightgray; margin-top: -2%; z-index: 0">
+                            <div class="row">
+                                <div class="col-md-6 my-1">
+                                    <div class="card h-100" style="border-radius: 15px">
+                                        <div class="card-body container">
+                                            <div class="row text-center">
+                                                <h3 class="w-100">
+                                                    {% if user.is_superuser %}
+                                                        <h3 class="w-100">فیل شاه</h3>
+                                                    {% elif user.is_admin %}
+                                                        <h3 class="w-100">فیل ملکه</h3>
+                                                    {% elif user.is_staff %}
+                                                        <h3 class="w-100">فیل درباری</h3>
+                                                    {% else %}
+                                                        <h3 class="w-100">فیل فمیلی</h3>
+                                                    {% endif %}
+                                                </h3>
+                                            </div>
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    ایمیل:
+                                                </div>
+                                                <div class="col-9 text-left  my-auto">
+                                                    <p class="mb-0">{{ user.email }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-3">
+                                                    شماره:
+                                                </div>
+                                                <div class="col-9 text-left  my-auto">
+                                                    <p class="mb-0">{{ user.phone }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-center  my-1">
+                                    <div class="card h-100" style="border-radius: 15px">
+                                        <div class="card-body">
+                                            <b class="card-title">تعداد زد و بندها</b>
+                                            <h1 class="text-success">{{ your_orders }}</h1>
+                                            <a class="btn btn-block btn-outline-secondary" href="#">مشاهده</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div> <!-- row.// -->
+                        </div> <!-- card-body .// -->
+                    </article> <!-- order-group.// -->
+                </main>
+            </div> <!-- row.// -->
+        </div>
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

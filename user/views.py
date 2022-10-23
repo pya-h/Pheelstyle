@@ -10,6 +10,7 @@ from django.contrib.auth.tokens import default_token_generator
 from .utilities import Mailer
 import requests
 from common.exceptions import WaitAssholeException
+from purchase.models import Order
 
 
 def register(request):
@@ -66,7 +67,7 @@ def login(request):
                     # if there is a next parameter in url:
                     if 'next' in url_params and url_params['next'] is not None:
                         return redirect(url_params['next'])
-                return redirect('profile') if not user.is_superuser else redirect('/admin/')
+                return redirect('user-dashboard') if not user.is_superuser else redirect('/admin/')
     except Exception as ex:
         print('sth went wrong while trying to login: ' + ex.__str__())
     return render(request, 'user/login.html')
@@ -80,8 +81,14 @@ def logout(request):
 
 
 @login_required(login_url='login')
-def profile(request):
-    return render(request, 'user/profile.html')
+def user_dashboard(request):
+    context = {}
+    try:
+        your_orders = Order.objects.filter(buyer=request.user, status='certified')
+        context['your_orders'] = your_orders.count()
+    except:
+        context['your_orders'] = 'خطای بارگذاری'
+    return render(request, 'user/dashboard/index.html', context)
 
 
 def activate(request, uidb64, token):

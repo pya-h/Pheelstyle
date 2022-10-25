@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django import forms
 from .forms import RegisterForm, InputValidator
 from .models import User
@@ -78,17 +78,6 @@ def logout(request):
     auth.logout(request)
     messages.success(request, 'خروج با موفقیت انجام شد.')
     return redirect('login')
-
-
-@login_required(login_url='login')
-def user_dashboard(request):
-    context = {}
-    try:
-        your_orders = Order.objects.filter(buyer=request.user, status='certified')
-        context['your_orders'] = your_orders.count()
-    except:
-        context['your_orders'] = 'خطای بارگذاری'
-    return render(request, 'user/dashboard/index.html', context)
 
 
 def activate(request, uidb64, token):

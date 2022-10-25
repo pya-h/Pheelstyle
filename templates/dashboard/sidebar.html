@@ -1,8 +1,8 @@
 <div class="col-lg-3 my-2">
     <!--   SIDEBAR   -->
     <ul class="list-group text-right px-0">
-        <a class="list-group-item active" href="#"> کیستی؟ </a>
-        <a class="list-group-item" href="#"> زد و بندها </a>
+        <a class="list-group-item {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'user-dashboard' %}"> کیستی؟ </a>
+        <a class="list-group-item {% if request.path == '/dashboard/orders/' %}active{% endif %}" href="{% url 'user-orders' %}"> زد و بندها </a>
         <a class="list-group-item" href="#"> پروفایل </a>
         <a class="list-group-item" href="#"> تغییر رمزشب </a>
         <br />

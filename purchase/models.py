@@ -84,7 +84,7 @@ class Order(models.Model):
 
     # stats
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
     # is_certified = models.BooleanField(default=False)
     # is_delivered = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS, default='new')

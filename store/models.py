@@ -17,7 +17,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='photos/products')
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     discount = models.IntegerField(default=0)  # discount in percentage
     # below line delete all products associated when the category deletes!! expected?
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -95,7 +95,7 @@ class Variation(models.Model):
     parameter = models.CharField(max_length=10, choices=variation_parameters)
     value = models.CharField(max_length=20)
     is_available = models.BooleanField(default=True)
-    creation_date = models.DateTimeField(auto_now=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
     stock = models.IntegerField(default=1)  # number of remaining
     # use default value for variation image or not?
     # if variation has no image use the product.image

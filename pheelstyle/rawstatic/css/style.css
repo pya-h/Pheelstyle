@@ -8,6 +8,10 @@ body {
     transition: all 1s;
     -webkit-transition: all 1s;
 }
+#newAvatarPreview {
+    transition: opacity 0.5s;
+    -webkit-transition: opacity 0.5s;
+}
 .expand-opacity-animation {
     opacity: 1;
     -webkit-transition: opacity 0.25s ease-in-out;

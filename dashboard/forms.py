@@ -25,6 +25,7 @@ class ProfileEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileEditForm, self).__init__(*args, **kwargs)
         placeholders = {'province': 'استان', 'city': 'نام خانوادگی', 'address': 'ایمیل', 'postal_code': 'شماره تلفن'}
+        self.fields['avatar'].widget.attrs['id'] = "fileChangeAvatar"
 
         for field in placeholders:
             self.fields[field].widget.attrs['class'] = 'form-control'
@@ -32,5 +33,7 @@ class ProfileEditForm(forms.ModelForm):
 
         self.fields['address'].widget.attrs['rows'] = 3
         # style the avatar change button:
-        self.fields['avatar'].widget.attrs['class'] = "btn btn-outline-info btn-block"
+        self.fields['avatar'].widget.attrs['title'] = "میتونی از اینجا آواتارتو عوض کنی"
+        self.fields['avatar'].widget.attrs['class'] = "btn btn-outline-light btn-block text-dark btn-large"
         self.fields['avatar'].widget.attrs['style'] = "cursor: pointer;"
+        self.fields['avatar'].widget.attrs['title'] = "میتونی از اینجا آواتارتو عوض کنی"

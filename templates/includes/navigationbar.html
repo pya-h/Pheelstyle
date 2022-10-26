@@ -106,7 +106,10 @@
     </section> <!-- header-main .// -->
 </header> <!-- section-header.// -->
 <script>
-    window.onload = event => {
+    function popScreenUp() {
         document.getElementById('navigation-box').style.height = "25rem";
+    }
+    window.onload = function(){
+        popScreenUp();
     }
 </script>

@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from purchase.models import Order
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from user.models import Profile, User
+from .forms import UserEditForm, ProfileEditForm
+from django.contrib import messages
 
 
 @login_required(login_url='login')
@@ -13,6 +16,7 @@ def user_dashboard(request):
     return render(request, 'dashboard/index.html', context)
 
 
+@login_required(login_url='login')
 def user_orders(request):
     status = {'new': 'جدید',
               'pending': 'در دست بررسی',
@@ -34,3 +38,24 @@ def user_orders(request):
         context['your_orders'] = 'خطای بارگذاری'
 
     return render(request, 'dashboard/your_orders.html', context)
+
+
+@login_required(login_url='login')
+def profile(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user_profile = get_object_or_404(Profile, user=request.user)
+    if request.method == "POST":
+        user_form = UserEditForm(request.POST, instance=request.user)
+        profile_form = ProfileEditForm(request.POST, request.FILES, instance=user_profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'پروفایلت آپدیت شد.')
+            return redirect('user-profile')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=user_profile)
+
+    return render(request, 'dashboard/profile.html', {'user_form': user_form, 'profile_form': profile_form})

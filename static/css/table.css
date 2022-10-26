@@ -27,14 +27,13 @@
 }
 .container-table-orders {
     width: 100%;
-    min-height: 100vh;
+
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
     display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: center;
+
     flex-wrap: wrap;
     padding: 33px 30px;
 }
@@ -95,7 +94,7 @@
 }
 .table-orders tbody tr:hover {
     color: #555;
-    background-color: #f5f5f5;
+    background-color: #84dfff;
     cursor: pointer;
 }
 .table-column-1 {

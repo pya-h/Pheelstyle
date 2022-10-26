@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import User
+from .models import User, Profile
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
 
 
 class UserAdminPanel(UserAdmin):
@@ -20,4 +21,12 @@ class UserAdminPanel(UserAdmin):
                      ('Permissions', {'fields': ('is_admin', 'is_staff')}),)
 
 
+class ProfilePanel(admin.ModelAdmin):
+    def avatar_thumbnail(self, obj):
+        return format_html('<img src="{}" width="30" style="border-radius: 50%;" />'.format(obj.avatar.url))
+    avatar_thumbnail.short_description = 'Avatar'
+    list_display = ('avatar_thumbnail', 'user', 'province', 'city')
+
+
 admin.site.register(User, UserAdminPanel)
+admin.site.register(Profile, ProfilePanel)

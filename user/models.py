@@ -66,3 +66,14 @@ class User(AbstractBaseUser):
     def has_module_perms(self, add_label):
         return True
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    postal_code = models.CharField(max_length=10, verbose_name="Postal Code", blank=True)
+    province = models.CharField(max_length=30, verbose_name="Province", blank=True)
+    city = models.CharField(max_length=30, verbose_name="City", blank=True)
+    address = models.TextField(max_length=256, verbose_name="Address", blank=True)
+    avatar = models.ImageField(blank=True, upload_to='photos/avatars/')
+
+    def full_address(self):
+        return f'{self.province} - {self.city} - {self.address}'

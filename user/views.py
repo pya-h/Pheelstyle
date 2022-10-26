@@ -10,7 +10,6 @@ from django.contrib.auth.tokens import default_token_generator
 from .utilities import Mailer
 import requests
 from common.exceptions import WaitAssholeException
-from purchase.models import Order
 
 
 def register(request):

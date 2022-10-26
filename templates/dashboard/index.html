@@ -4,7 +4,6 @@
 {% block content %}
 <!-- ========================= SECTION CONTENT ========================= -->
     <section class="section-content padding-y bg text-center">
-        {% include 'includes/toast.html' %}
         <div class="container">
             <div class="row">
                 {% include 'dashboard/sidebar.html' %}
@@ -59,7 +58,7 @@
                                         <div class="card-body">
                                             <b class="card-title">تعداد زد و بندها</b>
                                             <h1 class="text-success">{{ your_orders_count }}</h1>
-                                            <a class="btn btn-block btn-outline-secondary" href="#">مشاهده</a>
+                                            <a class="btn btn-block btn-outline-secondary" href="{% url 'user-orders' %}">مشاهده</a>
                                         </div>
                                     </div>
                                 </div>

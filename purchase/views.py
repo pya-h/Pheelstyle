@@ -127,7 +127,7 @@ def submit_order(request):
     except Exception as ex:
         print('sth went wrong while processing the order cause: ' + ex.__str__())
 
-    return redirect('checkout')
+    return redirect('order')
 
 
 @login_required(login_url='login')
@@ -174,9 +174,7 @@ def take_receipt(request, order_key):
 def reserve_order(request):
     if request.method == "POST":
         form = ReserveTransactionForm(request.POST)
-        print(form.errors, form.non_field_errors())
         if form.is_valid():
-            print("in validating")
             receipt = Receipt(reference_id=form.cleaned_data['reference_id'], image=form.cleaned_data['image'],
                               amount=form.cleaned_data['amount'])
             receipt.save()

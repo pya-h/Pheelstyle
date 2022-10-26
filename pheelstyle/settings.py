@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'store',
     'stack',
     'purchase',
+    'dashboard'
     # 'gateways'
 ]
 
@@ -141,7 +142,7 @@ MESSAGE_TAGS = {
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  # port for gmail
 EMAIL_HOST_USER = 'd3vcare@gmail.com'
-#EMAIL_HOST_PASSWORD = 'donxtcare'
+#  EMAIL_HOST_PASSWORD = 'donxtcare'
 EMAIL_HOST_PASSWORD = '8386466341'
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = True

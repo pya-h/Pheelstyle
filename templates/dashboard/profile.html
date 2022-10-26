@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y bg text-center">
+        <div class="container">
+            <div class="row">
+                {% include 'dashboard/sidebar.html' %}
+                <main class="col-lg-9 text-right mt-4">
+                    <article class="card bg-transparent" style="border: none">
+                        <header class="bg-transparent" style="z-index: 1">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img src="{% static 'images/noavatar.jpeg' %}" alt="آواتارت" width="96" height="96" style="border-radius: 50%">
+                                    </div>
+                                </div>
+                        </header>
+                        <div class="card-body" style="border-radius: 15px; border: 1px solid lightgray; margin-top: -2%; z-index: 0">
+                            <form method="post" action="{% url 'user-profile' %}">
+                                {% csrf_token %}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div dir="ltr"  class="form-row">
+                                            {{ profile_form.avatar }}
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div class="col form-group">
+                                                <label for="fname">اسم</label>
+                                                {{ user_form.fname }}
+                                            </div>
+                                            <div class="col form-group">
+                                                <label for="lname">فامیل</label>
+                                                {{ user_form.lname }}
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col form-group">
+                                                <label for="phone">شماره تماس</label>
+                                                {{ user_form.phone }}
+                                            </div>
+                                            <div class="col form-group">
+                                                <label for="email">ایمیل</label>
+                                                {{ user_form.email }}
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col form-group">
+                                                <label for="province">استان</label>
+                                                {{ profile_form.province }}
+                                            </div>
+                                            <div class="col form-group">
+                                                <label for="city">شهر</label>
+                                                {{ profile_form.city }}
+                                            </div>
+                                            <div class="col form-group">
+                                                <label for="postal_code">کد پستی</label>
+                                                {{ profile_form.postal_code }}
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col form-group">
+                                                <label for="address">آدرس کامل</label>
+                                                {{ profile_form.address }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-block btn-info">ذخیره</button>
+                                </div> <!-- card.// -->
+                            </form>
+                            <div class="row" style="height: 3rem">
+                            {% include 'includes/toast.html' %}
+
+                            </div>
+                        </div> <!-- card-body .// -->
+                    </article> <!-- order-group.// -->
+                </main>
+            </div> <!-- row.// -->
+        </div>
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

@@ -135,7 +135,7 @@ def stack(request):
 
 
 @login_required(login_url='login')
-def checkout(request):
+def order(request):
     try:
         context = open_stack(request).submit_bill()
     except ObjectDoesNotExist:
@@ -144,4 +144,4 @@ def checkout(request):
             'taken_products': [],
             'stack': None,
         }
-    return render(request, 'store/checkout.html', context)
+    return render(request, 'purchase/order.html', context)

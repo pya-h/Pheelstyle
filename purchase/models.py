@@ -35,9 +35,9 @@ class Transaction(models.Model):
 
 
 class OrderReceiver(models.Model):
-
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     related_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    # order = models.ForeignKey(Order, on_delete=models.CASCADE)
     # receiver identification
     fname = models.CharField(max_length=30, verbose_name="Receiver's First Name", blank=True)
     lname = models.CharField(max_length=30, verbose_name="Receiver's Last Name", blank=True)
@@ -46,7 +46,7 @@ class OrderReceiver(models.Model):
     postal_code = models.CharField(max_length=10, verbose_name="Postal Code", blank=False)
     province = models.CharField(max_length=30, verbose_name="Province", blank=False)
     city = models.CharField(max_length=30, verbose_name="City", blank=False)
-    address = models.CharField(max_length=256, verbose_name="Address", blank=False)
+    address = models.TextField(max_length=256, verbose_name="Address", blank=False)
 
     def fullname(self):
         return f'{self.fname} {self.lname}'

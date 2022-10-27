@@ -83,10 +83,11 @@
                                 <hr>
                                 {% comment %} {% if this_product.stock <= 0  %}
                                     <button disabled class="btn btn-block btn-dark expandable-button">تا دسته فروش رفت</button> {% endcomment %}
+
                                 {% if not this_product.available %}
                                     <button disabled class="btn btn-block btn-danger expandable-button">موجود نیست هنوز</button>
                                 {% else %}
-                                    <button type="submit" class="btn btn-lg btn-block btn-primary expandable-button">نظرمه</button>
+                                    <button type="submit" class="btn btn-lg btn-block btn-primary btn-shaking">نظرمه</button>
                                 {% endif %}
                                 <!--<a href="./product-detail.html" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </a> -->
                              </article> <!-- product-info-aside .// -->
@@ -126,7 +127,7 @@
                                         <input type="radio" name="rating" id="rate0_5" value="0.5" required /> <label for="rate0_5" title="0.5" class="star half"></label>
                                     </div>
                                     <div class="col-lg-2 col-md-2 col-4 text-left">
-                                        <button type="submit" class="btn btn-success btn-block text-center"><b>پست</b></button>
+                                        <button type="submit" class="btn btn-success btn-block btn-shaking text-center"><b>پست</b></button>
                                     </div>
                                 {% else %}
                                     <div>برای ادای فیلان بیسار باید ابتدا

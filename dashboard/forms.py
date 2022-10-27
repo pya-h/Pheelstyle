@@ -34,6 +34,6 @@ class ProfileEditForm(forms.ModelForm):
         self.fields['address'].widget.attrs['rows'] = 3
         # style the avatar change button:
         self.fields['avatar'].widget.attrs['title'] = "میتونی از اینجا آواتارتو عوض کنی"
-        self.fields['avatar'].widget.attrs['class'] = "btn btn-outline-light btn-block text-dark btn-large"
+        self.fields['avatar'].widget.attrs['class'] = "btn btn-outline-light btn-block btn-shaking text-dark btn-large"
         self.fields['avatar'].widget.attrs['style'] = "cursor: pointer;"
         self.fields['avatar'].widget.attrs['title'] = "میتونی از اینجا آواتارتو عوض کنی"

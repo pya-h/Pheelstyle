@@ -12,105 +12,37 @@
                         <header class="bg-transparent" style="z-index: 1">
                                 <div class="row">
                                     <div class="col-2">
-                                        <img onclick="openFileDialog()" src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%; cursor: pointer;">
-                                    </div>
-                                    <div class="col-md-8 text-center col-7" id="leftArrowIcon" >
-                                        <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="col-2 text-left">
-                                        <img id="newAvatarPreview" src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%">
+                                        <img src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%;">
                                     </div>
 
                                 </div>
                         </header>
                         <div class="card-body" style="border-radius: 15px; border: 1px solid lightgray; margin-top: -2%; z-index: 0">
-                            <form method="post" action="{% url 'user-profile' %}" enctype="multipart/form-data">
+                            <form method="post" action="{% url 'user-chpwd' %}">
                                 {% csrf_token %}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-row">
-                                            {{ profile_form.avatar }}
-                                            <script>
-
-                                                const fileChangeAvatar = document.getElementById("fileChangeAvatar");
-                                                const newAvatarPreview = document.getElementById("newAvatarPreview");
-                                                const elements = [ newAvatarPreview, document.getElementById("leftArrowIcon")];
-                                                function showHideElements(elements, hide=true) {
-                                                    for(const el of elements)
-                                                        el.style.opacity = `${+!hide}`;
-                                                }
-
-                                                function openFileDialog() {
-                                                    fileChangeAvatar.click();
-                                                }
-                                                window.onload = function() {
-                                                    showHideElements(elements);
-                                                    popScreenUp();
-                                                    fileChangeAvatar.addEventListener('change', function () {
-                                                        try{
-                                                            if(this.files){
-                                                                const oFReader = new FileReader();
-                                                                oFReader.readAsDataURL(this.files[0]);
-                                                                oFReader.onload = (oFREvent) => {
-                                                                    showHideElements(elements, false);
-                                                                    newAvatarPreview.src = oFREvent.target.result;
-                                                                };
-                                                            }
-                                                            else {
-                                                                showHideElements(elements);
-                                                            }
-                                                        }
-                                                        catch (ex) {
-                                                            console.log("New avatar selected is an unsupported file because:", ex);
-                                                            showHideElements(elements);
-                                                        }
-                                                    })
-                                                }
-                                            </script>
+                                            <div class="col form-group">
+                                                <label for="password">رمز فعلی</label>
+                                                <input id="password" type="password" class="form-control txt-shaking text-left text-dark" name="password" placeholder="Password" requird />
+                                            </div>
                                         </div>
                                         <hr />
                                         <div class="form-row">
                                             <div class="col form-group">
-                                                <label for="fname">اسم</label>
-                                                {{ user_form.fname }}
-                                            </div>
-                                            <div class="col form-group">
-                                                <label for="lname">فامیل</label>
-                                                {{ user_form.lname }}
+                                                <label for="new-pass">رمز شب جدید</label>
+                                                <input id="new-pass" type="password" class="form-control txt-shaking text-left text-dark" name="new-pass" placeholder="New Password" required />
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="col form-group">
-                                                <label for="phone">شماره تماس</label>
-                                                {{ user_form.phone }}
-                                            </div>
-                                            <div class="col form-group">
-                                                <label for="email">ایمیل</label>
-                                                {{ user_form.email }}
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col form-group">
-                                                <label for="province">استان</label>
-                                                {{ profile_form.province }}
-                                            </div>
-                                            <div class="col form-group">
-                                                <label for="city">شهر</label>
-                                                {{ profile_form.city }}
-                                            </div>
-                                            <div class="col form-group">
-                                                <label for="postal_code">کد پستی</label>
-                                                {{ profile_form.postal_code }}
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="col form-group">
-                                                <label for="address">آدرس کامل</label>
-                                                {{ profile_form.address }}
+                                                <label for="confirm-pass">تکرار رمز جدید</label>
+                                                <input id="confirm-pass" type="password" class="form-control txt-shaking text-left text-dark" name="confirm-pass" placeholder="Confirm Password" required />
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-block btn-outline-info">ذخیره</button>
+                                    <button type="submit" class="btn btn-block btn-outline-warning">تغییر رمز</button>
                                 </div> <!-- card.// -->
                             </form>
                             <div class="row" style="height: 3rem">

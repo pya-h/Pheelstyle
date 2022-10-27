@@ -97,7 +97,7 @@
                                         </select>
                                     </div>
                                     </div> <!-- form-row.// -->
-                                    <button class="btn btn-block btn-primary expandable-button">لحاظ کن</button>
+                                    <button class="btn btn-block btn-primary btn-shaking">لحاظ کن</button>
                                 </div><!-- card-body.// -->
                             </div>
                         </article> <!-- filter-group .// -->
@@ -137,7 +137,7 @@
                                             {% elif not product.available %}
                                                 <button disabled class="btn btn-block btn-danger">موجود نیست هنوز</button>
                                             {% else %}
-                                                <a href="{% url 'take_product' product.ID %}" enabled="true" class="btn btn-block btn-primary expandable-button">بزن به خرمن</a>
+                                                <a href="{% url 'take_product' product.ID %}" enabled="true" class="btn btn-shaking btn-block btn-primary">نظرمه!</a>
                                             {% endif %}
                                         </figcaption>
                                     </figure>

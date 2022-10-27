@@ -12,9 +12,11 @@
                         <header class="bg-transparent" style="z-index: 1">
                                 <div class="row">
                                     <div class="col-2">
-                                        <img src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%">
+                                        <img onclick="openFileDialog()" src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%; cursor: pointer;">
                                     </div>
-                                    <div class="col-md-8 col-7"></div>
+                                    <div class="col-md-8 text-center col-7" id="leftArrowIcon" >
+                                        <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                                    </div>
                                     <div class="col-2 text-left">
                                         <img id="newAvatarPreview" src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%">
                                     </div>
@@ -29,25 +31,38 @@
                                         <div class="form-row">
                                             {{ profile_form.avatar }}
                                             <script>
+
+                                                const fileChangeAvatar = document.getElementById("fileChangeAvatar");
                                                 const newAvatarPreview = document.getElementById("newAvatarPreview");
+                                                const elements = [ newAvatarPreview, document.getElementById("leftArrowIcon")];
+                                                function showHideElements(elements, hide=true) {
+                                                    for(const el of elements)
+                                                        el.style.opacity = `${+!hide}`;
+                                                }
+
+                                                function openFileDialog() {
+                                                    fileChangeAvatar.click();
+                                                }
                                                 window.onload = function() {
-                                                    newAvatarPreview.style.opacity = "0";
+                                                    showHideElements(elements);
                                                     popScreenUp();
-                                                    document.getElementById("fileChangeAvatar").addEventListener('change', function () {
+                                                    fileChangeAvatar.addEventListener('change', function () {
                                                         try{
-                                                            if(this.files && this.files[0].name){
+                                                            if(this.files){
                                                                 const oFReader = new FileReader();
                                                                 oFReader.readAsDataURL(this.files[0]);
                                                                 oFReader.onload = (oFREvent) => {
-                                                                    newAvatarPreview.style.opacity = "1";
+                                                                    showHideElements(elements, false);
                                                                     newAvatarPreview.src = oFREvent.target.result;
                                                                 };
                                                             }
-                                                            else newAvatarPreview.style.opacity = "0";
+                                                            else {
+                                                                showHideElements(elements);
+                                                            }
                                                         }
                                                         catch (ex) {
                                                             console.log("New avatar selected is an unsupported file because:", ex);
-                                                            newAvatarPreview.style.opacity = "0";
+                                                            showHideElements(elements);
                                                         }
                                                     })
                                                 }
@@ -95,7 +110,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-block btn-outline-info">ذخیره</button>
+                                    <button type="submit" class="btn btn-block btn-outline-info btn-shaking">ذخیره</button>
                                 </div> <!-- card.// -->
                             </form>
                             <div class="row" style="height: 3rem">

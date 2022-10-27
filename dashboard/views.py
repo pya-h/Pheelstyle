@@ -59,3 +59,42 @@ def profile(request):
         profile_form = ProfileEditForm(instance=user_profile)
 
     return render(request, 'dashboard/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+
+@login_required(login_url='login')
+def change_pass(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    if request.method == "POST":
+        try:
+
+            password = request.POST["password"]
+            new_pass = request.POST["new-pass"]
+            confirm_pass = request.POST["confirm-pass"]
+
+            if new_pass != confirm_pass:
+                messages.error(request, "رمز شب جدیدت با تاییدیه ش مطابقت نداره که!")
+                return redirect('user-chpwd')
+
+            user = User.objects.get(id__exact=request.user.id)
+            if not user:
+                messages.error(request, 'کاربر کنونی غیر معتبر تشریف دارد!')
+                return redirect('login')
+
+            # now check  that old password is correct
+            if not user.check_password(password):
+                messages.error(request, "در صورتی که رمز شبت رو اشتباه بزنی امکان تغییر رمز وجود نداره! ")
+                return redirect('user-chpwd')
+
+            # if everything checks out, then try to change th pas:
+            user.set_password(new_pass)
+            user.save()
+            messages.info(request, "رمز شب شما تغییر یافت.")
+            return redirect('logout')
+
+        except User.DoesNotExist:
+            messages.error(request, 'کاربر کنونی غیر معتبر تشریف دارد!')
+            return redirect('login')
+        except:
+            pass
+    return render(request, 'dashboard/change_pass.html')

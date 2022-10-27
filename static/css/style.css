@@ -8,10 +8,7 @@ body {
     transition: all 1s;
     -webkit-transition: all 1s;
 }
-#newAvatarPreview {
-    transition: opacity 0.5s;
-    -webkit-transition: opacity 0.5s;
-}
+
 .expand-opacity-animation {
     opacity: 1;
     -webkit-transition: opacity 0.25s ease-in-out;
@@ -24,12 +21,12 @@ body {
 }
 
 .btn-animation{
-    width: 70%;
+    width: 100%;
     -webkit-transition: width 0.4s ease-in-out;
     transition: width 0.4s ease-in-out;
 }
 .btn-animation:hover{
-    width: 100%;
+    width: 85%;
 }
 
 .expandable-textbox{
@@ -106,4 +103,47 @@ input:checked + .star:hover, input:checked ~ .star:hover, input:checked ~ .star:
 }
 .comment:hover {
     opacity: 0.7;
+}
+
+#newAvatarPreview {
+    opacity: 0;
+    transition: opacity 1.5s;
+    -webkit-transition: opacity 1.5s;
+}
+#leftArrowIcon {
+    transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+    font-size: 7rem;
+    opacity: 0;
+}
+
+
+.btn-shaking {
+    margin: auto;
+}
+.btn-shaking:hover {
+    animation: shake-anim 0.5s linear infinite;
+}
+
+.txt-shaking {
+    margin: auto;
+    transition: background-color 2s;
+}
+.txt-shaking:hover {
+    background: royalblue;
+}
+.txt-shaking:focus {
+    animation: shake-anim 0.5s linear infinite;
+}
+
+@keyframes shake-anim{
+    0%{
+        width: 100%;
+    }
+    50% {
+        width: 90%;
+    }
+    100%{
+        width: 100%;
+    }
 }

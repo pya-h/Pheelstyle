@@ -3,7 +3,6 @@ from stack.models import TakenProduct
 from .forms import OrderForm, ReserveTransactionForm
 from stack.utlities import open_stack
 from .models import Order, OrderReceiver, Transaction, OrderedProduct, Receipt
-import datetime
 from django.contrib.auth.decorators import login_required
 
 
@@ -107,18 +106,10 @@ def submit_order(request):
 
                 order.buyer.save()
                 order.save()  # call save for django to set the id primary key automatically
-                # now I generate the order key: the key that that identifies the order for both seller and buyer
-                year = int(datetime.date.today().strftime('%Y'))
-                month = int(datetime.date.today().strftime('%m'))
-                day = int(datetime.date.today().strftime('%d'))
-                today = datetime.date(year, month, day)  # construct today's date in proper format and object
-                order_key = today.strftime('%Y%m%d') + str(
-                    order.id)  # django default primary key: id starts from 1 increasing by one
-                order.key = order_key
-                order.save()
+                order.key = order.keygen()
 
                 # use Order.objects.get to make sure that the order is saved properly and retrievable
-                order = Order.objects.get(buyer=request.user, key=order_key)
+                order = Order.objects.get(buyer=request.user, key=order.key)
                 context = {
                     'order': order,
                     'goods': stack_items,

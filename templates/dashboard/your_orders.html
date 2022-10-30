@@ -7,12 +7,15 @@
 
     <section class="section-content padding-y bg text-center">
         <div class="container">
+
             <div class="row">
+
                 {% include 'dashboard/sidebar.html' %}
                 <main class="col-lg-9 text-right mt-4">
                     <div class="table-orders-limiter">
                         <div class="container-table-orders">
                             <div class="wrap-table-orders">
+                                {% include 'includes/toast.html' %}
                                 <table class="table-orders">
                                     <thead>
                                         <tr class="table-orders-head">

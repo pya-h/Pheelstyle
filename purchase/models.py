@@ -1,5 +1,5 @@
 from django.db import models
-
+import datetime
 from store.models import Variation, Product
 from user.models import User
 from uuid import uuid4
@@ -109,6 +109,15 @@ class Order(models.Model):
 
     def receipt_url(self):
         return reverse('order_receipt', args=[self.key])
+
+    def keygen(self):
+        # now I generate the order key: the key that that identifies the order for both seller and buyer
+        year = int(datetime.date.today().strftime('%Y'))
+        month = int(datetime.date.today().strftime('%m'))
+        day = int(datetime.date.today().strftime('%d'))
+        today = datetime.date(year, month, day)  # construct today's date in proper format and object
+        return today.strftime('%Y%m%d') + str(
+            self.id)  # django default primary key: id starts from 1 increasing by one
 
     def sell_products(self):
         # apply order and update the product stocks and statistics in the inventory

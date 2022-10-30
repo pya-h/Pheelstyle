@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from purchase.models import Order
+from purchase.models import Order, OrderedProduct
 from django.shortcuts import render, get_object_or_404, redirect
 from user.models import Profile, User
 from .forms import UserEditForm, ProfileEditForm
@@ -98,3 +98,18 @@ def change_pass(request):
         except:
             pass
     return render(request, 'dashboard/change_pass.html')
+
+
+@login_required(login_url='login')
+def view_order(request, order_key):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    context = {}
+    try:
+        context['order'] = Order.objects.get(key=order_key)
+        context['its_products'] = OrderedProduct.objects.filter(order__key=order_key)
+    except Order.DoesNotExist or OrderedProduct.DoesNotExist:
+        messages.error(request, "همچین زد و بندی نداشتیم ما با هم!")
+        return redirect('user-orders')
+
+    return render(request, 'dashboard/single_order.html', context)

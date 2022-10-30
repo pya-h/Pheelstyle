@@ -117,7 +117,6 @@ input:checked + .star:hover, input:checked ~ .star:hover, input:checked ~ .star:
     opacity: 0;
 }
 
-
 .btn-shaking {
     margin: auto;
 }

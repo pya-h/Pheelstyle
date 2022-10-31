@@ -19,7 +19,7 @@
                                 <table class="table-orders">
                                     <thead>
                                         <tr class="table-orders-head">
-                                            <th class="table-column-1 text-center">شماره سفارش</th>
+                                            <th class="table-column-1 text-center"> شماره سفارش</th>
                                         {% if your_orders.count %}
                                             <th class="table-column-1 text-center">به نام</th>
                                             <th class="table-column-1 text-center">هزینه (تومن)</th>
@@ -31,7 +31,7 @@
                                 {% if your_orders.count %}
                                     {% for order in your_orders %}
                                         <tr>
-                                            <td class="table-column-1 text-center"><b>{{ order.key }}</b></td>
+                                            <td class="table-column-1 text-center"><a href="{% url 'view-order' order.key %}">{{ order.key }}@</a></td>
                                             <td class="table-column-1 text-center"><b>{{ order.receiver }}</b></td>
                                             <td class="table-column-1 text-center"><b>{{ order.must_be_paid }}</b></td>
                                             <td class="table-column-1 text-center">

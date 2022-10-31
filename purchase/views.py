@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from stack.models import TakenProduct
 from .forms import OrderForm, ReserveTransactionForm
 from stack.utlities import open_stack
-from .models import Order, OrderReceiver, Transaction, OrderedProduct, Receipt
+from .models import Order, OrderReceiver, Transaction, PurchasedItem, Receipt
 from django.contrib.auth.decorators import login_required
 
 
@@ -18,27 +18,27 @@ def finalize_order(request, order_key, method, status, reference_id=None, amount
             user_stack.submit_bill()  # to make sure total products in the stack are billed successfully
             stack_items = TakenProduct.objects.filter(stack=user_stack)
             for item in stack_items:
-                ordered_product = OrderedProduct()
-                ordered_product.order_id = order.id  # another way of setting an ForeignKey object's value inside a
+                purchased_item = PurchasedItem()
+                purchased_item.order_id = order.id  # another way of setting an ForeignKey object's value inside a
                 # model
-                ordered_product.buyer_id = request.user.id
-                ordered_product.product_id = item.product_id
+                purchased_item.buyer_id = request.user.id
+                purchased_item.product_id = item.product_id
                 # variations cannot be set like this, it must be set after .save() call
-                ordered_product.quantity = item.quantity
-                ordered_product.cost = item.total_price()
-                ordered_product.delivered = order.status == 'delivered'
-                # ordered_product.color = ...?
-                # ordered_product.size = ...?
+                purchased_item.quantity = item.quantity
+                purchased_item.cost = item.total_price()
+                purchased_item.delivered = order.status == 'delivered'
+                # purchased_item.color = ...?
+                # purchased_item.size = ...?
                 preferred_variations = item.preferred_variations.all()
-                ordered_product.save()
-                ordered_product.variations.set(preferred_variations)
+                purchased_item.save()
+                purchased_item.variations.set(preferred_variations)
                 # **** NOTE ****
                 # when applying .variations the tutorial goes other idiotic way
                 # and does all the unnecessary things there
                 # i do that in a wise way that anyone would do
                 # but when running anything went wrong check this part again
-                if ordered_product.quantity <= ordered_product.exact_stock():
-                    # ordered_product.save()
+                if purchased_item.quantity <= purchased_item.exact_stock():
+                    # purchased_item.save()
 
                     # reduce the sold products from variation.stock values
                     # NOTE: i think this type of saving stock numbers is wrong and will cause problems
@@ -47,13 +47,13 @@ def finalize_order(request, order_key, method, status, reference_id=None, amount
                     # MOVE THIS PIECE OF CODE TO ADMIN VERIFICATION SECTION FOR INCOMING ORDERS
                     # for preferred_variation in preferred_variations:
                     # variation = Variation.objects.get(id=preferred_variation.id)
-                    # variation.stock -= ordered_product.quantity
+                    # variation.stock -= purchased_item.quantity
                     # variation.save()
                     # MOVE CODE ABOVE TO ADMIN VERIFICATION SECTION
-                    ordered_product.save()
+                    purchased_item.save()
                     item.delete()  # *** CORRECT ???? ***
                 else:
-                    ordered_product.anything_wrong = "تعداد درخواستی شما از این نوع کالا، بیشتر از موجودی انبار است."
+                    purchased_item.anything_wrong = "تعداد درخواستی شما از این نوع کالا، بیشتر از موجودی انبار است."
                     order.status = "failed"
             order.save()
             return order

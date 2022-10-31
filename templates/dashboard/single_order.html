@@ -15,25 +15,25 @@
                             <div class="col-lg-6">
                                 <!-- col-lg-6 start here -->
                                 <div class="invoice-from">
-                                    <ul class="list-unstyled text-right">
-                                        <li><strong>Invoiced To</strong></li>
+                                    <strong>مشخصات گیرنده</strong>
+                                    <ul style="border-top: 1px dashed black; list-style-type: none" class="w-100 text-right" >
                                         <li>{{ order.receiver }}</li>
-                                        <li> {{ order.receiver.province }} 37</li>
-                                        <li> {{ order.receiver.city }}</li>
+                                        <li> {{ order.receiver.province }}, {{ order.receiver.city }}</li>
                                         <li> {{ order.receiver.address }}</li>
                                     </ul>
                                 </div>
                             </div>
                             <!-- col-lg-6 end here -->
+
                             <div class="col-lg-12">
                                 <!-- col-lg-12 start here -->
                                 <div class="invoice-details mt25">
                                     <div class="well">
-                                        <ul class="list-unstyled mb0">
-                                            <li><strong>سفارش</strong> {{ order.key  }}</li>
+                                        <ul lass="list-unstyled mb0" style="list-style-type: none">
+                                            <li><strong>سفارش:</strong> {{ order.key  }}@</li>
                                             <li><strong>تراکنش</strong> {{ order.transaction.receipt.reference_id }}</li>
-                                            <li><strong>تاریخ سفارش:</strong> {{ order.date_created }} /li>
-                                            <li><strong>وضعیت:</strong> {{ order.status }} </li>
+                                            <li><strong>تاریخ سفارش:</strong> {{ order.date_created }} </li>
+                                            <li><strong>وضعیت:</strong> {{ order.status_fa }} </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -43,41 +43,45 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th class="per70 text-center">توضیحات</th>
-                                                    <th class="per5 text-center">Qty</th>
-                                                    <th class="per25 text-center">جمع کل</th>
+                                                    <th class="per70 text-center">کالا</th>
+                                                    <th class="per5 text-center">تعداد</th>
+                                                    <th class="per25 text-center">هزینه کل</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                            {% for item in items  %}
                                                 <tr>
-                                                    <td>1024MB Cloud 2.0 Server - elisium.dynamic.com (12/04/2014 - 01/03/2015)</td>
+                                                    <td>
+                                                        {{ item.product }}
+                                                            {% if item.variations.all  %}
+                                                                {% for v in item.variations.all %}
+                                                                    <p class="text-muted my-0">
+                                                                        {{ v.parameter_fa }} : {{ v.value | capfirst }}
+                                                                    </p>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                    </td>
                                                     <td class="text-center">1</td>
                                                     <td class="text-center">$25.00 USD</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Logo design</td>
-                                                    <td class="text-center">1</td>
-                                                    <td class="text-center">$200.00 USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Backup - 1024MB Cloud 2.0 Server - elisium.dynamic.com</td>
-                                                    <td class="text-center">12</td>
-                                                    <td class="text-center">$12.00 USD</td>
-                                                </tr>
+                                            {% endfor %}
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th colspan="2" class="text-right">Sub Total:</th>
+                                                    <th colspan="2" class="text-right">جمع اولیه</th>
                                                     <th class="text-center">$237.00 USD</th>
                                                 </tr>
                                                 <tr>
-                                                    <th colspan="2" class="text-right">Tax:</th>
+                                                    <th colspan="2" class="text-right">تخفیفات:</th>
                                                     <th class="text-center">$47.40 USD</th>
                                                 </tr>
-
                                                 <tr>
-                                                    <th colspan="2" class="text-right">Grand Total:</th>
-                                                    <th class="text-center">$284.4.40 USD</th>
+                                                    <th colspan="2" class="text-right">هزینه ارسال:</th>
+                                                    <th class="text-center">$47.40 USD</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="2" class="text-right">قیمت آخر:</th>
+                                                    <th class="text-center">{{ order.must_be_paid }} تومن</th>
                                                 </tr>
                                             </tfoot>
                                         </table>

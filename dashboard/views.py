@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from purchase.models import Order, OrderedProduct
+from purchase.models import Order, PurchasedItem
 from django.shortcuts import render, get_object_or_404, redirect
 from user.models import Profile, User
 from .forms import UserEditForm, ProfileEditForm
@@ -106,9 +106,23 @@ def view_order(request, order_key):
         return redirect('login')
     context = {}
     try:
+        status = {'new': 'جدید',
+                  'pending': 'در دست بررسی',
+                  'certified': 'سفارش معتبر',
+                  'sent': ' ارسال شده',
+                  'delivered': 'تحویل شده',
+                  'uncertified': 'سفارش نامعتبر',
+                  'not_sent': 'عدم ارسال',
+                  'undelivered': 'عدم تحویل',
+                  'canceled': 'داستان',
+                  'failed': 'قطعی آب'
+              }
+
         context['order'] = Order.objects.get(key=order_key)
-        context['its_products'] = OrderedProduct.objects.filter(order__key=order_key)
-    except Order.DoesNotExist or OrderedProduct.DoesNotExist:
+        context['items'] = PurchasedItem.objects.filter(order__key=order_key)
+
+        context['order'].status_fa = status[str(context['order'].status)]
+    except Order.DoesNotExist or PurchasedItem.DoesNotExist:
         messages.error(request, "همچین زد و بندی نداشتیم ما با هم!")
         return redirect('user-orders')
 

@@ -121,7 +121,7 @@ class Order(models.Model):
 
     def sell_products(self):
         # apply order and update the product stocks and statistics in the inventory
-        ordered_products = OrderedProduct.objects.filter(order=self, buyer=self.buyer,)  # transaction=self.transaction
+        ordered_products = PurchasedItem.objects.filter(order=self, buyer=self.buyer, )  # transaction=self.transaction
         for item in ordered_products:
             preferred_variations = item.variations.all()
             for preferred_variation in preferred_variations:
@@ -131,7 +131,7 @@ class Order(models.Model):
         self.save()
 
 
-class OrderedProduct(models.Model):
+class PurchasedItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     buyer = models.ForeignKey(User, on_delete=models.CASCADE)

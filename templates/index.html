@@ -32,6 +32,16 @@
                                     <figcaption class="info-wrap">
                                         <a href="{{ product.url }}" class="title text-center">{{ product }}</a>
                                         <div class="price mt-1 text-center">{{ product.price }} تومن</div> <!-- price-wrap.// -->
+                                        <div class="mx-auto text-center">
+                                            <span dir="ltr" class="text-left mt-2">
+                                                <i class="fa fa-star{% if product.rating < 0.5 %}-o{% elif product.rating >= 0.5 and product.rating < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.rating < 1.5 %}-o{% elif product.rating >= 1.5 and product.rating < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.rating < 2.5 %}-o{% elif product.rating >= 2.5 and product.rating < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.rating < 3.5 %}-o{% elif product.rating >= 3.5 and product.rating < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                                                <i class="fa fa-star{% if product.rating < 4.5 %}-o{% elif product.rating >= 4.5 and product.rating < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+
+                                            </span>
+                                        </div>
                                     </figcaption>
                                 </div>
                             </div> <!-- col.// -->

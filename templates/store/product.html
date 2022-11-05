@@ -47,7 +47,7 @@
                                     </div>
                                     <div dir="rtl" class="col-lg-6 col-md-6 col-12 text-left">
                                         امتیاز:
-                                        <b style="color:coral">{{ this_product.rating }}</b>
+                                        <b style="color:coral">{{ this_product.format_rating }}</b>
                                     </div>
                                 </div>
                                 <p>{{ this_product.description }}</p>
@@ -82,15 +82,15 @@
                                          {% for v_size in this_product.variation_set.by_size %}
                                              {% if v_size.stock > 0 %}
                                                  <label style="font-size: 16px;" class="btn btn-light variation-select">
-                                                        <input type="radio" name="size" value="{{v_size.value.lower}}">
-                                                        {{ v_size.value }}
-                                                        {% if v_size.stock > 3 %}
-                                                            <span class="badge pill badge-success mx-1 variation"> {{ v_size.stock }} </span>
-                                                        {% elif v_size.stock > 1 %}
-                                                            <span class="badge pill badge-warning mx-1 variation"> {{ v_size.stock }} </span>
-                                                        {% else %}
-                                                            <span class="badge pill badge-danger mx-1 variation"> {{ v_size.stock }} </span>
-                                                        {% endif %}
+                                                    <input type="radio" name="size" value="{{v_size.value.lower}}">
+                                                    {{ v_size.value }}
+                                                    {% if v_size.stock > 3 %}
+                                                        <span class="badge pill badge-success mx-1 variation"> {{ v_size.stock }} </span>
+                                                    {% elif v_size.stock > 1 %}
+                                                        <span class="badge pill badge-warning mx-1 variation"> {{ v_size.stock }} </span>
+                                                    {% else %}
+                                                        <span class="badge pill badge-danger mx-1 variation"> {{ v_size.stock }} </span>
+                                                    {% endif %}
                                                   </label>
                                              {% endif %}
                                           {% endfor %}

@@ -9,7 +9,7 @@ from django.db.models import Avg, Count
 
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100, unique=True, blank=False,)
+    name = models.CharField(max_length=100, unique=True, blank=False, )
     name_fa = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام")
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=1024, blank=True)
@@ -40,43 +40,52 @@ class Product(models.Model):
         return self.name_fa
         # return self.name_fa
 
-    def rating(self):
-        reviews = Review.objects.filter(product=self, status=True).aggregate(average_rating=Avg('rating'), count=Count('id'))
+    def format_rating(self):
+        reviews = Review.objects.filter(product=self, status=True).aggregate(average_rating=Avg('rating'),
+                                                                             count=Count('id'))
         if reviews['count']:
             return f'{float(reviews["average_rating"])}/5.0 [{int(reviews["count"])}]'
         return "-"
+
+    def rating(self):
+        try:
+            return Review.objects.filter(product=self, status=True).aggregate(average_rating=Avg('rating'))[
+                'average_rating']
+        except Exception as ex:
+            print("Something went wrong while calculating product rating because: ", ex)
+        return None
 
 
 class VariationManager(models.Manager):
     def by_color(self):
         """
-            returns color variations
-        :return:list
-        """
+                returns color variations
+            :return:list
+            """
         return super(VariationManager, self).filter(parameter='color', is_available=True)
 
     def by_size(self):
         """
-            returns size variations
-        :return:list
-        """
+                returns size variations
+            :return:list
+            """
         return super(VariationManager, self).filter(parameter='size', is_available=True)
 
     def displayable(self):
         """
-        check if the product has at least one available variation for each defined parameter
-        :return:boolean
-        """
+            check if the product has at least one available variation for each defined parameter
+            :return:boolean
+            """
         # **** add more checking like checking product.stock and product.available
         return self.by_size() and self.by_color()
 
     def item_exists(self, color, size):
         """
-            this will check if a product with these preferred color and size exists in the inventory
-            :param color:
-            :param size:
-            :return:boolean
-        """
+                this will check if a product with these preferred color and size exists in the inventory
+                :param color:
+                :param size:
+                :return:boolean
+            """
         color_exists = self.by_color().filter(value=color.lower())
         size_exists = self.by_size().filter(value=size.lower())
         return color_exists and size_exists

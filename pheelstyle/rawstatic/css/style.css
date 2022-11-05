@@ -163,5 +163,8 @@ ul.product-image-thumbnail li img {
     height: 80px;
     border: 1px solid coral;
     border-radius: 10px;
+}
 
+ul.product-image-thumbnail li img:hover {
+    opacity: 0.6;
 }

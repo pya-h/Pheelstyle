@@ -9,12 +9,29 @@
             <div style="border-radius: 5px" class="card">
                 <div class="row no-gutters">
                     <aside class="col-lg-6">
-                        <article class="gallery-wrap">
-                            <div class="img-big-wrap">
+                        <article class="gallery-wrap my-4 mx-4">
+                            <div class="img-big-wrap imagePreview">
                                <a href="#"><img src="{{ this_product.image.url }}"></a>
                             </div> <!-- img-big-wrap.// -->
 
                         </article> <!-- gallery-wrap .end// -->
+                        <ul class="product-image-thumbnail">
+                            <li>
+                                {% for item in gallery %}
+                                    <a href="{{ item.image.url }}" target="imagePreview"><img src="{{ item.image.url }}" alt="عکس کالا" /></a>
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    <script>
+                        $(document).ready(function() {
+                            // implement the image preview change when clicking on a thumbnail
+                            $('.product-image-thumbnail a').click(function(event) {
+                                event.preventDefault();
+                                $('.imagePreview img').attr('src', $(this).attr('href'))
+
+                            })
+                        })
+                    </script>
                     </aside>
                     <main class="col-lg-6 border-left text-right">
                         <form method="POST" action="{% url 'take_product' this_product.ID %}" >

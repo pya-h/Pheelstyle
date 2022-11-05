@@ -14,13 +14,13 @@ class Product(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(max_length=1024, blank=True)
     price = models.IntegerField()
-    image = models.ImageField(upload_to='photos/products')
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     discount = models.IntegerField(default=0)  # discount in percentage
     # below line delete all products associated when the category deletes!! expected?
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='photos/products')
 
     def update(self):
         # this function must update fields after sth has been sold
@@ -117,6 +117,18 @@ class Variation(models.Model):
 
     def __str__(self):
         return f'{self.parameter_fa()} : {self.value}'
+
+
+class Gallery(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
+    image = models.ImageField(upload_to='photos/products')
+
+    class Meta:
+        verbose_name = "Gallery"
+        verbose_name_plural = "Gallery"
+
+    def __str__(self):
+        return self.product.name
 
 
 class Review(models.Model):

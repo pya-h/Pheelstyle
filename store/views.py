@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from category.models import Category
-from .models import Product, Review
+from .models import Product, Review, Gallery
 from .forms import ReviewForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -30,10 +30,11 @@ def product(request, category_filter, product_slug=None):
         reviews = Review.objects.filter(product=this_product, status=True)
         #for review in reviews:
             #review.comment = review.comment.replace('\n', ' <br> ')
-
+        gallery = Gallery.objects.filter(product=this_product)
         context = {
             'this_product': this_product,
-            'reviews': reviews
+            'reviews': reviews,
+            'gallery': gallery
         }
     except Exception as ex:
         # handle this seriously

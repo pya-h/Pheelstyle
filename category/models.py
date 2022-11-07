@@ -6,11 +6,11 @@ from django.urls import reverse
 
 # category model for classifying your products
 class Category(models.Model):
-    name = models.CharField(max_length=30, blank=False, unique=True)
-    name_fa = models.CharField(max_length=30, blank=False, unique=True, verbose_name="نام")
-    slug = models.SlugField(max_length=30, unique=True)
-    description = models.TextField(max_length=256, blank=True)
-    icon = models.ImageField(upload_to='photos/categories/', blank=True) # optional field
+    name = models.CharField(max_length=30, blank=False, unique=True, verbose_name="نام دسته")
+    name_fa = models.CharField(max_length=30, blank=False, unique=True, verbose_name="فارسی نام دسته")
+    slug = models.SlugField(max_length=30, unique=True, verbose_name="اسلاگ")
+    description = models.TextField(max_length=256, blank=True, verbose_name="توضیحات")
+    icon = models.ImageField(upload_to='photos/categories/', blank=True, verbose_name="آیکون") # optional field
 
     class Meta:
         verbose_name = "category"

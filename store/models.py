@@ -8,19 +8,23 @@ from django.db.models import Avg, Count
 
 
 class Product(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=100, unique=True, blank=False, )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="آیدی")
+    name = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام به احنبی")
     name_fa = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام")
-    slug = models.SlugField(max_length=100, unique=True)
-    description = models.TextField(max_length=1024, blank=True)
-    price = models.IntegerField()
-    available = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    discount = models.IntegerField(default=0)  # discount in percentage
+    slug = models.SlugField(max_length=100, unique=True, verbose_name="اسلاگ")
+    description = models.TextField(max_length=1024, blank=True, verbose_name="مشخصات")
+    price = models.IntegerField(verbose_name="شیتیل")
+    available = models.BooleanField(default=True, verbose_name="در دسترس؟")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    modified = models.DateTimeField(auto_now=True, verbose_name="تاریخ تغییر")
+    discount = models.IntegerField(default=0, verbose_name="تخفیف")  # discount in percentage
     # below line delete all products associated when the category deletes!! expected?
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='photos/products')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="دسته بندی")
+    image = models.ImageField(upload_to='photos/products', verbose_name="تصویر")
+
+    class Meta:
+        verbose_name = "کالا"
+        verbose_name_plural = "کالا ها"
 
     def update(self):
         # this function must update fields after sth has been sold
@@ -57,6 +61,10 @@ class Product(models.Model):
 
 
 class VariationManager(models.Manager):
+    class Meta:
+        verbose_name = "سازمان دهنده مشخصات"
+        verbose_name_plural = "سازمان دهنده مشخصات"
+
     def by_color(self):
         """
                 returns color variations
@@ -99,18 +107,17 @@ class Variation(models.Model):
         ('size', 'سایز')
     )
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = "مشخصه"
+        verbose_name_plural = "مشخصات"
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="کالای مرتبط")
     # parameter means that on what parameter this variation differs from other variations with same Product
-    parameter = models.CharField(max_length=10, choices=variation_parameters)
-    value = models.CharField(max_length=20)
-    is_available = models.BooleanField(default=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
-    stock = models.IntegerField(default=1)  # number of remaining
-    # use default value for variation image or not?
-    # if variation has no image use the product.image
-    image = models.ImageField(upload_to=join('photos/products', parameter.__str__()), blank=True)  # parameter + '_'
-    # + value), blank=True)
-    # default image in photos/product root folder and variations in /product_name ? huh!
+    parameter = models.CharField(max_length=10, choices=variation_parameters, verbose_name="لیبل")
+    value = models.CharField(max_length=20 , verbose_name="ویزگی")
+    is_available = models.BooleanField(default=True, verbose_name="در دسترس؟")
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    stock = models.IntegerField(default=1, verbose_name="موجودی")  # number of remaining
     objects = VariationManager()
 
     def parameter_fa(self):
@@ -129,26 +136,26 @@ class Variation(models.Model):
 
 
 class Gallery(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None)
-    image = models.ImageField(upload_to='photos/products')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None, verbose_name="کالای مرتبط")
+    image = models.ImageField(upload_to='photos/products', verbose_name="تصویر")
 
     class Meta:
-        verbose_name = "Gallery"
-        verbose_name_plural = "Gallery"
+        verbose_name = "گالری"
+        verbose_name_plural = "گالری"
 
     def __str__(self):
         return self.product.name
 
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField(max_length=500, blank=True)
-    rating = models.FloatField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="کالای مرتبط")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر")
+    comment = models.TextField(max_length=500, blank=True, verbose_name="سخنوری")
+    rating = models.FloatField(verbose_name="امتیازدهی")
     ip = models.CharField(max_length=20, blank=True)
-    status = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=True, verbose_name="وضعیت")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ درافشانی")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="به روز رسانی نظز")
 
     def __str__(self):
         return f'{self.user.fname}: {self.comment}'

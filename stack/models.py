@@ -5,11 +5,11 @@ from user.models import User
 
 
 class Stack(models.Model):
-    sid = models.CharField(max_length=50, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    belongs_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    cost = models.IntegerField(default=0)  # total value (total price)
-    discounts = models.IntegerField(default=0)
+    sid = models.CharField(max_length=50, blank=True, verbose_name="شناسه خرمن")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="ایجاد شده")
+    belongs_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name="به نام")
+    cost = models.IntegerField(default=0, verbose_name="شیتیل موردنیاز")  # total value (total price)
+    discounts = models.IntegerField(default=0, verbose_name="تخفیف")
 
     def final_cost(self):
         result = self.cost - self.discounts
@@ -50,12 +50,12 @@ class Stack(models.Model):
 
 class TakenProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # match th item whit selected product
-    preferred_variations = models.ManyToManyField(Variation, blank=True)
-    stack = models.ForeignKey(Stack, on_delete=models.CASCADE)  # to which shop stack it belongs
-    quantity = models.IntegerField(default=0)
-    is_available = models.BooleanField(default=True)
-    exact_stock = models.IntegerField(blank=True, null=True)  # number of remaining
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="کالا")  # match th item whit selected product
+    preferred_variations = models.ManyToManyField(Variation, blank=True, verbose_name="مشخصهات ترجیحی")
+    stack = models.ForeignKey(Stack, on_delete=models.CASCADE, verbose_name="خرمن")  # to which shop stack it belongs
+    quantity = models.IntegerField(default=0, verbose_name="شمار")
+    is_available = models.BooleanField(default=True, verbose_name="در دسترس؟")
+    exact_stock = models.IntegerField(blank=True, null=True, verbose_name="موجودی دقیق")  # number of remaining
 
     def update_exact_stock(self):
         variations = list(self.preferred_variations.all())

@@ -33,21 +33,21 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    fname = models.CharField(max_length=30, verbose_name="First Name")
-    lname = models.CharField(max_length=30, verbose_name="Last Name")
+    fname = models.CharField(max_length=30, verbose_name="اسم")
+    lname = models.CharField(max_length=30, verbose_name="فامیل")
     # login field is phone number or email
-    phone = models.CharField(max_length=11, unique=True, verbose_name="Phone Number")
-    email = models.CharField(max_length=100, unique=True, verbose_name="E-mail")
+    phone = models.CharField(max_length=11, unique=True, verbose_name="تیلیف")
+    email = models.CharField(max_length=100, unique=True, verbose_name="نومه")
     ip = models.CharField(max_length=20, blank=True, verbose_name="IP")
     # age, whatever, etc..
 
     # requirements:
-    joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now_add=True)
-    is_superuser = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    activated = models.BooleanField(default=False)
+    joined = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ فیلی شدن")
+    last_login = models.DateTimeField(auto_now_add=True, verbose_name="آخرین دخول")
+    is_superuser = models.BooleanField(default=False, verbose_name="شاه؟")
+    is_admin = models.BooleanField(default=False, verbose_name="ملکه؟")
+    is_staff = models.BooleanField(default=False, verbose_name="درباری؟")
+    activated = models.BooleanField(default=False, verbose_name="فعال؟")
     # is active, is online , ... ?
 
     USERNAME_FIELD = 'phone'
@@ -68,11 +68,11 @@ class User(AbstractBaseUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    postal_code = models.CharField(max_length=10, verbose_name="Postal Code", blank=True)
-    province = models.CharField(max_length=30, verbose_name="Province", blank=True)
-    city = models.CharField(max_length=30, verbose_name="City", blank=True)
-    address = models.TextField(max_length=256, verbose_name="Address", blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر")
+    postal_code = models.CharField(max_length=10, verbose_name="کدپستی", blank=True)
+    province = models.CharField(max_length=30, verbose_name="استان", blank=True)
+    city = models.CharField(max_length=30, verbose_name="شهرستان", blank=True)
+    address = models.TextField(max_length=256, verbose_name="نشونی", blank=True)
     avatar = models.ImageField(blank=True, upload_to='photos/avatars/')
 
     def full_address(self):

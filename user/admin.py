@@ -12,13 +12,13 @@ class UserAdminPanel(UserAdmin):
     filter_horizontal = ()
     search_fields = ('phone', 'fname', 'lname', 'email', )
     list_filter = ('activated', 'is_superuser', 'is_admin', 'is_staff', )
-    fieldsets = (('Credentials', {'fields': ('phone', 'password', 'id')}),
-                 ('Personal Info', {'fields': ('fname', 'lname', 'email', 'joined')}),
-                 ('Permissions', {'fields': ('is_superuser', 'is_admin', 'is_staff', 'activated')}),)
+    fieldsets = (('ناموس', {'fields': ('phone', 'password', 'id')}),
+                 ('اصل', {'fields': ('fname', 'lname', 'email', 'joined')}),
+                 ('دسترسی ها', {'fields': ('is_superuser', 'is_admin', 'is_staff', 'activated')}),)
 
-    add_fieldsets = (('Credentials', {'fields': ('phone', 'password')}),
-                     ('Personal Info', {'fields': ('fname', 'lname', 'email', 'joined')}),
-                     ('Permissions', {'fields': ('is_admin', 'is_staff')}),)
+    add_fieldsets = (('ناموس', {'fields': ('phone', 'password')}),
+                     ('اصل', {'fields': ('fname', 'lname', 'email', 'joined')}),
+                     ('دسترسی ها', {'fields': ('is_admin', 'is_staff')}),)
 
 
 class ProfilePanel(admin.ModelAdmin):

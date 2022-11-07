@@ -66,6 +66,10 @@ class User(AbstractBaseUser):
     def has_module_perms(self, add_label):
         return True
 
+    class Meta:
+        verbose_name = "فیلی"
+        verbose_name_plural = "فیلی ها"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر")
@@ -77,3 +81,7 @@ class Profile(models.Model):
 
     def full_address(self):
         return f'{self.province} - {self.city} - {self.address}'
+
+    class Meta:
+        verbose_name = "پروفایل"
+        verbose_name_plural = "پروفایل ها"

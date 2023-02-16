@@ -2,16 +2,19 @@
 {% load static %}
 {% block content %}
     <div class="container" style="margin-top: 50px;">
-        <center><i class="fa fa-check-circle mx-auto" style="font-size: 72px;margin-bottom: 20px;color: #28A745;"></i></center>
-        <h2 class="text-center">پرداخت موفقیت آمیز بود.</h2>
+        {% if order %}
+            <center><i class="fa fa-check-circle mx-auto" style="font-size: 72px;margin-bottom: 20px;color: #28A745;"></i></center>
+            <h2 class="text-center">زد و بند با موفقیت لحاظ شد.</h2>
+            <p class="text-center">پس از بررسی سفارش و اطلاعات تراکنش نتیجه نهایی به شما اطلاع داده می شود ...</p>
+        {%  endif %}
         <br>
-        <div class="text-center">
-            <a href="{% url 'store' %}" class="btn btn-success btn-shaking">خرید بیشتر</a>
+        <div class="text-center col-6 mx-auto">
+            <a href="{% url 'store' %}" class="btn btn-success btn-block btn-shaking">خرید بیشتر</a>
         </div>
     </div>
 
     <div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
-        <div class="row invoice row-printable">
+        <div class="row mx-auto invoice row-printable">
             <div class="col-md-12">
                 <!-- col-lg-12 start here -->
                 <div class="panel panel-default plain" id="dash_0">

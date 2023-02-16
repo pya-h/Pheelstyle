@@ -105,8 +105,9 @@ def submit_order(request):
                 order.buyer.ip = request.META.get('REMOTE_ADDR')
 
                 order.buyer.save()
-                order.save()  # call save for django to set the id primary key automatically
+                order.save()  # save object and create id field for it (to use in keygen)
                 order.key = order.keygen()
+                order.save()  # call save for django to set the id primary key automatically
 
                 # use Order.objects.get to make sure that the order is saved properly and retrievable
                 order = Order.objects.get(buyer=request.user, key=order.key)
@@ -141,14 +142,19 @@ def check_order(request, order_key):
 # ACTUALLY THIS METHOD MUST BE CALLED BY ADIM SIDE
 @login_required(login_url="login")
 def accept_order(request, order_key):
-    if request.user and request.user.is_authenticated and order_key:
+    order = None
+    try:
         order = Order.objects.get(key=order_key, buyer=request.user)
-        if order and order.status.lower() == "certified":
-            order.sell_products()
-            context = {"order": order}
-            return render(request, 'purchase/result.html', context)
-            #  saves automatically in function above
-    # send proper error
+        if request.user and request.user.is_authenticated and order_key:
+            if order and order.status.lower() == "certified":
+                order.sell_products()
+                #  saves automatically in function above
+
+        # send proper error
+    except Exception as ex:
+        order = None
+        print('sth went wrong while showing the order final details: ' + ex.__str__())
+    return render(request, 'purchase/result.html', {"order": order})
 
 
 @login_required(login_url='login')
@@ -164,7 +170,7 @@ def take_receipt(request, order_key):
 
 def reserve_order(request):
     if request.method == "POST":
-        form = ReserveTransactionForm(request.POST)
+        form = ReserveTransactionForm(request.POST, request.FILES)
         if form.is_valid():
             receipt = Receipt(reference_id=form.cleaned_data['reference_id'], image=form.cleaned_data['image'],
                               amount=form.cleaned_data['amount'])

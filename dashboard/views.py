@@ -41,22 +41,22 @@ def user_orders(request):
 
 
 @login_required(login_url='login')
-def profile(request):
+def user_profile(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    user_profile = get_object_or_404(Profile, user=request.user)
+    profile = get_object_or_404(Profile, user=request.user)
     if request.method == "POST":
         user_form = UserEditForm(request.POST, instance=request.user)
-        profile_form = ProfileEditForm(request.POST, request.FILES, instance=user_profile)
+        profile_form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             messages.success(request, 'پروفایلت آپدیت شد.')
-            return redirect('user-profile')
+            return redirect('profile')
     else:
         user_form = UserEditForm(instance=request.user)
-        profile_form = ProfileEditForm(instance=user_profile)
+        profile_form = ProfileEditForm(instance=profile)
 
     return render(request, 'dashboard/profile.html', {'user_form': user_form, 'profile_form': profile_form})
 

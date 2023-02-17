@@ -13,90 +13,99 @@
         </div>
     </div>
 
-    <div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
-        <div class="row mx-auto invoice row-printable">
-            <div class="col-md-12">
+   <div class="container" style="padding: 50px;margin: auto;">
+        <div class="row">
+            <div class="col-12 card p-4">
                 <!-- col-lg-12 start here -->
                 <div class="panel panel-default plain" id="dash_0">
                     <!-- Start .panel -->
-                    <div class="panel-body p30">
-                        <div class="row">
+                    <div class="panel-body">
+                        <div dir="rtl" class="row text-right">
                             <!-- Start .row -->
 
                             <!-- col-lg-6 end here -->
-                            <div class="col-lg-6">
+                            <div class="text-center col-12">
                                 <!-- col-lg-6 start here -->
-                                <div class="invoice-from">
-                                    <ul class="list-unstyled text-right">
-                                        <li><strong>Invoiced To</strong></li>
-                                        <li>Jakob Smith</li>
-                                        <li>Roupark 37</li>
-                                        <li>New York, NY, 2014</li>
-                                        <li>USA</li>
-                                    </ul>
+                                <strong class="text-center">مشخصات گیرنده</strong>
+                                <div class="invoice-from text-right">
+                                    <div style="border-top: 1px solid black" class="container my-4">
+                                        <div class="row my-5">
+                                            <div class="col-md-6">
+                                                نام: <strong class="mx-5">{{ order.receiver }}</strong>
+                                            </div>
+                                            <div class="col-md-6">
+                                              آدرس: <strong class="mx-4">{{ order.receiver.province }}, {{ order.receiver.city }}, {{ order.receiver.address }} </strong>
+                                            </div>
+                                        </div>
+                                        <div class="row my-5">
+                                            <div class="col-md-6">
+                                                سفارش:<strong class="mx-4"> {{ order.key  }} </strong>
+                                            </div>
+                                            <div class="col-md-6">
+                                                تراکنش:<strong class="mx-4"> {{ order.transaction.receipt.reference_id }} </strong>
+                                            </div>
+                                        </div>
+                                        <div class="row my-5">
+                                            <div class="col-md-6">
+                                               تاریخ:<strong class="mx-5"> {{ order.date_created }} </strong>
+                                            </div>
+                                            <div class="col-md-6">
+                                               وضعیت:<strong class="mx-4"> {{ order.status_fa }} </strong>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- col-lg-6 end here -->
-                            <div class="col-lg-12">
-                                <!-- col-lg-12 start here -->
-                                <div class="invoice-details mt25">
-                                    <div class="well">
-                                        <ul class="list-unstyled mb0">
-                                            <li><strong>سفارش</strong> #</li>
-                                            <li><strong>تراکنش</strong> #</li>
-                                            <li><strong>تاریخ سفارش:</strong> Monday, October 10th, 2015</li>
-                                            <li><strong>وضعیت:</strong> PAID</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <strong  style="color:lightcoral;border-top: 1px dashed black;" class="w-100 my-5 py-4 text-center">صورت حساب</strong>
 
+                            <div class="col-lg-12" class="container my-4">
+                                <!-- col-lg-12 start here -->
                                 <div class="invoice-items">
-                                    <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
-                                        <table class="table table-bordered">
-                                            <thead>
+                                    <div class="m-0 p-0" style="overflow: hidden; outline: none;" tabindex="0">
+                                    <div class="m-0 p-0">
+
+                                        <table class="table-bordered w-100">
+
+                                            <tbody >
+                                            {% for item in items  %}
                                                 <tr>
-                                                    <th class="per70 text-center">توضیحات</th>
-                                                    <th class="per5 text-center">Qty</th>
-                                                    <th class="per25 text-center">جمع کل</th>
+                                                    <td  class="text-center p-4">
+                                                        {{ item.product }}
+                                                            {% if item.variations.all  %}
+                                                                {% for v in item.variations.all %}
+                                                                    <p class="text-muted my-0">
+                                                                        {{ v.parameter_fa }} : {{ v.value | capfirst }}
+                                                                    </p>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                    </td>
+                                                    <td class="text-center p-3">1</td>
+                                                    <td class="text-center p-3">{{ item.cost }}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1024MB Cloud 2.0 Server - elisium.dynamic.com (12/04/2014 - 01/03/2015)</td>
-                                                    <td class="text-center">1</td>
-                                                    <td class="text-center">$25.00 USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Logo design</td>
-                                                    <td class="text-center">1</td>
-                                                    <td class="text-center">$200.00 USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Backup - 1024MB Cloud 2.0 Server - elisium.dynamic.com</td>
-                                                    <td class="text-center">12</td>
-                                                    <td class="text-center">$12.00 USD</td>
-                                                </tr>
+                                            {% endfor %}
                                             </tbody>
                                             <tfoot>
-                                                <tr>
-                                                    <th colspan="2" class="text-right">Sub Total:</th>
-                                                    <th class="text-center">$237.00 USD</th>
+                                                <tr >
+                                                    <th class="text-right p-4">جمع اولیه</th>
+                                                    <th colspan="2"  class="text-center p-3">{{ order.cost }}</th>
                                                 </tr>
                                                 <tr>
-                                                    <th colspan="2" class="text-right">Tax:</th>
-                                                    <th class="text-center">$47.40 USD</th>
+                                                    <th class="text-right p-4">تخفیفات</th>
+                                                    <th colspan="2" class="text-center p-3">{{ order.discounts }}-</th>
                                                 </tr>
-
                                                 <tr>
-                                                    <th colspan="2" class="text-right">Grand Total:</th>
-                                                    <th class="text-center">$284.4.40 USD</th>
+                                                    <th class="text-right p-4">هزینه ارسال</th>
+                                                    <th colspan="2" class="text-center p-3">{{ order.shipping_cost }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-right p-4">قیمت آخر</th>
+                                                    <th colspan="2" class="text-center p-3">{{ order.must_be_paid }}</th>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
-                                </div>
-                                <div class="invoice-footer mt25">
-                                    <p class="text-center">Thank you for shopping with us!</p>
+                                    </div>
                                 </div>
                             </div>
                             <!-- col-lg-12 end here -->

@@ -14,5 +14,4 @@ class ReviewForm(forms.ModelForm):
     def clean(self):
         # get sent form's data to start checking
         cleaned_data = super(ReviewForm, self).clean()
-        print(cleaned_data)
         print('review form clean method has been called')

@@ -5,119 +5,133 @@
     <!-- ========================= SECTION CONTENT ========================= -->
     <section class="section-content padding-y">
         <div class="container">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="row text-right">
-                    <aside class="col-md-3">
-                        <div class="card">
-                            <article class="filter-group">
-                                <header class="card-header">
-                                    <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
-                                        <i class="icon-control fa fa-chevron-down"></i>
-                                        <h6 class="title mx-4">دسته ها</h6>
-                                    </a>
-                                </header>
-                                <div class="filter-content collapse show" id="collapse_1" style="">
-                                    <div class="card-body">
-                                        <ul class="list-menu px-1">
-                                            <li><a class="btn btn-light  expandable-button" href="{% url 'store' %}">همگی</a></li>
-                                            {% for category in categories %}
-                                                <li><a class="btn btn-light expandable-button" href="{{category.url}}">{{ category }}</a></li>
-                                            {% endfor %}
-                                        </ul>
+            <div class="row text-right">
+                <aside class="col-md-3">
+                    <div class="card">
+                        <article class="filter-group">
+                            <header class="card-header">
+                                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                                    <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title mx-4">دسته ها</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="collapse_1" style="">
+                                <div class="card-body">
+                                    <ul class="list-menu px-1">
+                                        <li class="text-center"><a class="mx-auto btn expandable-button {% if current_category == None %}w-100 btn-outline-success{% else %}btn-outline-dark{% endif %}" href="{% url 'store' %}">همگی</a></li>
+                                        {% for category in categories %}
+                                            <li class="text-center">
+                                                <a class="btn expandable-button {% if current_category == category.name_fa %}w-100 btn-outline-success{% else %}btn-outline-dark{% endif %}" href="{{category.url}}">{{ category }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
 
-                                    </div> <!-- card-body.// -->
                                 </div>
-                            </article> <!-- filter-group  .// -->
+                            </div>
+                        </article>
 
-                            <article class="filter-group">
-                                <header class="card-header">
-                                    <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
-                                        <i class="icon-control fa fa-chevron-down"></i>
-                                        <h6 class="title mx-4">محدوده ی قیمتی</h6>
-                                    </a>
-                                </header>
-                                <div class="filter-content collapse show" id="collapse_3" style="">
+                        <article class="filter-group">
+                            <header class="card-header">
+                                <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                                    <i class="icon-control fa fa-chevron-down"></i>
+                                    <h6 class="title mx-4">محدوده ی قیمتی</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="collapse_3" style="">
+                                {% if category_filter %}
+                                <form action="{% url 'filtered_by_category' category_filter %}" method="POST">
+                                {% else %}
+                                <form action="{% url 'store' %}" method="POST">
+                                {% endif %}
+                                    {% csrf_token %}
                                     <div class="card-body">
 
                                         <div class="form-row">
                                             <div class="form-group col-md-6 text-center">
                                                 <label>از</label>
-                                                <input type="number" name="min" class="form-control" />
+                                                {% if min_price > 0 %}
+                                                    <input type="number" name="min_price" class="form-control" value="{{min_price}}" />
+                                                {% else %}
+                                                    <input type="number" name="min_price" class="form-control" />
+                                                {% endif %}
                                             </div>
                                             <div class="form-group text-center col-md-6">
                                                 <label>تا</label>
-                                                <input type="number" name="max" class="form-control" />
+                                                {% if max_price > 0 %}
+                                                    <input type="number" name="max_price" class="form-control" value="{{max_price}}" />
+                                                {% else %}
+                                                    <input type="number" name="max_price" class="form-control" />
+                                                {% endif %}
                                             </div>
                                         </div> <!-- form-row.// -->
-                                        <button class="btn btn-block btn-primary btn-shaking">لحاظ کن</button>
+                                        <button type="submit" class="btn btn-block btn-primary btn-shaking">لحاظ کن</button>
                                     </div><!-- card-body.// -->
-                                </div>
-                            </article> <!-- filter-group .// -->
-
-                        </div> <!-- card.// -->
-
-                    </aside> <!-- col.// -->
-                    <main class="col-md-9">
-
-                        <header class="border-bottom mb-4 pb-3">
-                            <div class="form-inline">
-                            <span style="font-size: 16px" class="text-right badge">
-                                <span class="badge badge-success p-2">{{ products_count }}</span> آیتم یافت شد... </span>
+                                </form>
                             </div>
-                        </header><!-- sect-heading -->
+                        </article> <!-- filter-group .// -->
 
-                        {% if products %}
-                            <div class="row">
-                                {% for product in products %}
-                                    {% if product.variation_set.displayable %}
-                                        <div class="col-lg-4 col-md-6">
-                                            <figure class="card card-product-grid">
-                                                <div class="img-wrap expand-opacity-animation">
-                                                    <a href="{{ product.url }}">
-                                                        <img src={{ product.image.url }}>
-                                                    </a>
-                                                </div> <!-- img-wrap.// -->
-                                                <figcaption class="info-wrap">
-                                                    <div class="fix-height">
-                                                        <a href="{{ product.url }}" class="title text-center">{{ product }}</a>
-                                                        <div class="price-wrap  text-center mt-2">
-                                                            <span class="price">{{ product.price }} تومن</span>
-                                                        </div> <!-- price-wrap.// -->
+                    </div> <!-- card.// -->
+
+                </aside> <!-- col.// -->
+                <main class="col-md-9">
+
+                    <header class="border-bottom mb-4 pb-3">
+                        <div class="form-inline">
+                        <span style="font-size: 16px" class="text-right badge">
+                            <span class="badge badge-success p-2">{{ products_count }}</span> آیتم یافت شد... </span>
+                        </div>
+                    </header>
+
+                    {% if products %}
+                        <div class="row">
+                            {% for product in products %}
+                                {% if product.variation_set.displayable %}
+                                    <div class="col-lg-4 col-md-6">
+                                        <figure class="card card-product-grid">
+                                            <div class="img-wrap expand-opacity-animation">
+                                                <a href="{{ product.url }}">
+                                                    <img src={{ product.image.url }}>
+                                                </a>
+                                            </div>
+                                            <figcaption class="info-wrap">
+                                                <div class="fix-height">
+                                                    <a href="{{ product.url }}" class="title text-center">{{ product }}</a>
+                                                    <div class="price-wrap  text-center mt-2">
+                                                        <span class="price">{{ product.price }} تومن</span>
                                                     </div>
-                                                    {% if product.stock <= 0  %}
-                                                        <button disabled class="btn btn-block btn-dark">تا دسته فروش رفت</button>
-                                                    {% elif not product.available %}
-                                                        <button disabled class="btn btn-block btn-danger">موجود نیست هنوز</button>
-                                                    {% else %}
-                                                        <a href="{% url 'take_product' product.ID %}" enabled="true" class="btn btn-shaking btn-block btn-primary">نظرمه!</a>
-                                                    {% endif %}
-                                                </figcaption>
-                                            </figure>
-                                        </div> <!-- col.// -->
-                                    {% endif %}
-                                {% endfor %}
-                            </div> <!-- row end.// -->
-                        {% else %}
-                            <div class="row">
-                                <div class="card-body text-center">
-                                    <h3>There is no item in this category.</h3>
-                                    <a href="{% url 'store' %}" class="btn btn-secondary">همه کالاها</a>
-                                </div>
+                                                </div>
+                                                {% if product.stock <= 0  %}
+                                                    <button disabled class="btn btn-block btn-dark">تا دسته فروش رفت</button>
+                                                {% elif not product.available %}
+                                                    <button disabled class="btn btn-block btn-danger">موجود نیست هنوز</button>
+                                                {% else %}
+                                                    <a href="{% url 'take_product' product.ID %}" enabled="true" class="btn btn-shaking btn-block btn-primary">نظرمه!</a>
+                                                {% endif %}
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            <div class="card-body text-center">
+                                <h3>کالایی یافت نشد.</h3>
+                                <a href="{% url 'store' %}" class="btn btn-secondary">همه کالاها</a>
                             </div>
-                        {% endif %}
-                        <nav class="mt-4" aria-label="Page navigation sample">
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a class="page-link" href="#">قبلی</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">بعدی</a></li>
-                            </ul>
-                        </nav>
-                    </main> <!-- col.// -->
-                </div>
-            </form>
-        </div> <!-- container .//  -->
+                        </div>
+                    {% endif %}
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a class="page-link" href="#">قبلی</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">بعدی</a></li>
+                        </ul>
+                    </nav>
+                </main>
+            </div>
+        </div>
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
 {%  endblock %}

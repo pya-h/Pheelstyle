@@ -168,3 +168,38 @@ ul.product-image-thumbnail li img {
 ul.product-image-thumbnail li img:hover {
     opacity: 0.6;
 }
+
+
+@keyframes rainbow-animation {
+    to {
+        filter: hue-rotate(0deg);
+    }
+    from {
+        filter: hue-rotate(360deg);
+    }
+}
+.pheelstyle-banner {
+    font-size: 70px;
+    text-emphasis: "☻";
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.884);
+    color: red;
+    background-color: white;
+    text-align: center;
+    animation: rainbow-animation 500ms linear infinite;
+    transition: transform 500ms ease-in;
+    cursor: pointer;
+    
+}
+
+@media (max-width: 500px) {
+    .pheelstyle-banner {
+        font-size: 60px;
+    }
+}
+.pheelstyle-banner:hover {
+    transform: scale(1.1);
+}
+.pheelstyle-banner:first-letter {
+    font-size: 250%;
+    color: purple;
+}

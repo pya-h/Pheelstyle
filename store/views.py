@@ -9,17 +9,43 @@ from django.contrib.auth.decorators import login_required
 def store(request, category_filter=None):
     try:
         products = Product.objects.all()  # .filter(available=True)
+        max_price = min_price = 0
+        category_fa = None
         if category_filter:
             obj_expected_categories = get_object_or_404(Category, slug=category_filter)
+            category_fa = obj_expected_categories.name_fa
             if obj_expected_categories:
                 products = products.filter(category=obj_expected_categories)
-    except:
+                
+        if request.method == "POST":
+            try:
+                min_price = int(request.POST["min_price"])
+            except:
+                min_price = 0
+                
+            try:
+                max_price = int(request.POST["max_price"])
+            except:
+                max_price = 0
+                
+            if min_price > 0:
+                products = products.filter(price__gte=min_price)
+            if max_price > 0:
+                products = products.filter(price__lte=max_price)
+
+    except Exception as ex:
+        print(ex.__str__())
         products = []
 
     context = {
         'products': products,
-        'products_count': products.count if products else 0
+        'products_count': products.count if products else 0,
+        'current_category': category_fa,
+        'category_filter': category_filter,
+        'max_price': max_price,
+        'min_price': min_price
     }
+
     return render(request, 'store/store.html', context)
 
 

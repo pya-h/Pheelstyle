@@ -31,6 +31,7 @@
         background: coral;
     }
 </style>
+
 <header class="section-header">
     <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
         <div class="container">
@@ -45,7 +46,16 @@
           </div> <!-- navbar-collapse .// -->
         </div> <!-- container //  -->
     </nav>
-
+    {% if request.path == "/" %}
+    <section class="section-intro padding-y-sm">
+        <div class="container">
+            <div class="intro-banner-wrap">
+                {% comment %} <img src="{% static 'images/banners/1.jpg' %}" class="img-fluid rounded" alt="بارگذاری با مشکل مواجه شد"> {% endcomment %}
+                <div class="pheelstyle-banner">PHEELSTYLE</h1>
+            </div>
+        </div> <!-- container //  -->
+    </section>
+    {% endif %}
     <section class="header-main border-bottom">
         <div class="container" >
             <div id="navigation-box" class="row align-items-center " style="height:150vh; background: url({% static 'images/logo.png' %}) no-repeat center center ;">

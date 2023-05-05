@@ -36,12 +36,21 @@ class UserLoginBackend(BaseBackend):
 
 
 # -----------------------------------------------------------------------------------------------
+
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from decouple import config
+
 # EMAIL ONE MINUTE TIME LIMITATION IS FOR ALL USERS
 # MAKE IT USER SPECIFIC
+
+
 class Mailer:
     # email send helper
     template_dir = 'emails/%s.html'
     last_email_date = datetime(1970, 1, 1)
+    host = config('EMAIL_HOST_USER')
+    SENDGRID_API_KEY = config('SENDGRID_API_KEY')
 
     def __init__(self, user, target_email, request, template):
         self.sender_domain = get_current_site(request)
@@ -58,10 +67,27 @@ class Mailer:
                 'uid': urlsafe_base64_encode(force_bytes(self.user.pk)),
                 'token': default_token_generator.make_token(self.user)
             })
-            EmailMessage(subject, body, to=[self.default_target if not new_target else new_target]).send()
+            # EmailMessage(subject, body, to=[self.default_target if not new_target else new_target]).send()
+            Mailer.BySendGrid(self.default_target if not new_target else new_target, subject, body)
             Mailer.last_email_date = datetime.now()
         else:
             raise WaitAssholeException(time_passed_from_last_email)
+
+    @staticmethod
+    def BySendGrid(target, subject, content):
+        message = Mail(
+            from_email=Mailer.host,
+            to_emails=target,
+            subject=subject,
+            html_content=content)
+        try:
+            sg = SendGridAPIClient(Mailer.SENDGRID_API_KEY)
+            response = sg.send(message)
+#            print(response.status_code)
+#           print(response.body)
+#           print(response.headers)
+        except Exception as e:
+            print(e)
 
     @staticmethod
     def Send(request, user, email_address, subject, template_name):
@@ -74,6 +100,7 @@ class Mailer:
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user)
             })
-            EmailMessage(subject, body, to=[email_address]).send()
+            # EmailMessage(subject, body, to=[email_address]).send()
+            Mailer.BySendGrid(email_address, subject, body)
         else:
             raise WaitAssholeException(time_passed_from_last_email)

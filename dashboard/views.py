@@ -31,6 +31,7 @@ def user_orders(request):
               }
     context = {}
     try:
+        # send all orders to admin?
         context['your_orders'] = Order.objects.filter(buyer=request.user).order_by('-date_created')
         for order in context['your_orders']:
             order.status_fa = status[str(order.status)]
@@ -67,11 +68,9 @@ def change_pass(request):
         return redirect('login')
     if request.method == "POST":
         try:
-
             password = request.POST["password"]
             new_pass = request.POST["new-pass"]
             confirm_pass = request.POST["confirm-pass"]
-
             if new_pass != confirm_pass:
                 messages.error(request, "رمز شب جدیدت با تاییدیه ش مطابقت نداره که!")
                 return redirect('user-chpwd')

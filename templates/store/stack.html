@@ -34,19 +34,19 @@
                                                     <p class="text-muted small text-center">
                                                         دسته بندی: {{ taken.product.category }}
                                                         <br />
-                                                        {% if taken.preferred_variations.all %}
-                                                            {% for variation in taken.preferred_variations.all %}
-                                                               {{ variation.parameter_fa }} : {{variation.value}}
-                                                                <br />
-                                                            {% endfor %}
-                                                        {% endif %}
+                                                        رنگ : {{taken.variation.color}}
+                                                        <br />
+                                                        سایز : {{taken.variation.size}}
+
+                                                        <br />
+
                                                         موجودی:
-                                                        {% if taken.exact_stock > 3 %}
-                                                            <span class="badge pill badge-success"> {{ taken.exact_stock }} </span>
-                                                        {% elif taken.exact_stock > 1 %}
-                                                            <span class="badge pill badge-warning"> {{ taken.exact_stock }} </span>
+                                                        {% if taken.variation.stock > 3 %}
+                                                            <span class="badge pill badge-success"> {{ taken.variation.stock }} </span>
+                                                        {% elif taken.variation.stock > 1 %}
+                                                            <span class="badge pill badge-warning"> {{ taken.variation.stock }} </span>
                                                         {% else %}
-                                                            <span class="badge pill badge-danger"> {{ taken.exact_stock }} </span>
+                                                            <span class="badge pill badge-danger"> {{ taken.variation.stock }} </span>
                                                         {% endif %}
                                                 </figcaption>
                                             </figure>

@@ -69,13 +69,12 @@
                                                 <tr>
                                                     <td  class="table-column-1 text-center p-4">
                                                         {{ item.product }}
-                                                            {% if item.variations.all  %}
-                                                                {% for v in item.variations.all %}
-                                                                    <p class="text-muted my-0">
-                                                                        {{ v.parameter_fa }} : {{ v.value | capfirst }}
-                                                                    </p>
-                                                                {% endfor %}
-                                                            {% endif %}
+                                                        <p class="text-muted my-0">
+                                                            سایز: {{ item.variation.size }}
+                                                        </p>
+                                                        <p class="text-muted my-0">
+                                                            رنگ: {{ item.variation.color }}
+                                                        </p>
                                                     </td>
                                                     <td class="table-column-1 text-center p-3">1</td>
                                                     <td class="table-column-1 text-center p-3">{{ item.cost }}</td>

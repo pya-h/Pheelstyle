@@ -13,6 +13,10 @@ class Receipt(models.Model):
     amount = models.IntegerField(verbose_name="Transaction Amount")
     order_key = models.CharField(max_length=20)  # this is the order checking code between seller and buyer
 
+    class Meta:
+        verbose_name = 'رسید'
+        verbose_name_plural = 'رسیدها'
+
     def __str__(self):
         return self.reference_id
 
@@ -29,6 +33,10 @@ class Transaction(models.Model):
     performer = models.ForeignKey(User, on_delete=models.CASCADE)
     method = models.CharField(max_length=20, blank=False, choices=METHODS)
     date_created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'تراکنش'
+        verbose_name_plural = 'تراکنش ها'
 
     def __str__(self):
         return self.receipt.__str__() if self.receipt.__str__() else "Uncertified"
@@ -47,6 +55,10 @@ class OrderReceiver(models.Model):
     province = models.CharField(max_length=30, verbose_name="Province", blank=False)
     city = models.CharField(max_length=30, verbose_name="City", blank=False)
     address = models.TextField(max_length=256, verbose_name="Address", blank=False)
+
+    class Meta:
+        verbose_name = 'زدوبند کننده'
+        verbose_name_plural = 'زدوبندگان'
 
     def fullname(self):
         return f'{self.fname} {self.lname}'
@@ -95,6 +107,10 @@ class Order(models.Model):
     shipping_cost = models.IntegerField(default=0)
     must_be_paid = models.IntegerField(default=0)
 
+    class Meta:
+        verbose_name = 'زدوبند'
+        verbose_name_plural = 'زدوبندها'
+
     def how_much_to_pay(self):
         self.must_be_paid = self.cost - self.discounts + self.shipping_cost
 
@@ -137,7 +153,7 @@ class PurchasedItem(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)  # match th item whit selected product
-    variations = models.ManyToManyField(Variation, blank=True)
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
 
     quantity = models.IntegerField(default=0)
     color = models.CharField(max_length=20)  # these two variation are defined separately are for direct access
@@ -150,20 +166,15 @@ class PurchasedItem(models.Model):
     date_updated = models.DateTimeField(auto_now_add=True)
     anything_wrong = models.CharField(max_length=50, blank=True, null=True, default="")
 
+    class Meta:
+        verbose_name = 'کالای زدوبندی'
+        verbose_name_plural = 'زدوبندی ها'
+
     def __str__(self):
         return f'{self.product.__str__()} {self.color} {self.size} [{self.quantity}]'
 
-    def exact_stock(self):  # even after saving the order etc. => ordered product can get the exact stock value
-        # updated by today
-        variations = list(self.variations.all())
-        es = variations[0].stock
-        for variation in variations:
-            if es > variation.stock:
-                es = variation.stock
-        return es
-
     def resources_are_enough(self):
-        return self.exact_stock() >= self.quantity
+        return self.variation.stock >= self.quantity
 
     def ID(self):
         return self.id

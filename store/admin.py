@@ -18,10 +18,10 @@ class ProductAdminPanel(admin.ModelAdmin):
 
 
 class VariationAdminPanel(admin.ModelAdmin):
-    list_display = ('product', 'parameter', 'value', 'is_available', 'stock')
+    list_display = ('product', 'size', 'color', 'is_available', 'stock')
     list_editable = ('is_available', )
-    list_filter = ('product', 'parameter', 'value', 'is_available', 'stock', )
-    search_fields = ('parameter', 'value', )
+    list_filter = ('product', 'size', 'color', 'is_available', 'stock', )
+    search_fields = ('size', 'color', 'product')
 
 
 admin.site.register(Product, ProductAdminPanel)

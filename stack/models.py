@@ -11,13 +11,17 @@ class Stack(models.Model):
     cost = models.IntegerField(default=0, verbose_name="شیتیل موردنیاز")  # total value (total price)
     discounts = models.IntegerField(default=0, verbose_name="تخفیف")
 
+    class Meta:
+        verbose_name = 'بقچه خرید'
+        verbose_name_plural = 'بقچه های خرید'
+
     def final_cost(self):
         result = self.cost - self.discounts
         int_result = int(result)
         return int_result if result == int_result else  self.cost - self.discounts
 
     def __str__(self):
-        return self.sid
+        return f'بقچه ی {self.cost} تومنی متعلق به {self.belongs_to}'
 
     def ID(self):
         return self.sid
@@ -29,7 +33,7 @@ class Stack(models.Model):
             #    takens = TakenProduct.objects.all().filter(stack__belongs_to=stack_owner).filter(is_available=True)
             # else:
             #    takens = TakenProduct.objects.all().filter(stack=self).filter(is_available=True)
-            takens = TakenProduct.objects.all().filter(stack=self).filter(is_available=True)
+            takens = TakenProduct.objects.filter(stack=self, is_available=True)
             # calculate costs:
             for taken in takens:
                 self.cost += taken.total_price()
@@ -51,22 +55,17 @@ class Stack(models.Model):
 class TakenProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="کالا")  # match th item whit selected product
-    preferred_variations = models.ManyToManyField(Variation, blank=True, verbose_name="مشخصهات ترجیحی")
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE, verbose_name="گونه")
     stack = models.ForeignKey(Stack, on_delete=models.CASCADE, verbose_name="خرمن")  # to which shop stack it belongs
     quantity = models.IntegerField(default=0, verbose_name="شمار")
     is_available = models.BooleanField(default=True, verbose_name="در دسترس؟")
-    exact_stock = models.IntegerField(blank=True, null=True, verbose_name="موجودی دقیق")  # number of remaining
 
-    def update_exact_stock(self):
-        variations = list(self.preferred_variations.all())
-        self.exact_stock = variations[0].stock
-        for variation in variations:
-            if self.exact_stock > variation.stock:
-                self.exact_stock = variation.stock
+    class Meta:
+        verbose_name = 'کالای نشون شده'
+        verbose_name_plural = 'کالاهای نشون شده'
 
     def increase_quantity(self):
-        self.update_exact_stock()  # to make sure exact stock is updated for latest variations
-        if self.product.available and self.quantity < self.exact_stock:
+        if self.product.available and self.quantity < self.variation.stock:
             self.quantity += 1
         # else:
         # SHOW ERROR MESSAGE

@@ -14,7 +14,7 @@ def open_stack(request):
         if request.user.is_authenticated:
             if Stack.objects.all():
                 merge_user_stacks(request.user)
-                current_stack = Stack.objects.all().filter(belongs_to=request.user)
+                current_stack = Stack.objects.filter(belongs_to=request.user)
                 # TEMP ***************
                 current_stack = current_stack[0]
             else:
@@ -40,35 +40,21 @@ def attach_current_stack_to_current_user(request, user):
         print('no opened stack found to attach')
 
 
-def have_same_variations(first, second):
-    dict_first = {}
-    len_first = len(first)
-    dict_second = {}
-    len_second = len(second)
-
-    if len_first == len_second:
-        for i in range(len_first):
-            dict_first.update({first[i].parameter: first[i].value})
-            dict_second.update({second[i].parameter: second[i].value})
-        return dict_second == dict_first
-
-    return False
-
-
+# # # CHECK THIS METHOD WORKS CORRECTLY
 # NOTE: MERGING STACKS IS A SOLUTION FOR NOW ACTUALLY ==> I HAVE IN MIND THAT THE USER SHPOULD BE ABLE TO HAVE MULTIPLE DIFFERENT STACKS
 # IN OTHER HANDS => ITS NOT NECESSARY!
 def merge_user_stacks(user):  # temporary approach
     try:
         # find all stacks belonging to the same user
-        stacks_belonging_to_user = Stack.objects.all().filter(belongs_to=user)
+        stacks_belonging_to_user = Stack.objects.filter(belongs_to=user)
         # stacks_belonging_to_user.sort(key=lambda x: x.created)  # sort by creation date ==> want to take the oldest one and delete others
         merged_stack = stacks_belonging_to_user[0]
-        merged_stack_taken_products = TakenProduct.objects.all().filter(stack=merged_stack)
+        merged_stack_taken_products = TakenProduct.objects.filter(stack=merged_stack)
 
         if stacks_belonging_to_user and len(stacks_belonging_to_user) > 1:  # if umber of stack is one there's no need
             for stack in stacks_belonging_to_user:
                 if stack.ID() != merged_stack.ID():
-                    products_taken_by_user = TakenProduct.objects.all().filter(stack=stack)
+                    products_taken_by_user = TakenProduct.objects.filter(stack=stack)
                     if products_taken_by_user:
                         for taken_product in products_taken_by_user:
                             taken_is_duplicate = False
@@ -76,8 +62,7 @@ def merge_user_stacks(user):  # temporary approach
                             # if so just add the quantity of this one to the merged one and then delete this duplicate one
                             similar_products_in_merged_stack = merged_stack_taken_products.filter(product=taken_product.product)
                             for possibly_duplicate in similar_products_in_merged_stack:
-                                if have_same_variations(first=list(possibly_duplicate.preferred_variations.all()),
-                                                        second=list(taken_product.preferred_variations.all())):
+                                if possibly_duplicate.variation == taken_product.variation:
                                     possibly_duplicate.quantity += taken_product.quantity
                                     possibly_duplicate.save()
                                     taken_product.delete()

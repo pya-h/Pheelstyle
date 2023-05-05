@@ -12,13 +12,17 @@
                         <header class="bg-transparent" style="z-index: 1">
                                 <div class="row">
                                     <div class="col-2">
-                                        <img onclick="openFileDialog()" src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%; cursor: pointer;">
+                                        <img onclick="openFileDialog()"
+                                            src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %} {% static 'images/noavatar.jpeg' %}{% endif %}"
+                                            alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%; cursor: pointer;">
                                     </div>
                                     <div class="col-md-8 text-center col-7" id="leftArrowIcon" >
                                         <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
                                     </div>
                                     <div class="col-2 text-left">
-                                        <img id="newAvatarPreview" src="{{ user.profile.avatar.url }}" alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%">
+                                        <img id="newAvatarPreview"
+                                            src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %} {% static 'images/noavatar.jpeg' %}{% endif %}"
+                                            alt="بارگذاری آواتار ناموفق بود!" width="96" height="96" style="border-radius: 50%">
                                     </div>
 
                                 </div>

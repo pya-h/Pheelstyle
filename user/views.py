@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django import forms
 from .forms import RegisterForm, InputValidator
-from .models import User
+from .models import User, Profile
 from stack.utlities import attach_current_stack_to_current_user, merge_user_stacks
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
@@ -23,9 +23,10 @@ def register(request):
             password = form.cleaned_data['password']
             user = User.objects.create_user(fname=fname, lname=lname, phone=phone, password=password, email=email)
             user.save()
+            profile = Profile(user=user)
+            profile.save()
             # send user verification email
             Mailer(user, email, request, 'user_verification').send('فعال سازی حساب کاربری')
-
             # messages.info(request, 'حسابت ساخته شد...حالا از طریقی ایمیلی که برات فرستادیم باید اکانتت رو فعال
             # کنی...')
             return redirect('/user/login/?command=verification&email=' + email)

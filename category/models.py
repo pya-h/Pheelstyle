@@ -11,8 +11,8 @@ class Category(models.Model):
     icon = models.ImageField(upload_to='photos/categories/', blank=True, verbose_name="آیکون") # optional field
 
     class Meta:
-        verbose_name = "category"
-        verbose_name_plural = "categories"
+        verbose_name = "دسته"
+        verbose_name_plural = "دسته ها"
 
     def url(self):
         return reverse('filtered_by_category', args=[self.slug])  # or-> '/store/' + self.slug + '/'

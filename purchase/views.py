@@ -29,15 +29,15 @@ def finalize_order(request, order_key, method, status, reference_id=None, amount
                 purchased_item.delivered = order.status == 'delivered'
                 # purchased_item.color = ...?
                 # purchased_item.size = ...?
-                preferred_variations = item.preferred_variations.all()
+                purchased_item.variation = item.variation
                 purchased_item.save()
-                purchased_item.variations.set(preferred_variations)
+
                 # **** NOTE ****
                 # when applying .variations the tutorial goes other idiotic way
                 # and does all the unnecessary things there
                 # i do that in a wise way that anyone would do
                 # but when running anything went wrong check this part again
-                if purchased_item.quantity <= purchased_item.exact_stock():
+                if purchased_item.resources_are_enough():
                     # purchased_item.save()
 
                     # reduce the sold products from variation.stock values
@@ -132,7 +132,7 @@ def check_order(request, order_key):
     order = finalize_order(request=request, order_key=order_key, method='receipt', status='pending')
     if order and order.status.lower() == "pending":
         # now we send the user to transaction page
-        context = {"order": order}
+
         return redirect(order.receipt_url())
         # return render(request, 'purchase/receipt.html', context)
     # sth went wrong: HANDLE ERROR

@@ -11,7 +11,7 @@
                     <article class="card bg-transparent" style="border: none">
                         <header class="bg-transparent" style="z-index: 1">
                             <strong class="d-inline-block mr-3">
-                                <img src="{{ user.profile.avatar.url }}" alt="آواتارت" width="96" height="96" style="border-radius: 50%">
+                                <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %} {% static 'images/noavatar.jpeg' %}{%endif%}" alt="آواتارت" width="96" height="96" style="border-radius: 50%">
                                 {{ user }}
                             </strong>
                         </header>

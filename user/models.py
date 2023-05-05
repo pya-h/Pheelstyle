@@ -11,7 +11,7 @@ class UserManager(BaseUserManager):
             raise ValueError('Password must be stronger')
         if not fname or not lname:
             raise ValueError('Both name fields are essential')
-        
+
     def create_user(self, phone, password, fname, lname, email):
         self.validate_credentials(phone, password, fname, lname, email)
         new_user = self.model(phone=phone, fname=fname, lname=lname, email=self.normalize_email(email))
@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         new_user.is_superuser = False
         new_user.save(using=self._db)
         return new_user
-    
+
     def create_superuser(self, phone, password, fname, lname, email):
         self.validate_credentials(phone, password, fname, lname, email)
         owner = self.model(phone=phone, fname=fname, lname=lname, email=self.normalize_email(email))
@@ -77,7 +77,7 @@ class Profile(models.Model):
     province = models.CharField(max_length=30, verbose_name="استان", blank=True)
     city = models.CharField(max_length=30, verbose_name="شهرستان", blank=True)
     address = models.TextField(max_length=256, verbose_name="نشونی", blank=True)
-    avatar = models.ImageField(blank=True, upload_to='photos/avatars/')
+    avatar = models.ImageField(blank=True, upload_to='photos/avatars/', null=True)
 
     def full_address(self):
         return f'{self.province} - {self.city} - {self.address}'

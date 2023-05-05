@@ -23,7 +23,7 @@ class UserAdminPanel(UserAdmin):
 
 class ProfilePanel(admin.ModelAdmin):
     def avatar_thumbnail(self, obj):
-        return format_html('<img src="{}" width="48" height="48" style="border-radius: 50%;" />'.format(obj.avatar.url))
+        return format_html('<img src="{}" width="48" height="48" style="border-radius: 50%;" />'.format(obj.avatar.url if obj.avatar else "/static/images/noavatar.jpeg"))
     avatar_thumbnail.short_description = 'Avatar'
     list_display = ('avatar_thumbnail', 'user', 'province', 'city')
 

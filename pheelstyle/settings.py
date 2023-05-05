@@ -2,7 +2,6 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 from decouple import config
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +18,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '109.109.53.162', '.herokuapp.com', 'pheelstyle.herokuapp.com']
-
 
 # Application definition
 
@@ -59,7 +57,6 @@ SESSION_EXPIRE_SECONDS = 7200  # 1 hour
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_TIMEOUT_REDIRECT = 'user/login'
 
-
 ROOT_URLCONF = 'pheelstyle.urls'
 
 TEMPLATES = [
@@ -94,7 +91,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -112,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -133,8 +128,9 @@ MESSAGE_TAGS = {
 }
 
 # email - SMTP configuration :
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST', default="localhost")
-EMAIL_PORT = config('EMAIL_PORT', default=8000, cast=int)  # port for gmail
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)  # port for gmail
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 #  EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_HOST_PASSWORD = config('EMAIL_APP_PASSWORD')
@@ -147,12 +143,11 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 STATIC_URL = '/static/'
 # STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = [
-   'pheelstyle/rawstatic',
+    'pheelstyle/rawstatic',
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / 'static'
-
 
 # HEROKU setups:
 # heroku imports

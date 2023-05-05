@@ -86,21 +86,16 @@
                                                             </a>
 
                                                             <p class="text-muted small text-center">
-                                                                دسته بندی: {{ item.product.category }}
-                                                                <br />
-                                                                {% if item.preferred_variations.all %}
-                                                                    {% for variation in item.preferred_variations.all %}
-                                                                       {{ variation.parameter_fa }} : {{variation.value}}
-                                                                        <br />
-                                                                    {% endfor %}
-                                                                {% endif %}
+                                                                دسته بندی: {{ item.product.category }} <br />
+                                                                سایز: {{ item.variation.size }} <br />
+                                                                رنگ: {{ item.variation.color }} <br />
                                                                 موجودی:
-                                                                {% if item.exact_stock > 3 %}
-                                                                    <span class="badge pill badge-success"> {{ item.exact_stock }} </span>
-                                                                {% elif item.exact_stock > 1 %}
-                                                                    <span class="badge pill badge-warning"> {{ item.exact_stock }} </span>
+                                                                {% if item.variation.stock > 3 %}
+                                                                    <span class="badge pill badge-success"> {{ item.variation.stock }} </span>
+                                                                {% elif item.variation.stock > 1 %}
+                                                                    <span class="badge pill badge-warning"> {{ item.variation.stock }} </span>
                                                                 {% else %}
-                                                                    <span class="badge pill badge-danger"> {{ item.exact_stock }} </span>
+                                                                    <span class="badge pill badge-danger"> {{ item.variation.stock }} </span>
                                                                 {% endif %}
                                                         </figcaption>
                                                     </figure>

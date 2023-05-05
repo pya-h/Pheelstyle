@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, get_object_or_404, redirect
 from category.models import Category
 from .models import Product, Review, Gallery
@@ -16,18 +18,18 @@ def store(request, category_filter=None):
             category_fa = obj_expected_categories.name_fa
             if obj_expected_categories:
                 products = products.filter(category=obj_expected_categories)
-                
+
         if request.method == "POST":
             try:
                 min_price = int(request.POST["min_price"])
             except:
                 min_price = 0
-                
+
             try:
                 max_price = int(request.POST["max_price"])
             except:
                 max_price = 0
-                
+
             if min_price > 0:
                 products = products.filter(price__gte=min_price)
             if max_price > 0:
@@ -53,14 +55,27 @@ def product(request, category_filter, product_slug=None):
     context = dict()
     try:
         this_product = Product.objects.get(slug=product_slug, category__slug=category_filter)
+        sizes = this_product.variation_set.by_size()
+        dict_bysize_variations = {}
+        for s in sizes:
+            dict_bysize_variations[s] = list(this_product.variation_set.find_specific_size(s))
+            cs = {}
+            for c in dict_bysize_variations[s]:
+                cs[c.color] = c.stock
+            dict_bysize_variations[s] = cs
+
+
         reviews = Review.objects.filter(product=this_product, status=True)
         #for review in reviews:
             #review.comment = review.comment.replace('\n', ' <br> ')
         gallery = Gallery.objects.filter(product=this_product)
         context = {
             'this_product': this_product,
+            'sizes': sizes,
             'reviews': reviews,
-            'gallery': gallery
+            'gallery': gallery,
+            'dict_bysize_variations': json.dumps(dict_bysize_variations), # convert to json so it can be used in javascript
+
         }
     except Exception as ex:
         # handle this seriously

@@ -3,23 +3,20 @@ from store.models import Product, Variation
 from .models import Stack, TakenProduct
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-from .utlities import open_stack, have_same_variations
+from .utlities import open_stack
 
 
-def submit_preferred_variation(preferred_variations, taken=None, product=None, current_stack=None):
-    if len(preferred_variations) == len(Variation.variation_parameters):
+def submit_preferred_variation(variation, taken=None, product=None, current_stack=None):
+    if variation:
+        print("taken found", taken)
         if not taken:
             if product and current_stack:
-                taken = TakenProduct.objects.create(product=product, stack=current_stack)
+                taken = TakenProduct.objects.create(product=product, stack=current_stack, variation=variation)
             elif not product:
                 raise TakenProduct.DoesNotExist('Unknown product. cannot create a new Taken field')
             elif not current_stack:
                 raise Stack.DoesNotExist('Something went wrong while opening a new shopping stack.')
         taken.quantity = 1
-        taken.preferred_variations.clear()
-        for key in preferred_variations:
-            taken.preferred_variations.add(key)
-        taken.update_exact_stock()
         taken.save()
     else:
         raise Variation.DoesNotExist('Insufficient number of selected variations')
@@ -78,42 +75,34 @@ def take_another(request, product_id, taken_item_id):
 
 def take_product(request, product_id):
     product = Product.objects.get(id=product_id)
-
+    variation = None
     if request.method == 'POST':
         # collect all the user selection on product variation
-        preferred_variations = []
-        for key in request.POST:
-            value = request.POST[key]
-            try:
-                preferred = Variation.objects.get(product=product, parameter__iexact=key, value__iexact=value)
-                preferred_variations.append(preferred)
-            except:  # such as csrf_token
-                pass
+        color = request.POST['color']
+        size = request.POST['size']
+
+        try:
+            variation = Variation.objects.get(product=product, color=color, size=size)
+        except:  # such as csrf_token
+            pass
 
         current_stack = None
         try:
             current_stack = open_stack(request)
-            similar_takens = TakenProduct.objects.filter(product=product, stack=current_stack)
-            taken = None
-            # count the similar variations
-
-            for similar_taken in similar_takens:
-                items_variations = similar_taken.preferred_variations.all()
-
-                if have_same_variations(first=list(items_variations), second=preferred_variations):  # the exact item
-                    # with exact variations exists in previous stack products
-                    # so no need to add new product variations
-                    taken = similar_taken
-                    break
+            try:
+                taken = TakenProduct.objects.get(variation=variation, stack=current_stack)
+            except:
+                taken = None
 
             if (not taken or not taken.quantity) and product.available:
-                submit_preferred_variation(taken=taken, preferred_variations=preferred_variations, product=product, current_stack=current_stack)
+                submit_preferred_variation(taken=taken, variation=variation, product=product, current_stack=current_stack)
             else:
                 # SHOW ERROR MESSAGE
+
                 return redirect('stack')
         except TakenProduct.DoesNotExist:
             # handle this error (actually it must never happen
-            submit_preferred_variation(preferred_variations=preferred_variations, product=product, current_stack=current_stack)
+            submit_preferred_variation(variation=variation, product=product, current_stack=current_stack)
 
         except ObjectDoesNotExist:
             # handle this error seriously

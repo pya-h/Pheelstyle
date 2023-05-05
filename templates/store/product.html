@@ -2,10 +2,33 @@
 {% load static %}
 
 {% block content %}
+    <script>
+
+        const statistics = JSON.parse("{{dict_bysize_variations|escapejs}}")
+        function onSizeChange(selectedRadio) {
+
+            const size = selectedRadio.value;
+            console.log(statistics)
+            const colorSelectionDiv = document.getElementById('colorSelectionSection');
+            let html = '<h6>انتخاب رنگ</h6><div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">';
+
+            for(const color of Object.keys(statistics[size])) {
+                const stock = statistics[size][color];
+                const badge = `<span class="badge pill badge-${stock > 3 ? 'success' : stock > 1 ? 'warning' : 'danger'} mx-1 variation">${stock}</span>`;
+                html += `<label style="font-size: 17px;" class="btn btn-light p-3 variation-select">
+                    <input type="radio" name="color" value=${color}>
+                        ${color}
+                        ${badge}
+                    </label>`;
+            }
+            html += "</div></div>";
+            colorSelectionDiv.innerHTML = html;
+        }
+    </script>
     <section class="section-content padding-y bg">
         <div class="container">
-
         <!-- ============================ COMPONENT 1 ================================= -->
+
             <div style="border-radius: 5px" class="card">
                 <div class="row no-gutters">
                     <aside class="col-lg-6">
@@ -52,51 +75,26 @@
                                 </div>
                                 <p>{{ this_product.description }}</p>
                                 <hr>
+
                                 <div dir="ltr" class="row justify-content-center text-center">
-                                    <div>
-                                        <h6>انتخاب رنگ</h6>
+                                    <div class="item-option-select">
+                                        <h6>انتخاب سایز</h6>
                                         <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-                                         {% for v_color in this_product.variation_set.by_color %}
-                                            {% if v_color.stock > 0 %}
-                                                <label style="font-size: 16px;" class="btn btn-light variation-select">
-                                                        <input type="radio" name="color" value="{{v_color.value.lower}}">
-                                                        {{ v_color.value }}
-                                                        {% if v_color.stock > 3 %}
-                                                            <span class="badge pill badge-success mx-1 variation"> {{ v_color.stock }} </span>
-                                                        {% elif v_color.stock > 1 %}
-                                                            <span class="badge pill badge-warning mx-1 variation"> {{ v_color.stock }} </span>
-                                                        {% else %}
-                                                            <span class="badge pill badge-danger mx-1 variation"> {{ v_color.stock }} </span>
-                                                        {% endif %}
-                                                </label>
-                                            {% endif %}
-                                        {% endfor %}
+                                            {% for v_size in sizes %}
+                                                    <label style="font-size: 17px;" class="btn btn-light p-3 variation-select">
+                                                        <input id="size-{{v_size}}" onchange="onSizeChange(this)" type="radio" name="size" value="{{v_size}}">
+                                                        {{ v_size }}
+                                                    </label>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div> <!-- row.// -->
                                 <div class="mx-5 px-5"> <hr /> </div>
                                 <div dir="ltr" class="row justify-content-center text-center">
-                                    <div class="item-option-select">
-                                        <h6>انتخاب سایز</h6>
-                                        <div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-                                         {% for v_size in this_product.variation_set.by_size %}
-                                             {% if v_size.stock > 0 %}
-                                                 <label style="font-size: 16px;" class="btn btn-light variation-select">
-                                                    <input type="radio" name="size" value="{{v_size.value.lower}}">
-                                                    {{ v_size.value }}
-                                                    {% if v_size.stock > 3 %}
-                                                        <span class="badge pill badge-success mx-1 variation"> {{ v_size.stock }} </span>
-                                                    {% elif v_size.stock > 1 %}
-                                                        <span class="badge pill badge-warning mx-1 variation"> {{ v_size.stock }} </span>
-                                                    {% else %}
-                                                        <span class="badge pill badge-danger mx-1 variation"> {{ v_size.stock }} </span>
-                                                    {% endif %}
-                                                  </label>
-                                             {% endif %}
-                                          {% endfor %}
+                                        <div id="colorSelectionSection">
+
                                         </div>
-                                    </div>
-                                </div> <!-- row.// -->
+                                    </div> <!-- row.// -->
                                 <hr>
                                 {% comment %} {% if this_product.stock <= 0  %}
                                     <button disabled class="btn btn-block btn-dark expandable-button">تا دسته فروش رفت</button> {% endcomment %}
@@ -187,5 +185,7 @@
             </div> <!-- row.// -->
 
         </div> <!-- container .//  -->
+
     </section>
+
 {% endblock %}

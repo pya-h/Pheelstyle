@@ -4,7 +4,7 @@ from .models import Stack, TakenProduct
 
 class TakenProductAdminPanel(admin.ModelAdmin):
     list_display = ('id', 'product',  'stack', 'quantity', 'is_available',)
-    list_filter = ('product', 'stack', 'quantity', 'exact_stock', 'is_available', )
+    list_filter = ('product', 'stack', 'quantity', 'variation', 'is_available', )
 
 
 class TakenProductInline(admin.TabularInline):

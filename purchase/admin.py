@@ -7,7 +7,7 @@ from .models import Transaction, Order, PurchasedItem, OrderReceiver
 
 class PurchasedItemInline(admin.TabularInline):
     model = PurchasedItem
-    readonly_fields = ('product', 'order', 'buyer', 'quantity', 'cost', 'color', 'size', 'delivered')
+    readonly_fields = ('product', 'order', 'buyer', 'quantity', 'cost', 'delivered')
     extra = 0
 
 

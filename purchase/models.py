@@ -7,11 +7,11 @@ from django.urls import reverse
 
 
 class Receipt(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    reference_id = models.CharField(max_length=30)  # *** WHAT TO SET ON MAX_LENGTH ??
-    image = models.ImageField(upload_to='photos/transactions', blank=True, null=True)
-    amount = models.IntegerField(verbose_name="Transaction Amount")
-    order_key = models.CharField(max_length=20)  # this is the order checking code between seller and buyer
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
+    reference_id = models.CharField(max_length=30, verbose_name='کد رهیگیری')  # *** WHAT TO SET ON MAX_LENGTH ??
+    image = models.ImageField(upload_to='photos/transactions', blank=True, null=True, verbose_name='تصویر')
+    amount = models.IntegerField(verbose_name="مقدار تراکنش")
+    order_key = models.CharField(max_length=20, verbose_name='شماره سفارش')  # this is the order checking code between seller and buyer
 
     class Meta:
         verbose_name = 'رسید'
@@ -25,14 +25,14 @@ class Transaction(models.Model):
     METHODS = (('reserve', 'رزرو'),
               ('zarinpal', 'زرین پال'),
               ('bank_portal', 'درگاه پرداخت بانکی'))
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
     VALIDATION_STATUS = (('pending', 'در دست بررسی'), ('valid', 'معتبر'), ('invalid', 'نامعتبر'))
-    receipt = models.ForeignKey(Receipt, on_delete=models.CASCADE, blank=True, null=True)
-    validation = models.CharField(max_length=20, choices=VALIDATION_STATUS, default='pending')
+    receipt = models.ForeignKey(Receipt, on_delete=models.CASCADE, blank=True, null=True, verbose_name='رسید')
+    validation = models.CharField(max_length=20, choices=VALIDATION_STATUS, default='pending', verbose_name='صحت تراکنش')
 
-    performer = models.ForeignKey(User, on_delete=models.CASCADE)
-    method = models.CharField(max_length=20, blank=False, choices=METHODS)
-    date_created = models.DateTimeField(auto_now_add=True)
+    performer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='زدوبند کننده')
+    method = models.CharField(max_length=20, blank=False, choices=METHODS, verbose_name='روش پرداخت')
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
 
     class Meta:
         verbose_name = 'تراکنش'
@@ -43,22 +43,22 @@ class Transaction(models.Model):
 
 
 class OrderReceiver(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    related_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
+    related_to = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر مربوطه')
     # order = models.ForeignKey(Order, on_delete=models.CASCADE)
     # receiver identification
-    fname = models.CharField(max_length=30, verbose_name="Receiver's First Name", blank=True)
-    lname = models.CharField(max_length=30, verbose_name="Receiver's Last Name", blank=True)
-    phone = models.CharField(max_length=11, verbose_name="Receiver's Phone Number", blank=True)
+    fname = models.CharField(max_length=30, blank=True, verbose_name='اسم')
+    lname = models.CharField(max_length=30, blank=True, verbose_name='فامیلی')
+    phone = models.CharField(max_length=11, blank=True, verbose_name='تیلیف')
     # receiver address
-    postal_code = models.CharField(max_length=10, verbose_name="Postal Code", blank=False)
-    province = models.CharField(max_length=30, verbose_name="Province", blank=False)
-    city = models.CharField(max_length=30, verbose_name="City", blank=False)
-    address = models.TextField(max_length=256, verbose_name="Address", blank=False)
+    postal_code = models.CharField(max_length=10, verbose_name="کد پستی", blank=False)
+    province = models.CharField(max_length=30, verbose_name="استان", blank=False)
+    city = models.CharField(max_length=30, verbose_name="شهرستان", blank=False)
+    address = models.TextField(max_length=256, verbose_name="نشونی", blank=False)
 
     class Meta:
-        verbose_name = 'زدوبند کننده'
-        verbose_name_plural = 'زدوبندگان'
+        verbose_name = 'گیرنده سفارش'
+        verbose_name_plural = 'گیرنده های سفارش'
 
     def fullname(self):
         return f'{self.fname} {self.lname}'
@@ -86,26 +86,26 @@ class Order(models.Model):
               ('failed', 'قطعی آب'))
     # model connections
     # EDIT ON_DELETE s
-    key = models.CharField(max_length=20)  # this is the order checking code between seller and buyer
-    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # is it a good thing to remove records ?
-    transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True, blank=True)
-    receiver = models.ForeignKey(OrderReceiver, on_delete=models.PROTECT)  # edit the on_delete
+    key = models.CharField(max_length=20, verbose_name='شماره سفارش')  # this is the order checking code between seller and buyer
+    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='مالک زدوبند')  # is it a good thing to remove records ?
+    transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='تراکنش')
+    receiver = models.ForeignKey(OrderReceiver, on_delete=models.PROTECT, verbose_name='گیرنده')  # edit the on_delete
 
     # optionals
-    notes = models.CharField(max_length=256, verbose_name="Order Notes", blank=True)
+    notes = models.CharField(max_length=256, verbose_name="لحاظیات", blank=True)
 
     # stats
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    date_updated = models.DateTimeField(auto_now=True, verbose_name='تاریخ به روزرسانی')
     # is_certified = models.BooleanField(default=False)
     # is_delivered = models.BooleanField(default=False)
-    status = models.CharField(max_length=20, choices=STATUS, default='new')
+    status = models.CharField(max_length=20, choices=STATUS, default='new', verbose_name='وضعیت')
 
     # prices and costs
-    cost = models.IntegerField(default=0)  # total value (total price)
-    discounts = models.IntegerField(default=0)  # sum of the amount of discounts in Money (not percentage)
-    shipping_cost = models.IntegerField(default=0)
-    must_be_paid = models.IntegerField(default=0)
+    cost = models.IntegerField(default=0, verbose_name='هزینه')  # total value (total price)
+    discounts = models.IntegerField(default=0, verbose_name='تخفیفی جات')  # sum of the amount of discounts in Money (not percentage)
+    shipping_cost = models.IntegerField(default=0, verbose_name='هزینه ارسال')
+    must_be_paid = models.IntegerField(default=0, verbose_name='هزینه نهایی')
 
     class Meta:
         verbose_name = 'زدوبند'
@@ -148,27 +148,27 @@ class Order(models.Model):
 
 
 class PurchasedItem(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='سفارش مربوطه')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='مالک زدوبند')
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # match th item whit selected product
-    variation = models.ForeignKey(Variation, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='کالا')  # match th item whit selected product
+    variation = models.ForeignKey(Variation, on_delete=models.CASCADE, verbose_name='گونه')
 
-    quantity = models.IntegerField(default=0)
-    color = models.CharField(max_length=20)  # these two variation are defined separately are for direct access
-    size = models.CharField(max_length=20)
-    cost = models.IntegerField()  # final price for each product that is ordered ( considering the quantity and
+    quantity = models.IntegerField(default=0, verbose_name='تعداد')
+#    color = models.CharField(max_length=20, verbose_name='رنگ')  # these two variation are defined separately are for direct access
+#    size = models.CharField(max_length=20, verbose_name='سایز')
+    cost = models.IntegerField(verbose_name='هزینه')  # final price for each product that is ordered ( considering the quantity and
     # discount)
 
-    delivered = models.BooleanField(default=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now_add=True)
-    anything_wrong = models.CharField(max_length=50, blank=True, null=True, default="")
+    delivered = models.BooleanField(default=False, verbose_name='تحویل شده')
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    date_updated = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ به روزرسانی')
+    anything_wrong = models.CharField(max_length=50, blank=True, null=True, default="", verbose_name='مشکل پشکل؟')
 
     class Meta:
         verbose_name = 'کالای زدوبندی'
-        verbose_name_plural = 'زدوبندی ها'
+        verbose_name_plural = 'کالاهای زدوبندی'
 
     def __str__(self):
         return f'{self.product.__str__()} {self.color} {self.size} [{self.quantity}]'

@@ -8,15 +8,6 @@
     font-style: normal;
 }
 @font-face {
-    font-family: "Vazir-Bold";
-    src: url("../fonts/vazir/Vazir-Bold.eot") format("eot"),
-        url("../fonts/vazir/Vazir-Bold.ttf") format("truetype"),
-        url("../fonts/vazir/Vazir-Bold.woff") format("woff"),
-        url("../fonts/vazir/Vazir-Bold.woff2") format("woff2");
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
     font-family: "BYekan";
     src: url("../fonts/b1/BYekan-webfont.eot") format("eot"),
         url("../fonts/b1/BYekan-webfont.ttf") format("truetype"),

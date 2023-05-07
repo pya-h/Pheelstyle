@@ -5,20 +5,20 @@ from django.utils.html import format_html
 
 
 class UserAdminPanel(UserAdmin):
-    list_display = ('phone', 'fname', 'lname', 'email', 'joined', 'last_login', 'activated')
+    list_display = ('phone', 'fname', 'lname', 'email', 'joining_date', 'last_login', 'is_activated')
     list_display_links = ('phone', 'email')
-    readonly_fields = ('id', 'joined', 'last_login')
-    ordering = ('-joined', )  # sort list by date_joined descending order
+    readonly_fields = ('id', 'joining_date', 'last_login')
+    ordering = ('-joining_date', )  # sort list by joining_date descending order
     filter_horizontal = ()
     search_fields = ('phone', 'fname', 'lname', 'email', )
-    list_filter = ('activated', 'is_superuser', 'is_admin', 'is_staff', )
-    fieldsets = (('ناموس', {'fields': ('phone', 'password', 'id')}),
-                 ('اصل', {'fields': ('fname', 'lname', 'email', 'joined')}),
-                 ('دسترسی ها', {'fields': ('is_superuser', 'is_admin', 'is_staff', 'activated')}),)
+    list_filter = ('is_activated', 'is_superuser',)
+    fieldsets = (('مسائل ناموسی', {'fields': ('phone', 'password', 'id')}),
+                 ('اصل', {'fields': ('fname', 'lname', 'email', 'joining_date')}),
+                 ('دسترسی ها', {'fields': ('is_superuser', 'is_staff', 'is_activated')}),)
 
-    add_fieldsets = (('ناموس', {'fields': ('phone', 'password')}),
-                     ('اصل', {'fields': ('fname', 'lname', 'email', 'joined')}),
-                     ('دسترسی ها', {'fields': ('is_admin', 'is_staff')}),)
+    add_fieldsets = (('مسائل ناموسی', {'fields': ('phone', 'password')}),
+                     ('اصل', {'fields': ('fname', 'lname', 'email', 'joining_date')}),
+                     ('دسترسی ها', {'fields': ('is_staff', 'is_superuser', )}),)
 
 
 class ProfilePanel(admin.ModelAdmin):

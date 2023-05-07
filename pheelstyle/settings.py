@@ -80,7 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pheelstyle.wsgi.application'
 
 AUTH_USER_MODEL = 'user.User'
-AUTHENTICATION_BACKENDS = ('user.utilities.UserLoginBackend',)
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend', 'user.utilities.UserLoginBackend',)
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

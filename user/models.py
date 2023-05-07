@@ -16,8 +16,7 @@ class UserManager(BaseUserManager):
         self.validate_credentials(phone, password, fname, lname, email)
         new_user = self.model(phone=phone, fname=fname, lname=lname, email=self.normalize_email(email))
         new_user.set_password(password)
-        new_user.is_admin = new_user.is_staff = False
-        new_user.is_superuser = False
+        new_user.is_staff = new_user.is_superuser = False
         new_user.save(using=self._db)
         return new_user
 
@@ -25,8 +24,8 @@ class UserManager(BaseUserManager):
         self.validate_credentials(phone, password, fname, lname, email)
         owner = self.model(phone=phone, fname=fname, lname=lname, email=self.normalize_email(email))
         owner.set_password(password)
-        owner.activated = False
-        owner.is_staff = owner.is_admin = owner.is_superuser = True
+        owner.is_activated = False
+        owner.is_staff = owner.is_superuser = True
         owner.save(using=self._db)
         return owner
 
@@ -42,12 +41,11 @@ class User(AbstractBaseUser):
     # age, whatever, etc..
 
     # requirements:
-    joined = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ فیلی شدن")
-    last_login = models.DateTimeField(auto_now_add=True, verbose_name="آخرین دخول")
-    is_superuser = models.BooleanField(default=False, verbose_name="شاه؟")
-    is_admin = models.BooleanField(default=False, verbose_name="ملکه؟")
-    is_staff = models.BooleanField(default=False, verbose_name="درباری؟")
-    activated = models.BooleanField(default=False, verbose_name="فعال؟")
+    joining_date = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ فیلی شدن")
+    last_login = models.DateTimeField(auto_now=True, verbose_name="آخرین دخول")
+    is_staff = models.BooleanField(default=False, verbose_name="فیل درباری")
+    is_superuser = models.BooleanField(default=False, verbose_name="فیل شاه")
+    is_activated = models.BooleanField(default=False, verbose_name="فعال شدن اکانت")
     # is active, is online , ... ?
 
     USERNAME_FIELD = 'phone'
@@ -61,10 +59,10 @@ class User(AbstractBaseUser):
         return self.id
 
     def has_perm(self, perm, obj=None):
-        return self.is_admin
+        return self.is_superuser
 
     def has_module_perms(self, add_label):
-        return True
+        return self.is_superuser
 
     class Meta:
         verbose_name = "فیلی"

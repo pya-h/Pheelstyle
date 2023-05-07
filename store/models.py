@@ -149,7 +149,7 @@ class Variation(models.Model):
         return self.id
 
     def __str__(self):
-        return f'{self.product} - {self.size} : {self.color}'
+        return f'{self.size} : {self.color}'
 
 
 class Gallery(models.Model):

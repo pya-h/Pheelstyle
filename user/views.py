@@ -51,6 +51,9 @@ def login(request):
             if user is None:  # wrong credentials
                 messages.error(request, 'متاسفانه آب قطعه!')
                 return redirect('login')
+            elif not user.is_activated:  # wrong credentials
+                messages.error(request, 'این اکانت هنوز فعال سازی نشده است. لطفا به ایمیل خود مراجعه کنید!')
+                return redirect('login')
             else:  # ok credentials
                 attach_current_stack_to_current_user(request=request, user=user)  # must be exactly before auth.login
                 auth.login(request, user)
@@ -67,7 +70,7 @@ def login(request):
                     # if there is a next parameter in url:
                     if 'next' in url_params and url_params['next'] is not None:
                         return redirect(url_params['next'])
-                return redirect('user-dashboard') if not user.is_superuser else redirect('darbar')
+                return redirect('user-dashboard') if not user.is_superuser else redirect('/submax')
     except Exception as ex:
         print('sth went wrong while trying to login: ' + ex.__str__())
     return render(request, 'user/login.html')
@@ -87,7 +90,7 @@ def activate(request, uidb64, token):
         user = User._default_manager.get(pk=uid)
         # if user returned successfully
         if user is not None and default_token_generator.check_token(user, token):
-            user.activated = True
+            user.is_activated = True
             user.save()
             messages.success(request, 'حساب کاربری شما با موفقیت فعال شد.')
             return redirect('login')

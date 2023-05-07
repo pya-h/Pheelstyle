@@ -72,6 +72,8 @@ class OrderReceiver(models.Model):
 
 class Order(models.Model):
     # order possible status
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
+
     STATUS = (('new', 'جدید'),
               ('pending', 'در دست بررسی'),
               ('certified', 'سفارش معتبر'),
@@ -106,6 +108,7 @@ class Order(models.Model):
     discounts = models.IntegerField(default=0, verbose_name='تخفیفی جات')  # sum of the amount of discounts in Money (not percentage)
     shipping_cost = models.IntegerField(default=0, verbose_name='هزینه ارسال')
     must_be_paid = models.IntegerField(default=0, verbose_name='هزینه نهایی')
+    seen = models.BooleanField(default=False, verbose_name='مشاهده توسط ادمین')
 
     class Meta:
         verbose_name = 'زدوبند'

@@ -4,6 +4,7 @@ from .forms import OrderForm, ReserveTransactionForm
 from stack.utlities import open_stack
 from .models import Order, OrderReceiver, Transaction, PurchasedItem, Receipt
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def finalize_order(request, order_key, method, status, reference_id=None, amount=None):
@@ -84,21 +85,26 @@ def submit_order(request):
             if form.is_valid():
                 # first get the data posted by user
                 order = Order()
-                order.receiver = OrderReceiver()
+                try:
+                    order.receiver = OrderReceiver.objects.get(related_to=user, phone=form.cleaned_data['phone'])
+                except ObjectDoesNotExist:
+                    order.receiver = OrderReceiver()
+                    order.receiver.phone = form.cleaned_data['phone']
+                    order.receiver.related_to = user
+
                 order.receiver.fname = form.cleaned_data['fname']
                 order.receiver.lname = form.cleaned_data['lname']
-                order.receiver.phone = form.cleaned_data['phone']
                 order.receiver.postal_code = form.cleaned_data['postal_code']
                 order.receiver.province = form.cleaned_data['province']
                 order.receiver.city = form.cleaned_data['city']
                 order.receiver.address = form.cleaned_data['address']
-                order.receiver.related_to = user
+
                 order.receiver.save()
 
                 order.notes = form.cleaned_data['notes']
-                order.cost = user_stack.cost * 10
+                order.cost = user_stack.cost
                 order.discounts = user_stack.discounts
-                order.shipping_cost = 50000  # this is for test; ask pouya about this
+                order.shipping_cost = 50  # this is for test; ask pouya about this
                 order.how_much_to_pay()  # calculate the cose and update the order.must_be_paid
                 # update the ip of the user again just to make sure
                 order.buyer = user
@@ -171,6 +177,7 @@ def take_receipt(request, order_key):
 def reserve_order(request):
     if request.method == "POST":
         form = ReserveTransactionForm(request.POST, request.FILES)
+        print(form, form.is_valid())
         if form.is_valid():
             receipt = Receipt(reference_id=form.cleaned_data['reference_id'], image=form.cleaned_data['image'],
                               amount=form.cleaned_data['amount'])

@@ -67,7 +67,7 @@
                                     <thead class="text-muted bg-light">
                                         <tr class="small text-center text-uppercase">
                                           <th scope="col">کالا</th>
-                                          <th scope="col">قیمت نهایی</th>
+                                          <th scope="col">قیمت نهایی (تومن)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,10 +104,10 @@
                                                     <div class="price-wrap text-center">
                                                         <h4>
                                                             <span dir="ltr" class="mx-1 my-1 badge badge-pill badge-success text-white">
-                                                                <del>{{item.product.price}}$</del>
+                                                                <del>{{item.product.price}}</del>
                                                                 <sub>{{ item.absolute_price }}</sub>
                                                                 x {{ item.quantity }}
-                                                                = {{ item.final_price }}$
+                                                                = {{ item.final_price }}
                                                             </span>
                                                         </h4>
                                                     </div> <!-- price-wrap .// -->

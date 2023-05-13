@@ -1,0 +1,30 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_bottom %}
+    <style>
+        #btn-verify {
+            float: right;
+            background: darkgreen;
+            transition: all 1s;
+        }
+        #btn-verify:hover {
+            background: greenyellow;
+        }
+
+        #btn-cancel {
+            float: left;
+            background: coral;
+            transition: all 1s;
+        }
+        #btn-cancel:hover {
+            background: darkred;
+        }
+    </style>
+
+    <div class="submit-row" style="text-align: center; margin: auto auto 1rem;">
+        <input id="btn-verify" type="submit" name="btn_verify_order" value="تایید سفارش" />
+        <input id="btn-cancel" type="submit" name="btn_cancel_order" value="رد کردن سفارش" />
+
+    </div>
+    {{ block.super }}
+{% endblock %}

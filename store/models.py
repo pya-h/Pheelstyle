@@ -9,7 +9,7 @@ from django.db.models import Avg, Count
 
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="آیدی")
-    name = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام به احنبی")
+    name = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام به اجنبی")
     name_fa = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام")
     slug = models.SlugField(max_length=100, unique=True, verbose_name="اسلاگ")
     description = models.TextField(max_length=1024, blank=True, verbose_name="مشخصات")

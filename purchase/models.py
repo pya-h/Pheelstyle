@@ -72,16 +72,15 @@ class OrderReceiver(models.Model):
 
 class Order(models.Model):
     # order possible status
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
 
     STATUS = (('new', 'جدید'),
               ('pending', 'در دست بررسی'),
-              ('certified', 'سفارش معتبر'),
+              ('verified', 'سفارش معتبر'),
               ('sent', ' ارسال شده'),
               ('delivered', 'تحویل شده'),
               ('separator', '--------------------'),
 
-              ('uncertified', 'سفارش نامعتبر'),
+              ('invalid', 'سفارش نامعتبر'),
               ('not_sent', 'عدم ارسال'),
               ('undelivered', 'عدم تحویل'),
               ('canceled', 'داستان'),
@@ -135,8 +134,7 @@ class Order(models.Model):
         month = int(datetime.date.today().strftime('%m'))
         day = int(datetime.date.today().strftime('%d'))
         today = datetime.date(year, month, day)  # construct today's date in proper format and object
-        return today.strftime('%Y%m%d') + str(
-            self.id)  # django default primary key: id starts from 1 increasing by one
+        return today.strftime('%Y%m%d') + str(self.id)  # django default primary key: id starts from 1 increasing by one
 
     def sell_products(self):
         # apply order and update the product stocks and statistics in the inventory
@@ -174,7 +172,7 @@ class PurchasedItem(models.Model):
         verbose_name_plural = 'کالاهای زدوبندی'
 
     def __str__(self):
-        return f'{self.product.__str__()} {self.color} {self.size} [{self.quantity}]'
+        return f'{self.product} - {self.variation} [{self.quantity}]'
 
     def resources_are_enough(self):
         return self.variation.stock >= self.quantity

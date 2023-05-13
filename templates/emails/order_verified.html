@@ -1,0 +1,19 @@
+{% autoescape off %}
+<div dir="rtl" style="font-size: 20px; font-weight: bold">
+    <h2>
+        اطلاعیه:
+    </h2>
+    <br />
+    سلام {{ name }}
+    <br /> <br />
+    سفارش شما، با شماره سفارش {{ order_key }}
+    و کد پیگیری تراکنش {{ reference_id }}
+    توسط فیل تایید شد.
+    <br> <br/>
+    بزودی سفارشت آماده ارسال میشه.
+    از لینک زیر می تونی مشخصات کامل و وضعیت ارسال سفارشت رو ببینی:
+    <br /> <br />
+    http://{{domain}}{% url 'view-order' order_key=order_key %}
+
+</div>
+{% endautoescape %}

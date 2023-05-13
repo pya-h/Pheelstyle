@@ -5,6 +5,19 @@ from user.models import User
 from uuid import uuid4
 from django.urls import reverse
 
+ORDER_STATUS = {
+    'new': 'جدید',
+    'pending': 'در دست بررسی',
+    'verified': 'سفارش معتبر',
+    'sent': ' ارسال شده',
+    'delivered': 'تحویل شده',
+    'refused': 'سفارش نامعتبر',
+    'not_sent': 'عدم ارسال',
+    'undelivered': 'عدم تحویل',
+    'canceled': 'داستان',
+    'failed': 'قطعی آب'
+}
+
 
 class Receipt(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
@@ -73,18 +86,18 @@ class OrderReceiver(models.Model):
 class Order(models.Model):
     # order possible status
 
-    STATUS = (('new', 'جدید'),
-              ('pending', 'در دست بررسی'),
-              ('verified', 'سفارش معتبر'),
-              ('sent', ' ارسال شده'),
-              ('delivered', 'تحویل شده'),
+    STATUS = (('new', ORDER_STATUS['new']),
+              ('pending', ORDER_STATUS['pending']),
+              ('verified', ORDER_STATUS['verified']),
+              ('sent', ORDER_STATUS['sent']),
+              ('delivered', ORDER_STATUS['delivered']),
               ('separator', '--------------------'),
 
-              ('invalid', 'سفارش نامعتبر'),
-              ('not_sent', 'عدم ارسال'),
-              ('undelivered', 'عدم تحویل'),
-              ('canceled', 'داستان'),
-              ('failed', 'قطعی آب'))
+              ('invalid', ORDER_STATUS['refused']),
+              ('not_sent', ORDER_STATUS['not_sent']),
+              ('undelivered', ORDER_STATUS['undelivered']),
+              ('canceled', ORDER_STATUS['canceled']),
+              ('failed', ORDER_STATUS['failed']))
     # model connections
     # EDIT ON_DELETE s
     key = models.CharField(max_length=20, verbose_name='شماره سفارش')  # this is the order checking code between seller and buyer
@@ -108,6 +121,7 @@ class Order(models.Model):
     shipping_cost = models.IntegerField(default=0, verbose_name='هزینه ارسال')
     must_be_paid = models.IntegerField(default=0, verbose_name='هزینه نهایی')
     seen = models.BooleanField(default=False, verbose_name='مشاهده توسط ادمین')
+    whats_wrong = models.TextField(max_length=256, null=True, blank=True, verbose_name='علت رد سفارش')
 
     class Meta:
         verbose_name = 'زدوبند'

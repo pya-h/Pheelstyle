@@ -1,7 +1,9 @@
 from django.contrib import admin
 from .models import Transaction, Order, PurchasedItem, OrderReceiver
 from django.shortcuts import get_object_or_404
-
+from django.contrib import messages
+from django.shortcuts import redirect
+from common.tools import MailingInterface
 # TODO:
 # ADD TRANSACTION & ORDERRECEIVER MANAGERS CLASSES AS INLINES FOR ORDER ADMIN PANEL
 
@@ -38,18 +40,48 @@ class OrderAdminPanel(admin.ModelAdmin):
         try:
             if "btn_verify_order" in request.POST:
                 order = get_object_or_404(Order, id=obj.id, key=obj.key)
-                order.status = "verified"
-                order.seen = True
-                goods = PurchasedItem.objects.filter(order=order)
+                if order.status != "verified" and order.status != 'sent' and order.status != "delivered":
+                    order.status = "verified"
+                    order.seen = True
+                    goods = PurchasedItem.objects.filter(order=order)
 
-                for item in goods:
-                    item.variation.stock -= item.quantity
-                    item.variation.save()
-                    item.save()
-                # send email with details to notify that the order is verified and will be prepared to send
-                order.save()
+                    for item in goods:
+                        item.variation.stock -= item.quantity
+                        item.variation.save()
+                        item.save()
+
+                    order.whats_wrong = None
+                    # send email with details to notify that the order is verified and will be prepared to send
+                    if not order.buyer or not order.buyer.email:
+                        messages.error(request, "خریدار این سفارش و یا ایمیل وی مشخص نیست. احتمالا اطلاعات این کاربر دستکاری شده است و نیاز به بررسی دارد.")
+                        return redirect(request.path)
+                    ref_id = order.transaction.receipt.reference_id if order.transaction and order.transaction.receipt else None
+                    MailingInterface.SendMessage(request, order.buyer.email, "تایید سفارش", "order_verified", {"name": order.buyer.fname, "order_key": order.key, "reference_id": ref_id})
+                    order.save()
+                else:
+                    messages.info(request, "این سفارش قبلا تایید شده است.")
+                    return redirect(request.path)
             elif "btn_cancel_order" in request.POST:
-                pass
+                cause = request.POST["whats_wrong"]
+                if not cause:
+                    messages.error(request, "علت رد سفارش را وارد کن.")
+                    return redirect(request.path)
+
+                order = get_object_or_404(Order, id=obj.id, key=obj.key)
+                order.whats_wrong = cause
+                order.seen = True
+                order.save()
+                if not order.buyer or not order.buyer.email:
+                    messages.error(request, "خریدار این سفارش و یا ایمیل وی مشخص نیست. احتمالا اطلاعات این کاربر دستکاری شده است و نیاز به بررسی دارد.")
+                    return redirect(request.path)
+
+                MailingInterface.SendMessage(request,
+                                             target_email=order.buyer.email,
+                                             subject="سفارش نامعتبر",
+                                             template_name="order_refused",
+                                             dict_content={"name": order.buyer.fname,
+                                                           "order_key": order.key,
+                                                           "whats_wrong": cause})
                 # send email to notify
                 # change order status
                 # or remove the order?

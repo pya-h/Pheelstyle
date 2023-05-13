@@ -39,7 +39,7 @@
                                                                                         badge-success
                                                                                     {% elif  order.status == 'new' or order.status == 'pending' %}
                                                                                         badge-warning
-                                                                                    {% elif  order.status == 'certified' %}
+                                                                                    {% elif order.status == "verified" %}
                                                                                         badge-info
                                                                                     {% else %}
                                                                                         badge-danger

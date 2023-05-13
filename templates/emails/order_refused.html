@@ -1,0 +1,19 @@
+{% autoescape off %}
+<div dir="rtl" style="font-size: 20px; font-weight: bold">
+    <h2>
+        هشدار:
+    </h2>
+    <br />
+    سلام {{ name }}
+    <br /> <br />
+    سفارش شما، با شماره سفارش {{ order_key }}
+    در مرحله تایید اعتبار با مشکل مواجه شده و به دلیل زیر مردود شد:
+    <br> <br/>
+    {{ whats_wrong }}
+    <br> <br/>
+    از لینک زیر می تونی مشخصات کامل سفارشت رو ببینی و مشکلش رو حل کنی:
+    <br /> <br />
+    http://{{domain}}{% url 'view-order' order_key=order_key %}
+
+</div>
+{% endautoescape %}

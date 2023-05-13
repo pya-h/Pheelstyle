@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from purchase.models import Order, PurchasedItem
+from purchase.models import Order, PurchasedItem, ORDER_STATUS
 from django.shortcuts import render, get_object_or_404, redirect
 from user.models import Profile, User
 from .forms import UserEditForm, ProfileEditForm
@@ -18,23 +18,12 @@ def user_dashboard(request):
 
 @login_required(login_url='login')
 def user_orders(request):
-    status = {'new': 'جدید',
-              'pending': 'در دست بررسی',
-              'certified': 'سفارش معتبر',
-              'sent': ' ارسال شده',
-              'delivered': 'تحویل شده',
-              'uncertified': 'سفارش نامعتبر',
-              'not_sent': 'عدم ارسال',
-              'undelivered': 'عدم تحویل',
-              'canceled': 'داستان',
-              'failed': 'قطعی آب'
-              }
     context = {}
     try:
         # send all orders to admin?
         context['your_orders'] = Order.objects.filter(buyer=request.user).order_by('-date_created')
         for order in context['your_orders']:
-            order.status_fa = status[str(order.status)]
+            order.status_fa = ORDER_STATUS[str(order.status)]
     except:
         context['your_orders'] = 'خطای بارگذاری'
 
@@ -105,22 +94,10 @@ def view_order(request, order_key):
         return redirect('login')
     context = {}
     try:
-        status = {'new': 'جدید',
-                  'pending': 'در دست بررسی',
-                  'certified': 'سفارش معتبر',
-                  'sent': ' ارسال شده',
-                  'delivered': 'تحویل شده',
-                  'uncertified': 'سفارش نامعتبر',
-                  'not_sent': 'عدم ارسال',
-                  'undelivered': 'عدم تحویل',
-                  'canceled': 'داستان',
-                  'failed': 'قطعی آب'
-              }
-
         context['order'] = Order.objects.get(key=order_key)
         context['items'] = PurchasedItem.objects.filter(order__key=order_key)
 
-        context['order'].status_fa = status[str(context['order'].status)]
+        context['order'].status_fa = ORDER_STATUS[str(context['order'].status)]
     except Order.DoesNotExist or PurchasedItem.DoesNotExist:
         messages.error(request, "همچین زد و بندی نداشتیم ما با هم!")
         return redirect('user-orders')

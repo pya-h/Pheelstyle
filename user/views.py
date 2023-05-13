@@ -7,7 +7,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
-from .utilities import Mailer
+from common.tools import MailingInterface
 import requests
 from common.exceptions import WaitAssholeException
 
@@ -26,7 +26,9 @@ def register(request):
             profile = Profile(user=user)
             profile.save()
             # send user verification email
-            Mailer(user, email, request, 'user_verification').send('فعال سازی حساب کاربری')
+            MailingInterface.SendSignedMessage(request=request, target_email=email, subject='فعال سازی حساب کاربری',
+                                               template_name='user_verification')
+
             # messages.info(request, 'حسابت ساخته شد...حالا از طریقی ایمیلی که برات فرستادیم باید اکانتت رو فعال
             # کنی...')
             return redirect('/user/login/?command=verification&email=' + email)
@@ -111,7 +113,7 @@ def forgot_password(request):
                     messages.error(request=request, message='هیچ حساب کاربری با این ایمیل ثبت نشده.')
                 else:
                     # send password reset email:
-                    Mailer.Send(request=request, user=user, email_address=email, subject='بازیابی رمزشب', template_name='reset_password')
+                    MailingInterface.SendSignedMessage(request=request, target_email=email, subject='بازیابی رمزشب', template_name='reset_password')
                     messages.info(request=request, message='ایمیل بازیابی رمزشب به آدرس بالا ارسال شد...')
                     return redirect('login')
             else:

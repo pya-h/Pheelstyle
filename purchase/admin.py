@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.shortcuts import redirect
 from common.tools import MailingInterface
+from devshare.models import DevShare
+
 # TODO:
 # ADD TRANSACTION & ORDERRECEIVER MANAGERS CLASSES AS INLINES FOR ORDER ADMIN PANEL
 
@@ -58,6 +60,12 @@ class OrderAdminPanel(admin.ModelAdmin):
                     ref_id = order.transaction.receipt.reference_id if order.transaction and order.transaction.receipt else None
                     MailingInterface.SendMessage(request, order.buyer.email, "تایید سفارش", "order_verified", {"name": order.buyer.fname, "order_key": order.key, "reference_id": ref_id})
                     order.save()
+                    try:
+                        dev_share = DevShare.objects.get(order=order)
+                        dev_share.verify()
+                        dev_share.save()
+                    except Exception as ex:
+                        print("Cannot retrieve developer share: ", ex)
                 else:
                     messages.info(request, "این سفارش قبلا تایید شده است.")
                     return redirect(request.path)
@@ -85,6 +93,9 @@ class OrderAdminPanel(admin.ModelAdmin):
                 # send email to notify
                 # change order status
                 # or remove the order?
+            elif "btn_indebt" in request.POST:
+                pass
+            #  COMPLETE THIS IF
         except Exception as ex:
             print("Something went wrong while verifying the order: ", ex)
         return super().response_change(request, obj)

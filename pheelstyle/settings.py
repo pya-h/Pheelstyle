@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'store',
     'stack',
     'purchase',
-    'dashboard'
+    'dashboard',
+    'devshare'
     # 'gateways'
 ]
 

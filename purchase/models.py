@@ -9,6 +9,7 @@ ORDER_STATUS = {
     'new': 'جدید',
     'pending': 'در دست بررسی',
     'verified': 'سفارش معتبر',
+    'indebt': 'شامل بدهی',
     'sent': ' ارسال شده',
     'delivered': 'تحویل شده',
     'refused': 'سفارش نامعتبر',
@@ -89,8 +90,10 @@ class Order(models.Model):
     STATUS = (('new', ORDER_STATUS['new']),
               ('pending', ORDER_STATUS['pending']),
               ('verified', ORDER_STATUS['verified']),
+              ('indebt', ORDER_STATUS['indebt']),
               ('sent', ORDER_STATUS['sent']),
               ('delivered', ORDER_STATUS['delivered']),
+
               ('separator', '--------------------'),
 
               ('invalid', ORDER_STATUS['refused']),

@@ -77,6 +77,8 @@ class Profile(models.Model):
     address = models.TextField(max_length=256, verbose_name="نشونی", blank=True)
     avatar = models.ImageField(blank=True, upload_to='photos/avatars/', null=True)
 
+    debt = models.IntegerField(default=0, verbose_name='بدهی شما')
+
     def full_address(self):
         return f'{self.province} - {self.city} - {self.address}'
 

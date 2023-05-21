@@ -5,6 +5,7 @@ from stack.utlities import open_stack
 from .models import Order, OrderReceiver, Transaction, PurchasedItem, Receipt
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from devshare.models import DevShare
 
 
 def finalize_order(request, order_key, method, status, reference_id=None, amount=None):
@@ -107,14 +108,16 @@ def submit_order(request):
                 order.shipping_cost = 50  # this is for test; ask pouya about this
                 order.how_much_to_pay()  # calculate the cose and update the order.must_be_paid
                 # update the ip of the user again just to make sure
+
                 order.buyer = user
                 order.buyer.ip = request.META.get('REMOTE_ADDR')
-
                 order.buyer.save()
                 order.save()  # save object and create id field for it (to use in keygen)
                 order.key = order.keygen()
                 order.save()  # call save for django to set the id primary key automatically
-
+                new_share = DevShare(order=order)
+                new_share.calculate()
+                new_share.save()
                 # use Order.objects.get to make sure that the order is saved properly and retrievable
                 order = Order.objects.get(buyer=request.user, key=order.key)
                 context = {

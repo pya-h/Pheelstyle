@@ -5,13 +5,14 @@ from django.urls import reverse
 import uuid
 from user.models import User
 from django.db.models import Avg, Count
+from shop.models import Shop
 
 
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name="آیدی")
-    name = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام به اجنبی")
-    name_fa = models.CharField(max_length=100, unique=True, blank=False, verbose_name="نام")
-    slug = models.SlugField(max_length=100, unique=True, verbose_name="اسلاگ")
+    name = models.CharField(max_length=64, unique=True, blank=False, verbose_name="نام به اجنبی")
+    name_fa = models.CharField(max_length=64, unique=True, blank=False, verbose_name="نام")
+    slug = models.SlugField(max_length=64, unique=True, verbose_name="اسلاگ")
     description = models.TextField(max_length=1024, blank=True, verbose_name="مشخصات")
     price = models.IntegerField(verbose_name="شیتیل")
     available = models.BooleanField(default=True, verbose_name="در دسترس؟")
@@ -21,16 +22,11 @@ class Product(models.Model):
     # below line delete all products associated when the category deletes!! expected?
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="دسته بندی")
     image = models.ImageField(upload_to='photos/products', verbose_name="تصویر")
-
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, blank=False, null=False)
+    
     class Meta:
         verbose_name = "کالا"
         verbose_name_plural = "کالا ها"
-
-    def update(self):
-        # this function must update fields after sth has been sold
-        # like updating availability
-        # or update dates?
-        return self.available  # temp
 
     # this is IMPORTANT -> remove image from here and add use default variation image
 
@@ -161,7 +157,7 @@ class Gallery(models.Model):
         verbose_name_plural = "گالری"
 
     def __str__(self):
-        return self.product.name
+        return self.product.__str__()
 
 
 class Review(models.Model):

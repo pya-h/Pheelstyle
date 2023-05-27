@@ -25,8 +25,10 @@ def register(request):
             user.save()
             profile = Profile(user=user)
             profile.save()
+            user.save()
+            print("user is  = ", user, "\n\n type of = ", (user.last_login), end="\n\n")
             # send user verification email
-            MailingInterface.SendSignedMessage(request=request, target_email=email, subject='فعال سازی حساب کاربری',
+            MailingInterface.SendSignedMessage(request=request, user=user, target_email=email, subject='فعال سازی حساب کاربری',
                                                template_name='user_verification')
 
             # messages.info(request, 'حسابت ساخته شد...حالا از طریقی ایمیلی که برات فرستادیم باید اکانتت رو فعال
@@ -113,7 +115,7 @@ def forgot_password(request):
                     messages.error(request=request, message='هیچ حساب کاربری با این ایمیل ثبت نشده.')
                 else:
                     # send password reset email:
-                    MailingInterface.SendSignedMessage(request=request, target_email=email, subject='بازیابی رمزشب', template_name='reset_password')
+                    MailingInterface.SendSignedMessage(request=request, user=user, target_email=email, subject='بازیابی رمزشب', template_name='reset_password')
                     messages.info(request=request, message='ایمیل بازیابی رمزشب به آدرس بالا ارسال شد...')
                     return redirect('login')
             else:

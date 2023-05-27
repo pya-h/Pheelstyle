@@ -135,7 +135,6 @@ EMAIL_HOST = config('EMAIL_HOST', default="localhost")
 EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)  # port for gmail
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 #  EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_HOST_PASSWORD = config('EMAIL_APP_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 # EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 

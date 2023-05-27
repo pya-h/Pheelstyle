@@ -50,8 +50,7 @@ class MailingInterface:
             raise WaitAssholeException(time_passed_from_last_email)
 
     @staticmethod
-    def SendSignedMessage(request, target_email, subject, template_name):
-        user = request.user
+    def SendSignedMessage(request, user, target_email, subject, template_name):
         time_passed_from_last_email = datetime.now() - MailingInterface.last_email_date
         if time_passed_from_last_email.total_seconds() > 60:
             sender_domain = get_current_site(request)

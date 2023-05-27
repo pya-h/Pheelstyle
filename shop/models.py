@@ -4,14 +4,14 @@ import uuid
 
 # Create your models here.
 class Shop(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='ID')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
-    name = models.CharField(max_length=64, blank=False, null=False)
-    name_fa = models.CharField(max_length=64, blank=False, null=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='آیدی')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, verbose_name='مالک')
+    name = models.CharField(max_length=64, blank=False, null=False, verbose_name='نام (انگلیسی)')
+    name_fa = models.CharField(max_length=64, blank=False, null=False, verbose_name='نام (فارسی)')
 
-    description = models.CharField(max_length=1024, blank=True)
-    location = models.CharField(max_length=128, blank=False, null=False)
-    slug = models.SlugField(max_length=64, unique=True)
+    description = models.CharField(max_length=1024, blank=True, verbose_name='توضیحات')
+    location = models.CharField(max_length=128, blank=False, null=False, verbose_name='آدرس')
+    slug = models.SlugField(max_length=64, unique=True, verbose_name='اسلاگ')
 
     def rating(self):
         pass
@@ -20,7 +20,7 @@ class Shop(models.Model):
 
 
 class Gallery(models.Model):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, default=None)
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, default=None, verbose_name='فروشگاه')
     image = models.ImageField(upload_to='photos/shops', verbose_name="تصویر")
 
     class Meta:

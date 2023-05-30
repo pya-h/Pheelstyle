@@ -1,36 +1,4 @@
 {% load static %}
-<style>
-
-    #navigation-box {
-        transition: height 1.75s;
-        -webkit-transition: height 1.75s;
-    }
-    .search-textbox {
-        border: 1px dashed coral;
-        width:60%;
-        font-weight: bold;
-        font-size: 20px;
-        opacity: 0.3;
-        transition: opacity 1.5s ease-in-out;
-        -webkit-transition: opacity 1.5s ease-in-out;
-    }
-
-    .search-textbox:focus {
-        opacity: 0.9;
-    }
-    .search-textbox:hover {
-        opacity: 0.9;
-    }
-
-    .search-button {
-        border: 1px dashed coral;
-
-    }
-
-    .search-button:hover{
-        background: coral;
-    }
-</style>
 
 <header class="section-header">
     <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
@@ -51,7 +19,7 @@
         <div class="container">
             <div class="intro-banner-wrap">
                 {% comment %} <img src="{% static 'images/banners/1.jpg' %}" class="img-fluid rounded" alt="بارگذاری با مشکل مواجه شد"> {% endcomment %}
-                <div class="pheelstyle-banner">PHEELSTYLE</h1>
+                <div class="pheelstyle-banner">PHEELSTYLE</div>
             </div>
         </div> <!-- container //  -->
     </section>
@@ -77,14 +45,19 @@
                 </div> <!-- col.// -->
                 <a href="{% url 'store' %}" class="btn btn-primary" >فروشگاه</a>
                 <div class="mt-3 col-lg col-md-6 col-sm-12 col-12 col">
-                    <form action="#" class="search">
+                    <form action="{% url 'search' %}" method="post" class="search">
+                        {% csrf_token %}
                         <div class="input-group w-100">
                             <div class="input-group-append">
                               <button class="btn search-button" style="border-radius: 0 1rem 1rem 0;" type="submit">
                                 <i class="fa fa-search"></i>
                               </button>
                             </div>
-                            <input type="text" class="form-control text-center text-dark search-textbox" style="border-radius: 1rem 0 0 1rem;" placeholder="بگرد...">
+                            <input type="text" required
+                                   class="form-control text-center text-dark search-textbox"
+                                   style="border-radius: 1rem 0 0 1rem;"
+                                   name="search_text"
+                                   placeholder="بگرد...">
                         </div>
                     </form> <!-- search-wrap .end// -->
                 </div> <!-- col.// -->
@@ -92,21 +65,21 @@
                     <div class="d-flex justify-content-end mb-3 mb-lg-0">
                         <div class="text-right widget-header">
                             {% if user.ID is None %}
-                                <small class="title text-muted">سلام فیلی</small>
+                                <small class="title text-info">سلام فیلی</small>
                                 <div>
-                                    <a href="{% url 'login' %}">ورود</a> <span class="dark-transp"> | </span>
-                                    <a href="{% url 'register' %}">نوم نویسی</a>
+                                    <a class="text-warning profile-summary" href="{% url 'login' %}">ورود</a> <span class="dark-transp"> | </span>
+                                    <a class="text-success profile-summary" href="{% url 'register' %}">نوم نویسی</a>
                                 </div>
                             {% else %}
-                                <small class="title text-muted">سلام {{user.fname}} {{user.lname}}</small>
+                                <small class="title text-info">سلام {{user.fname}} {{user.lname}}</small>
                                 <div>
-                                    <a href="{% url 'user-dashboard' %}" >داشبرد</a> <span class="dark-transp"> | </span>
-                                    <a href="{% url 'logout' %}">خروج</a>
+                                    <a class="text-info profile-summary" href="{% url 'user-dashboard' %}" >داشبرد</a> <span class="dark-transp"> | </span>
+                                    <a class="text-danger profile-summary" href="{% url 'logout' %}">خروج</a>
                                 </div>
                             {% endif %}
                         </div>
                         <a href="{% url 'stack' %}" class="widget-header mx-4">
-                            <div class="icon icon-md rounded-circle border"><i class="fa fa-shopping-bag"></i></div>
+                            <div class="icon icon-md rounded-circle border"><i class="fa fa-shopping-bag text-success pt-3"></i></div>
                             <span class="badge badge-pill badge-danger notify">{{stack_counter}}</span>
                         </a>
                     </div> <!-- widgets-wrap.// -->

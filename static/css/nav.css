@@ -1,0 +1,33 @@
+#navigation-box {
+    transition: height 1.75s;
+    -webkit-transition: height 1.75s;
+}
+.search-textbox {
+    border: 1px dashed coral;
+    width:60%;
+    font-weight: bold;
+    font-size: 20px;
+    opacity: 0.3;
+    transition: opacity 1.5s ease-in-out;
+    -webkit-transition: opacity 1.5s ease-in-out;
+}
+
+.search-textbox:focus {
+    opacity: 0.9;
+}
+.search-textbox:hover {
+    opacity: 0.9;
+}
+
+.search-button {
+    border: 1px dashed coral;
+
+}
+
+.search-button:hover{
+    background: coral;
+}
+.profile-summary {
+    font-size: 150%;
+    font-weight: bolder
+}

@@ -17,6 +17,9 @@ class Shop(models.Model):
         pass
         # this will be calculated by the average of shop's products ratings
 
+    class Meta:
+        verbose_name = 'فروشگاه'
+        verbose_name_plural = 'فروشگاه ها'
 
 
 class Gallery(models.Model):

@@ -28,5 +28,6 @@ urlpatterns = [
     path('purchase/', include('purchase.urls')),
     path('user/', include('user.urls')),
     # path('gateways/', include('gateways.urls')),
-    path('dashboard/', include('dashboard.urls'))
+    path('dashboard/', include('dashboard.urls')),
+    path('search/', views.search, name='search')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

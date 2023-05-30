@@ -9,10 +9,10 @@ from django.contrib.auth.decorators import login_required
 
 
 def store(request, category_filter=None):
+    max_price = min_price = 0
+    category_fa = None
     try:
         products = Product.objects.all()  # .filter(available=True)
-        max_price = min_price = 0
-        category_fa = None
         if category_filter:
             obj_expected_categories = get_object_or_404(Category, slug=category_filter)
             category_fa = obj_expected_categories.name_fa
@@ -64,10 +64,8 @@ def product(request, category_filter, product_slug=None):
                 cs[c.color] = c.stock
             dict_bysize_variations[s] = cs
 
-
         reviews = Review.objects.filter(product=this_product, status=True)
-        #for review in reviews:
-            #review.comment = review.comment.replace('\n', ' <br> ')
+
         gallery = Gallery.objects.filter(product=this_product)
         context = {
             'this_product': this_product,

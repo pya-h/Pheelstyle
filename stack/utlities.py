@@ -52,6 +52,9 @@ def merge_user_stacks(user):  # temporary approach
         merged_stack_taken_products = TakenProduct.objects.filter(stack=merged_stack)
 
         if stacks_belonging_to_user and len(stacks_belonging_to_user) > 1:  # if umber of stack is one there's no need
+            trash = []
+            # removing stacks directly will change the size of the stacks_belonging_to_user, and causes trouble
+            # so i save the un wanted stacks in 'trash' and after that delete the items of trash one by one
             for stack in stacks_belonging_to_user:
                 if stack.ID() != merged_stack.ID():
                     products_taken_by_user = TakenProduct.objects.filter(stack=stack)
@@ -73,6 +76,9 @@ def merge_user_stacks(user):  # temporary approach
                                 taken_product.stack = merged_stack
                                 taken_product.save()
 
-                    stack.delete()
+                    trash.append(stack)
+            for stack in trash:
+                stack.delete()
+
     except Exception as ex:
         print('sth went wrong while trying to merge stacks: ' + ex.__str__())

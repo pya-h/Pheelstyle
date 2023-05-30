@@ -10,7 +10,7 @@
 
             <header class="section-heading">
                 <a href="{% url 'store' %}" class="btn btn-outline-primary float-left">نمایش همه</a>
-                <h3 class="text-right section-title">کالاهای پرطرفدار</h3>
+                <h3 class="text-right section-title">{{ page_title }}</h3>
             </header><!-- sect-heading -->
 
             {% if popular_products%}

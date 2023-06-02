@@ -38,6 +38,7 @@ class User(AbstractBaseUser):
     phone = models.CharField(max_length=11, unique=True, verbose_name="تیلیف")
     email = models.CharField(max_length=100, unique=True, verbose_name="نومه")
     ip = models.CharField(max_length=20, blank=True, verbose_name="IP")
+    last_email_date = models.DateTimeField(default=None, blank=True, null=True)
     # age, whatever, etc..
 
     # requirements:

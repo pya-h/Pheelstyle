@@ -2,7 +2,7 @@ from django.db import models
 from user.models import User
 import uuid
 
-# Create your models here.
+
 class Shop(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='آیدی')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, verbose_name='مالک')
@@ -12,6 +12,9 @@ class Shop(models.Model):
     description = models.CharField(max_length=1024, blank=True, verbose_name='توضیحات')
     location = models.CharField(max_length=128, blank=False, null=False, verbose_name='آدرس')
     slug = models.SlugField(max_length=64, unique=True, verbose_name='اسلاگ')
+
+    def __str__(self):
+        return self.name_fa
 
     def rating(self):
         pass

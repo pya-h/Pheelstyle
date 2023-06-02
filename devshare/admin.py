@@ -11,5 +11,8 @@ class DevShareAdminPanel(admin.ModelAdmin):
     search_fields = ('order', 'status', 'amount')
     # inlines = (TakenProductInline, )
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 admin.site.register(DevShare, DevShareAdminPanel)

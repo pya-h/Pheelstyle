@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from datetime import datetime
 
 
 class UserManager(BaseUserManager):
@@ -38,7 +39,7 @@ class User(AbstractBaseUser):
     phone = models.CharField(max_length=11, unique=True, verbose_name="تیلیف")
     email = models.CharField(max_length=100, unique=True, verbose_name="نومه")
     ip = models.CharField(max_length=20, blank=True, verbose_name="IP")
-    last_email_date = models.DateTimeField(default=None, blank=True, null=True)
+
     # age, whatever, etc..
 
     # requirements:
@@ -77,8 +78,24 @@ class Profile(models.Model):
     city = models.CharField(max_length=30, verbose_name="شهرستان", blank=True)
     address = models.TextField(max_length=256, verbose_name="نشونی", blank=True)
     avatar = models.ImageField(blank=True, upload_to='photos/avatars/', null=True)
-
+    last_email_date = models.DateTimeField(default=None, blank=True, null=True)
     debt = models.IntegerField(default=0, verbose_name='بدهی شما')
+
+    def __str__(self):
+        return self.user.__str__()
+
+    @staticmethod
+    def get_email_time_passed(u):
+        profile = None
+        time_passed_from_last_email = -1
+
+        try:
+            profile = Profile.objects.get(user=u)
+            time_passed_from_last_email = datetime.now().timestamp() - profile.last_email_date.timestamp() if profile.last_email_date else -1
+        except Profile.DoesNotExist:
+            print("EXception")
+            time_passed_from_last_email = -1
+        return time_passed_from_last_email, profile
 
     def full_address(self):
         return f'{self.province} - {self.city} - {self.address}'

@@ -1,4 +1,4 @@
-
+from user.models import Profile
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from decouple import config
@@ -41,32 +41,36 @@ class MailingInterface:
     @staticmethod
     def SendMessage(request, target_email, subject, template_name, dict_content):
         user = request.user
-        time_passed_from_last_email = datetime.now() - user.last_email_date if user.last_email_date else MailingInterface.MIN_EMAIL_TIME_DIFFERENCE
-        if time_passed_from_last_email.total_seconds() >= MailingInterface.MIN_EMAIL_TIME_DIFFERENCE:
-            dict_content['user'] = user
-            dict_content['domain'] = get_current_site(request)
-            body = render_to_string(MailingInterface.template_dir % template_name, dict_content)
-            MailingInterface.SendBySMTP(target_email, subject, body)
-            user.last_email_date = datetime.now()
-            user.save()
-        else:
+        time_passed_from_last_email, profile = Profile.get_email_time_passed(user)
+
+        if 0 <= time_passed_from_last_email <= MailingInterface.MIN_EMAIL_TIME_DIFFERENCE:
             raise WaitAssholeException(time_passed_from_last_email)
+
+        dict_content['user'] = user
+        dict_content['domain'] = get_current_site(request)
+        body = render_to_string(MailingInterface.template_dir % template_name, dict_content)
+        MailingInterface.SendBySMTP(target_email, subject, body)
+        if profile:
+            profile.last_email_date = datetime.now()
+            profile.save()
 
     @staticmethod
     def SendSignedMessage(request, user, target_email, subject, template_name):
-        time_passed_from_last_email = datetime.now() - user.last_email_date if user.last_email_date else MailingInterface.MIN_EMAIL_TIME_DIFFERENCE
-        if time_passed_from_last_email.total_seconds() >= MailingInterface.MIN_EMAIL_TIME_DIFFERENCE:
-            body = render_to_string(MailingInterface.template_dir % template_name, {
-                'user': user,
-                'domain': get_current_site(request),
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user)
-            })
-            MailingInterface.SendBySMTP(target_email, subject, body)
-            user.last_email_date = datetime.now()
-            user.save()
-        else:
+        time_passed_from_last_email, profile = Profile.get_email_time_passed(user)
+
+        if 0 <= time_passed_from_last_email <= MailingInterface.MIN_EMAIL_TIME_DIFFERENCE:
             raise WaitAssholeException(time_passed_from_last_email)
+
+        body = render_to_string(MailingInterface.template_dir % template_name, {
+            'user': user,
+            'domain': get_current_site(request),
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': default_token_generator.make_token(user)
+        })
+        MailingInterface.SendBySMTP(target_email, subject, body)
+        if profile:
+            profile.last_email_date = datetime.now()
+            profile.save()
 
     @staticmethod
     def SendBySMTP(target, subject, body):

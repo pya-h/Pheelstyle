@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load humanize %}
+
 {% block content %}
     <section class="section-content padding-y bg">
         <div class="container">
@@ -104,10 +106,10 @@
                                                     <div class="price-wrap text-center">
                                                         <h4>
                                                             <span dir="ltr" class="mx-1 my-1 badge badge-pill badge-success text-white">
-                                                                <del>{{item.product.price}}</del>
-                                                                <sub>{{ item.absolute_price }}</sub>
+                                                                <del>{{item.product.price | intcomma:False}}</del>
+                                                                <sub>{{ item.absolute_price | intcomma:False }}</sub>
                                                                 x {{ item.quantity }}
-                                                                = {{ item.final_price }}
+                                                                = {{ item.final_price | intcomma:False }}
                                                             </span>
                                                         </h4>
                                                     </div> <!-- price-wrap .// -->
@@ -129,19 +131,19 @@
                         <div dir="rtl"  class="card-body text-right">
                             <dl class="dlist-align">
                               <dt>قیمت اصلی:</dt>
-                              <dd class="text-left text-primary">{{ order.cost }}&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-left text-primary">{{ order.cost | intcomma:False }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>تخفیف:</dt>
-                              <dd class="text-left text-danger">{{ order.discounts }}-  &nbsp;تومن</dd>
+                              <dd class="text-left text-danger">{{ order.discounts | intcomma:False }}-  &nbsp;تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه ارسال:</dt>
-                              <dd class="text-left text-primary">{{ order.shipping_cost }}&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-left text-primary">{{ order.shipping_cost | intcomma:False }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه پرداختی:</dt>
-                              <dd class="text-left text-success b"><strong>{{ order.must_be_paid }}</strong>&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-left text-success b"><strong>{{ order.must_be_paid | intcomma:False }}</strong>&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <hr>
                             <a href="{{ order.check_url }}" class="btn btn-success btn-block btn-shaking">تایید نهایی</a>

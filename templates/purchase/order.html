@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load humanize %}
 
 {% block content %}
     <section class="section-content padding-y bg" xmlns="http://www.w3.org/1999/html">
@@ -103,14 +104,14 @@
                                             <td>
                                                 <div class="price-wrap text-center">
                                                     <h4>
-                                                        <span class="mx-1 my-1 badge badge-pill badge-primary">{{ taken.total_price }}</span>
+                                                        <span class="mx-1 my-1 badge badge-pill badge-primary">{{ taken.total_price | intcomma:False }}</span>
                                                     </h4>
                                                     <small class="text-muted"> هر كالا {{ taken.product.price }}</small>
                                                 </div> <!-- price-wrap .// -->
                                             </td>
                                             <td>
                                                 <h5 class="text-center">
-                                                    <span class="mx-1 my-1 badge badge-pill badge-danger">{{ taken.product.discount }}%</span>
+                                                    <span class="mx-1 my-1 badge badge-pill badge-danger">{{ taken.product.discount | intcomma:False }}%</span>
                                                 </h5>
                                             </td>
                                         </tr>
@@ -121,15 +122,15 @@
                             <div dir="rtl"  class="card-body text-right">
                                 <dl class="dlist-align">
                                   <dt>قیمت اصلی:</dt>
-                                  <dd class="text-left text-primary">{{ stack.cost }}&nbsp;&nbsp; تومن</dd>
+                                  <dd class="text-left text-primary">{{ stack.cost | intcomma:False }}&nbsp;&nbsp; تومن</dd>
                                 </dl>
                                 <dl class="dlist-align">
                                   <dt>تخفیف:</dt>
-                                  <dd class="text-left text-danger">{{ stack.discounts }}-  &nbsp;تومن</dd>
+                                  <dd class="text-left text-danger">{{ stack.discounts | intcomma:False }}-  &nbsp;تومن</dd>
                                 </dl>
                                 <dl class="dlist-align">
                                   <dt>هزینه نهایی:</dt>
-                                  <dd class="text-left text-success b"><strong>{{ stack.final_cost }}</strong>&nbsp;&nbsp; تومن</dd>
+                                  <dd class="text-left text-success b"><strong>{{ stack.final_cost | intcomma:False }}</strong>&nbsp;&nbsp; تومن</dd>
                                 </dl>
                                 <hr>
                                 <button type="submit" class="btn btn-success btn-block btn-shaking"> ثبت سفارش </button>

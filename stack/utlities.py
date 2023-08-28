@@ -16,6 +16,8 @@ def open_stack(request):
                 merge_user_stacks(request.user)
                 current_stack = Stack.objects.filter(belongs_to=request.user)
                 # TEMP ***************
+                if not current_stack:
+                    raise Stack.DoesNotExist
                 current_stack = current_stack[0]
             else:
                 raise Stack.DoesNotExist

@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load humanize %}
+
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}">
 
@@ -77,7 +79,7 @@
                                                         </p>
                                                     </td>
                                                     <td class="table-column-1 text-center p-3">1</td>
-                                                    <td class="table-column-1 text-center p-3">{{ item.cost }}</td>
+                                                    <td class="table-column-1 text-center p-3">{{ item.cost | intcomma:False }}</td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>

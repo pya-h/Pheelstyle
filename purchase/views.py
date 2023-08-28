@@ -102,7 +102,7 @@ def submit_order(request):
 
                 order.receiver.save()
 
-                order.notes = form.cleaned_data['notes']
+                order.notes = form.cleaned_data['notes'] if 'notes' in form.cleaned_data and form.cleaned_data['notes'] else None
                 order.cost = user_stack.cost
                 order.discounts = user_stack.discounts
                 order.shipping_cost = 50  # this is for test; ask pouya about this
@@ -183,7 +183,7 @@ def reserve_order(request):
         print(form, form.is_valid())
         if form.is_valid():
             receipt = Receipt(reference_id=form.cleaned_data['reference_id'], image=form.cleaned_data['image'],
-                              amount=form.cleaned_data['amount'])
+                              amount=form.cleaned_data['amount'], order_key=form.cleaned_data['order_key'])
             receipt.save()
             transaction = Transaction(performer=request.user, method="reserve", validation="pending", receipt=receipt)
             transaction.save()

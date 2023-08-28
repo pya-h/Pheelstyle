@@ -109,7 +109,7 @@ class Order(models.Model):
     receiver = models.ForeignKey(OrderReceiver, on_delete=models.PROTECT, verbose_name='گیرنده')  # edit the on_delete
 
     # optionals
-    notes = models.CharField(max_length=256, verbose_name="لحاظیات", blank=True)
+    notes = models.CharField(max_length=256, verbose_name="لحاظیات", blank=True, null=True)
 
     # stats
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')

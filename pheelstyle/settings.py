@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     # thirdparty apps:
     'admin_honeypot',
     # my apps
@@ -149,6 +150,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / 'static'
+# USE_THOUSAND_SEPARATOR = True
 
 # HEROKU setups:
 # heroku imports

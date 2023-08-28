@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 
 {% load static %}
+{% load humanize %}
+
 {% block content %}
     <!-- ========================= SECTION CONTENT ========================= -->
     <section class="section-content padding-y">
@@ -97,7 +99,7 @@
                                                 <div class="fix-height">
                                                     <a href="{{ product.url }}" class="title text-center">{{ product }}</a>
                                                     <div class="price-wrap  text-center mt-2">
-                                                        <span class="price">{{ product.price }} تومن</span>
+                                                        <span class="price">{{ product.price | intcomma:False}} تومن</span>
                                                     </div>
                                                 </div>
                                                 {% if product.stock <= 0  %}

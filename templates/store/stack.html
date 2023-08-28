@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load humanize %}
+
 {% block content %}
     <section class="section-content padding-y bg">
         {% if taken_products %}
@@ -67,9 +69,9 @@
                                         <td>
                                             <div class="price-wrap text-center">
                                                 <h4>
-                                                    <span class="mx-1 my-1 badge badge-pill badge-primary">{{ taken.total_price }} تومن</span>
+                                                    <span class="mx-1 my-1 badge badge-pill badge-primary">{{ taken.total_price | intcomma:False }} تومن</span>
                                                 </h4>
-                                                <small class="text-muted">هرکدوم {{ taken.product.price }} تومن </small>
+                                                <small class="text-muted">هرکدوم {{ taken.product.price | intcomma:False }} تومن </small>
                                             </div> <!-- price-wrap .// -->
                                         </td>
                                         <td>
@@ -97,19 +99,19 @@
                         <div dir="rtl"  class="card-body text-right">
                             <dl class="dlist-align">
                               <dt>قیمت اصلی:</dt>
-                              <dd class="text-center text-primary">{{ stack.cost }}&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-center text-primary">{{ stack.cost | intcomma:False }}&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <dl class="dlist-align">
                               <dt>تخفیف:</dt>
                                 {% if stack.discounts %}
-                                  <dd class="text-center text-danger">{{ stack.discounts }}-  &nbsp;تومن</dd>
+                                  <dd class="text-center text-danger">{{ stack.discounts | intcomma:False }}-  &nbsp;تومن</dd>
                                 {% else %}
                                   <dd class="mx-5 text-center text-danger">-</dd>
                                 {% endif %}
                             </dl>
                             <dl class="dlist-align">
                               <dt>هزینه نهایی:</dt>
-                              <dd class="text-center text-success b"><strong>{{ stack.final_cost }}</strong>&nbsp;&nbsp; تومن</dd>
+                              <dd class="text-center text-success b"><strong>{{ stack.final_cost | intcomma:False }}</strong>&nbsp;&nbsp; تومن</dd>
                             </dl>
                             <hr>
                             <a href="{% url 'order' %}" class="btn btn-warning btn-block btn-shaking"> زد و بند </a>

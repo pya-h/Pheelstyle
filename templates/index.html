@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% load static %}
-
+{% load humanize %}
 {% block content %}
 
     <!-- ========================= SECTION  ========================= -->
@@ -22,7 +22,7 @@
                                     <a href="{{ product.url }}" class="img-wrap"> <img src="{{product.image.url}}"> </a>
                                     <figcaption class="info-wrap">
                                         <a href="{{ product.url }}" class="title text-center">{{ product }}</a>
-                                        <div class="price mt-1 text-center text-primary">{{ product.price }} تومن</div> <!-- price-wrap.// -->
+                                        <div class="price mt-1 text-center text-primary">{{ product.price | intcomma:False }} تومن</div> <!-- price-wrap.// -->
                                         <div class="mx-auto text-center my-3">
                                             {%  if product.rating %}
                                                 <span dir="ltr" class="text-left mt-2">

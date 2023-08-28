@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Transaction, Order, PurchasedItem, OrderReceiver
+from .models import Transaction, Order, PurchasedItem, OrderReceiver, Receipt
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -111,6 +111,7 @@ class OrderReceiverAdminPanel(admin.ModelAdmin):
     list_per_page = 20
 
 
+admin.site.register(Receipt)
 admin.site.register(Transaction)
 admin.site.register(Order, OrderAdminPanel)
 admin.site.register(PurchasedItem, PurchasedItemAdminPanel)

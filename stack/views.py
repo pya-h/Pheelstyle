@@ -4,6 +4,7 @@ from .models import Stack, TakenProduct
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from .utlities import open_stack
+from django.contrib import messages
 
 
 def submit_preferred_variation(variation, taken=None, product=None, current_stack=None):
@@ -83,6 +84,9 @@ def take_product(request, product_id):
 
         try:
             variation = Variation.objects.get(product=product, color=color, size=size)
+            if not variation.stock:
+                messages.error(request, "این کالا موجود نیست!")
+                return redirect(request.META.get('HTTP_REFERER'))
         except:  # such as csrf_token
             pass
 
@@ -95,7 +99,8 @@ def take_product(request, product_id):
                 taken = None
 
             if (not taken or not taken.quantity) and product.available:
-                submit_preferred_variation(taken=taken, variation=variation, product=product, current_stack=current_stack)
+                submit_preferred_variation(taken=taken, variation=variation, product=product,
+                                           current_stack=current_stack)
             else:
                 # SHOW ERROR MESSAGE
 

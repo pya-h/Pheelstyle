@@ -5,7 +5,6 @@ from django.contrib.auth.backends import BaseBackend
 # custom authenticate class and method
 class UserLoginBackend(BaseBackend):
     def authenticate(self, request, phone=None, email=None, password=None):
-        print(request, phone, email, password)
         try:
             user = None
 

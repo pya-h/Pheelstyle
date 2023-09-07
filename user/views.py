@@ -26,7 +26,6 @@ def register(request):
             profile = Profile(user=user)
             profile.save()
             user.save()
-            print("user is  = ", user, "\n\n type of = ", (user.last_login), end="\n\n")
             # send user verification email
             MailingInterface.SendSignedMessage(request=request, user=user, target_email=email, subject='فعال سازی حساب کاربری',
                                                template_name='user_verification')

@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
     <div class="container" style="margin-top: 50px;">
         {% if order %}
@@ -87,19 +88,19 @@
                                             <tfoot>
                                                 <tr >
                                                     <th class="text-right p-4">جمع اولیه</th>
-                                                    <th colspan="2"  class="text-center p-3">{{ order.cost }}</th>
+                                                    <th colspan="2"  class="text-center p-3">{{ order.cost | intcomma:False }}</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="text-right p-4">تخفیفات</th>
-                                                    <th colspan="2" class="text-center p-3">{{ order.discounts }}-</th>
+                                                    <th colspan="2" class="text-center p-3">{{ order.discounts | intcomma:False }}-</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="text-right p-4">هزینه ارسال</th>
-                                                    <th colspan="2" class="text-center p-3">{{ order.shipping_cost }}</th>
+                                                    <th colspan="2" class="text-center p-3">{{ order.shipping_cost | intcomma:False }}</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="text-right p-4">قیمت آخر</th>
-                                                    <th colspan="2" class="text-center p-3">{{ order.must_be_paid }}</th>
+                                                    <th colspan="2" class="text-center p-3">{{ order.must_be_paid | intcomma:False }}</th>
                                                 </tr>
                                             </tfoot>
                                         </table>

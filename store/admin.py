@@ -10,18 +10,20 @@ class GalleryInlinePanel(admin.TabularInline):
 
 
 class ProductAdminPanel(admin.ModelAdmin):
-    list_display = ('name', 'category', 'slug', 'modified', 'available',)
+    list_display = ('name', 'category', 'modified', 'available',)
+    list_editable = ('available', )
     prepopulated_fields = {'slug': ('name', )}
-    list_filter = ('category', 'price', 'discount', )
-    search_fields = ('name', 'name_fa', )
+    list_filter = ('category', 'available', 'shop', 'discount', )
+    search_fields = ('name', 'name_fa', 'category', 'shop__name', 'shop__name_fa', 'price', 'created',)
     inlines = (GalleryInlinePanel, )
 
 
 class VariationAdminPanel(admin.ModelAdmin):
-    list_display = ('product', 'size', 'color', 'is_available', 'stock')
-    list_editable = ('is_available', )
-    list_filter = ('product', 'size', 'color', 'is_available', 'stock', )
-    search_fields = ('size', 'color', 'product')
+    list_display = ('product', 'size', 'color', 'stock', 'is_available',)
+    list_editable = ('is_available', 'stock',)
+    list_editable = ('is_available', 'stock')
+    list_filter = ('is_available', 'size', 'color', 'stock', )
+    search_fields = ('size', 'color', 'product__name', 'product__name_fa')
 
 
 admin.site.register(Product, ProductAdminPanel)

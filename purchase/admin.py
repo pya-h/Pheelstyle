@@ -26,8 +26,9 @@ class OrderReceiverInline(admin.TabularInline):
 
 class OrderAdminPanel(admin.ModelAdmin):
     list_display = ('key', 'buyer', 'status', 'seen',)
+    list_editable = ('status', )
     list_filter = ('status', 'seen', )
-    search_fields = ('key', 'status')
+    search_fields = ('key', 'receiver__fname', 'receiver__lname', 'buyer__fname', 'buyer__lname',  'status')
     list_per_page = 20
     inlines = (PurchasedItemInline,)  # OrderReceiverInline)
     change_form_template = "personalization/order_admin_template.html"
@@ -102,17 +103,40 @@ class OrderAdminPanel(admin.ModelAdmin):
 
 
 class PurchasedItemAdminPanel(admin.ModelAdmin):
-    list_display = ('buyer', 'product', 'variation', 'quantity',)  # 'is_certified', 'is_delivered', )
+    list_display = ('buyer', 'product', 'variation', 'quantity',)
+    list_filter = ('delivered',)
+    search_fields = (
+        'product__name', 'product__name_fa', 'order__key', 'variation__color', 'variation__size',
+                     'order__receiver__fname', 'order__receiver__lname', 'order__buyer__fname', 'order__buyer__lname', 
+    )
     list_per_page = 20
 
 
 class OrderReceiverAdminPanel(admin.ModelAdmin):
     list_display = ('phone', 'fname', 'lname', 'province', 'city')
+    list_filter = ( 'province', 'city')
+    search_fields = ('phone', 'fname', 'lname', 'province', 'city', 'postal_code', 'address')
     list_per_page = 20
 
+class TransactionInlinePanel(admin.TabularInline):
+    model = Transaction
+    extra = 0
+    
 
-admin.site.register(Receipt)
-admin.site.register(Transaction)
+class ReceiptAdminPanel(admin.ModelAdmin):
+    inlines = (TransactionInlinePanel, )
+    list_display = ('reference_id', 'order_key', 'amount')
+    search_fields = ('reference_id', 'order_key', 'amount')
+    list_display_links = ('reference_id', )
+    
+class TransactionAdminPanel(admin.ModelAdmin):
+    list_display = ('receipt', 'validation', 'performer', 'date_created')
+    list_filter = ('validation', 'method', )
+    search_fields = ('receipt__reference_id', 'performer__fname', 'performer__lname', 'validation', 'date_created', 'method', )
+
+    
+admin.site.register(Receipt, ReceiptAdminPanel)
+admin.site.register(Transaction, TransactionAdminPanel)
 admin.site.register(Order, OrderAdminPanel)
 admin.site.register(PurchasedItem, PurchasedItemAdminPanel)
 admin.site.register(OrderReceiver, OrderReceiverAdminPanel)

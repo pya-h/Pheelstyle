@@ -3,7 +3,7 @@ from .models import Category
 
 
 class CategoryAdminPanel(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    list_display = ['name_fa', 'slug']
     prepopulated_fields = {'slug': ('name', )}
     search_fields = ('name', 'name_fa', )
 

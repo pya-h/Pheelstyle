@@ -152,20 +152,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / 'static'
 # USE_THOUSAND_SEPARATOR = True
 
-# HEROKU setups:
-# heroku imports
-# import os
-# import django_heroku
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# Activate Django-Heroku.
-# django_heroku.settings(locals())
-
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

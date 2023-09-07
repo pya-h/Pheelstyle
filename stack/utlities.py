@@ -59,28 +59,33 @@ def merge_user_stacks(user):  # temporary approach
             # so i save the un wanted stacks in 'trash' and after that delete the items of trash one by one
             for stack in stacks_belonging_to_user:
                 if stack.ID() != merged_stack.ID():
-                    products_taken_by_user = TakenProduct.objects.filter(stack=stack)
-                    if products_taken_by_user:
-                        for taken_product in products_taken_by_user:
-                            taken_is_duplicate = False
-                            # now check if there is a similar product with exact variation in the merged stack takens list
-                            # if so just add the quantity of this one to the merged one and then delete this duplicate one
-                            similar_products_in_merged_stack = merged_stack_taken_products.filter(product=taken_product.product)
-                            for possibly_duplicate in similar_products_in_merged_stack:
-                                if possibly_duplicate.variation == taken_product.variation:
-                                    possibly_duplicate.quantity += taken_product.quantity
-                                    possibly_duplicate.save()
-                                    taken_product.delete()
-                                    taken_is_duplicate = True
-                                    break
+                    if stack.belongs_to is None and stack.cost == 0 and stack.discounts < 100:
+                        trash.append(stack)
+                    else:
+                        products_taken_by_user = TakenProduct.objects.filter(stack=stack)
+                        if products_taken_by_user:
+                            for taken_product in products_taken_by_user:
+                                taken_is_duplicate = False
+                                # now check if there is a similar product with exact variation in the merged stack takens list
+                                # if so just add the quantity of this one to the merged one and then delete this duplicate one
+                                similar_products_in_merged_stack = merged_stack_taken_products.filter(product=taken_product.product)
+                                for possibly_duplicate in similar_products_in_merged_stack:
+                                    if possibly_duplicate.variation == taken_product.variation:
+                                        possibly_duplicate.quantity += taken_product.quantity
+                                        possibly_duplicate.save()
+                                        taken_product.delete()
+                                        taken_is_duplicate = True
+                                        break
 
-                            if not taken_is_duplicate:
-                                taken_product.stack = merged_stack
-                                taken_product.save()
+                                if not taken_is_duplicate:
+                                    taken_product.stack = merged_stack
+                                    taken_product.save()
 
-                    trash.append(stack)
+                        trash.append(stack)
             for stack in trash:
                 stack.delete()
 
+            # remove empty stacks:
+            Stack.objects.filter(belongs_to=None, cost=0).delete()
     except Exception as ex:
         print('sth went wrong while trying to merge stacks: ' + ex.__str__())

@@ -97,7 +97,6 @@ def view_order(request, order_key):
         context['order'] = Order.objects.get(key=order_key)
         context['items'] = PurchasedItem.objects.filter(order__key=order_key)
 
-        context['order'].status_fa = ORDER_STATUS[str(context['order'].status)]
     except Order.DoesNotExist or PurchasedItem.DoesNotExist:
         messages.error(request, "همچین زد و بندی نداشتیم ما با هم!")
         return redirect('user-orders')

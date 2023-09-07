@@ -16,7 +16,7 @@ class OrderForm(forms.ModelForm):
     def clean(self):
         # get sent form's data to start checking
         cleaned_data = super(OrderForm, self).clean()
-        print('order form clean method has been called')
+        print('OrderForm clean method has been called')
         # InputValidator.full(cleaned_data)
 
 
@@ -31,8 +31,8 @@ class ReserveTransactionForm(forms.ModelForm):
 
     def clean(self):
         # get sent form's data to start checking
-        print("clean method called")
+        print("ReserveTransactionForm clean method called")
         cleaned_data = super(ReserveTransactionForm, self).clean()
-        print(cleaned_data)
-        #if cleaned_data.get('amount') <= 0:
-            #raise forms.ValidationError('مقدار تراکنش باید بزرگتر از صفر باشد!')
+
+        if cleaned_data.get('amount') <= 0:
+            raise forms.ValidationError('مقدار تراکنش باید بزرگتر از صفر باشد!')

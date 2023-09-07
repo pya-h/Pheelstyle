@@ -73,13 +73,13 @@ class User(AbstractBaseUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="کاربر")
-    postal_code = models.CharField(max_length=10, verbose_name="کدپستی", blank=True)
-    province = models.CharField(max_length=30, verbose_name="استان", blank=True)
-    city = models.CharField(max_length=30, verbose_name="شهرستان", blank=True)
-    address = models.TextField(max_length=256, verbose_name="نشونی", blank=True)
     avatar = models.ImageField(blank=True, upload_to='photos/avatars/', null=True)
     last_email_date = models.DateTimeField(default=None, blank=True, null=True)
     debt = models.IntegerField(default=0, verbose_name='بدهی شما')
+    postal_code = models.CharField(max_length=10, verbose_name="کدپستی", blank=True)
+    province = models.CharField(max_length=30, verbose_name="استان", blank=True)
+    city = models.CharField(max_length=30, verbose_name="شهرستان", blank=True)
+    address = models.TextField(max_length=64, verbose_name="نشونی", blank=True)
 
     def __str__(self):
         return self.user.__str__()
@@ -93,7 +93,6 @@ class Profile(models.Model):
             profile = Profile.objects.get(user=u)
             time_passed_from_last_email = datetime.now().timestamp() - profile.last_email_date.timestamp() if profile.last_email_date else -1
         except Profile.DoesNotExist:
-            print("EXception")
             time_passed_from_last_email = -1
         return time_passed_from_last_email, profile
 

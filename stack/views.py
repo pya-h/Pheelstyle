@@ -9,7 +9,6 @@ from django.contrib import messages
 
 def submit_preferred_variation(variation, taken=None, product=None, current_stack=None):
     if variation:
-        print("taken found", taken)
         if not taken:
             if product and current_stack:
                 taken = TakenProduct.objects.create(product=product, stack=current_stack, variation=variation)

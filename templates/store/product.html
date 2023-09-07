@@ -16,7 +16,7 @@
                 const stock = statistics[size][color];
                 const badge = `<span class="badge pill badge-${stock > 3 ? 'success' : stock > 1 ? 'warning' : 'danger'} mx-1 variation">${stock}</span>`;
                 html += `<label style="font-size: 17px;" class="btn btn-light p-3 variation-select">
-                    <input type="radio" name="color" value=${color}>
+                    <input type="radio" name="color" value="${color}">
                         ${color}
                         ${badge}
                     </label>`;
@@ -90,10 +90,10 @@
                                 </div> <!-- row.// -->
                                 <div class="mx-5 px-5"> <hr /> </div>
                                 <div dir="ltr" class="row justify-content-center text-center">
-                                        <div id="colorSelectionSection">
+                                    <div id="colorSelectionSection">
 
-                                        </div>
-                                    </div> <!-- row.// -->
+                                    </div>
+                                </div> <!-- row.// -->
                                 <hr>
                                 {% comment %} {% if this_product.stock <= 0  %}
                                     <button disabled class="btn btn-block btn-dark expandable-button">تا دسته فروش رفت</button> {% endcomment %}

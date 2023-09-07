@@ -58,6 +58,7 @@ def finalize_order(request, order_key, method, status, reference_id=None, amount
                     purchased_item.anything_wrong = "تعداد درخواستی شما از این نوع کالا، بیشتر از موجودی انبار است."
                     order.status = "failed"
             order.save()
+            user_stack.delete()
             return order
         else:
             print('No order has been found')
@@ -105,7 +106,7 @@ def submit_order(request):
                 order.notes = form.cleaned_data['notes'] if 'notes' in form.cleaned_data and form.cleaned_data['notes'] else None
                 order.cost = user_stack.cost
                 order.discounts = user_stack.discounts
-                order.shipping_cost = 50  # this is for test; ask pouya about this
+                order.shipping_cost = 50000  # this is for test; ask pouya about this
                 order.how_much_to_pay()  # calculate the cose and update the order.must_be_paid
                 # update the ip of the user again just to make sure
 
@@ -180,7 +181,6 @@ def take_receipt(request, order_key):
 def reserve_order(request):
     if request.method == "POST":
         form = ReserveTransactionForm(request.POST, request.FILES)
-        print(form, form.is_valid())
         if form.is_valid():
             receipt = Receipt(reference_id=form.cleaned_data['reference_id'], image=form.cleaned_data['image'],
                               amount=form.cleaned_data['amount'], order_key=form.cleaned_data['order_key'])

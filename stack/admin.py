@@ -3,9 +3,11 @@ from .models import Stack, TakenProduct
 
 
 class TakenProductAdminPanel(admin.ModelAdmin):
-    list_display = ('product',  'variation', 'stack', 'quantity', 'is_available',)
-    list_filter = ('product', 'variation', 'stack', 'quantity', 'is_available', )
-
+    list_display = ('product',  'variation', 'stack', 'quantity', 'is_available', )
+    list_filter = ('is_available', 'variation', 'stack', 'quantity', )
+    search_fields = ('product__name', 'product__name_fa', 'variation__color', 'variation__size', 
+                     'stack__sid', 'stack__belongs_to__fname', 'stack__belongs_to__lname',)
+    list_editable = ('is_available', )
 
 class TakenProductInline(admin.TabularInline):
     model = TakenProduct
@@ -13,9 +15,9 @@ class TakenProductInline(admin.TabularInline):
 
 
 class StackAdminPanel(admin.ModelAdmin):
-    list_display = ('sid', 'cost', 'created')
+    list_display = ('sid', 'belongs_to', 'cost', 'created')
     readonly_fields = ('sid', 'created')
-    search_fields = ('sid',)
+    search_fields = ('sid', 'belongs_to__fname', 'belongs_to__lname', 'cost')
     inlines = (TakenProductInline, )
 
 

@@ -164,6 +164,8 @@ class Order(models.Model):
                 variation.save()
         self.save()
 
+    def status_fa(self):
+        return ORDER_STATUS[str(self.status)]
 
 class PurchasedItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')

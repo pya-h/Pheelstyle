@@ -167,6 +167,7 @@ class Order(models.Model):
     def status_fa(self):
         return ORDER_STATUS[str(self.status)]
 
+
 class PurchasedItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False, verbose_name='آیدی')
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='سفارش مربوطه')

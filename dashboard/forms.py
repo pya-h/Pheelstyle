@@ -24,7 +24,7 @@ class ProfileEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProfileEditForm, self).__init__(*args, **kwargs)
-        placeholders = {'province': 'استان', 'city': 'نام خانوادگی', 'address': 'ایمیل', 'postal_code': 'شماره تلفن'}
+        placeholders = {'province': 'استان', 'city': 'شهر', 'address': 'آدرس', 'postal_code': 'کد پستی'}
         self.fields['avatar'].widget.attrs['id'] = "fileChangeAvatar"
 
         for field in placeholders:
